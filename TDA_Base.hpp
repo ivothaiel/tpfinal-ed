@@ -4,7 +4,9 @@
 #include <string.h>   // Para strcmp(), strcpy() 
 
 using namespace std;
+
 const int MAX = 50; 
+
 typedef char tcad[MAX];
 
 typedef struct tjugador {
@@ -17,8 +19,9 @@ typedef struct tjugador {
     int puntaje_acumulado;
 };
 
-typedef struct tinfo {
-    tcad palabra;     
+typedef struct tpalabra {
+    tcad palabra;
+	int longitud;
     tcad definicion;
     tcad sinonimo;
 };

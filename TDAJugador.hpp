@@ -1,18 +1,19 @@
 #include "TDA_Base.hpp" 
 
-typedef struct tnodo_jugador *pnodo_jugador;
+typedef struct tnodo_jugador *pjugador;
+
 struct tnodo_jugador {
     tjugador dato;        
-    pnodo_jugador izq;   
-    pnodo_jugador der;   
+    pjugador izq;   
+    pjugador der;   
 };
 
 
-void iniciar(pnodo_jugador &arbol) {
+void iniciar(pjugador &arbol) {
     arbol = NULL;
 }
 
-void crearnodo(pnodo_jugador &nuevo, tjugador dato_jugador) {
+void crear_jugador(pjugador &nuevo, tjugador dato_jugador) {
     nuevo = new tnodo_jugador; 
     
     if (nuevo != NULL) {
@@ -23,22 +24,22 @@ void crearnodo(pnodo_jugador &nuevo, tjugador dato_jugador) {
 }
 
 
-void insertar(pnodo_jugador &arbol, pnodo_jugador nuevo) {
+void insertar_jugador(pjugador &arbol, pjugador nuevo) {
     if (arbol == NULL) {
         arbol = nuevo;
     }
     else {
         if (strcmp(nuevo->dato.alias, arbol->dato.alias) < 0) {
-            insertar(arbol->izq, nuevo);
+            insertar_jugador(arbol->izq, nuevo);
         }
         else {
-            insertar(arbol->der, nuevo);
+            insertar_jugador(arbol->der, nuevo);
         }
     }
 }
 
 
-pnodo_jugador buscar(pnodo_jugador arbol, tcad alias_buscado) {
+pjugador buscar_jugador(pjugador arbol, tcad alias_buscado) {
     if (arbol == NULL) {
         return NULL;
     }
@@ -49,19 +50,19 @@ pnodo_jugador buscar(pnodo_jugador arbol, tcad alias_buscado) {
         }
         else {
             if (comparacion < 0) {
-                return buscar(arbol->izq, alias_buscado);
+                return buscar_jugador(arbol->izq, alias_buscado);
             }
             else {
-                return buscar(arbol->der, alias_buscado);
+                return buscar_jugador(arbol->der, alias_buscado);
             }
         }
     }
 }
 
-
-void listar(pnodo_jugador arbol) {
+// RECORRIDO EN-ORDEN
+void listar_jugadores(pjugador arbol) {
     if (arbol != NULL) {
-        listar(arbol->izq);
+        listar_jugadores(arbol->izq);
         cout << "----------------------------------------" << endl;
         cout << "Alias: " << arbol->dato.alias << endl;
         cout << "Nombre: " << arbol->dato.nombre << " " << arbol->dato.apellido << endl;
@@ -69,11 +70,11 @@ void listar(pnodo_jugador arbol) {
         cout << "Puntaje Max: " << arbol->dato.mejor_puntaje << endl;
         cout << "Puntaje Acum: " << arbol->dato.puntaje_acumulado << endl;
         cout << "Juegos Ganados: " << arbol->dato.juegos_ganados << endl;
-
-        listar(arbol->der);
+        listar_jugadores(arbol->der);
     }
 }
-void liberar(pnodo_jugador &arbol) {
+
+void liberar(pjugador &arbol) {
     if (arbol != NULL) {
         liberar(arbol->izq);
         liberar(arbol->der);
