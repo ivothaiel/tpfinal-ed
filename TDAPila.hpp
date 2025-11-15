@@ -1,4 +1,4 @@
-// Define el TDA Pila Estatica para las 6 palabras del juego
+
 
 #include "TDA_Base.hpp" 
 
@@ -63,4 +63,8 @@ tpalabra tope_pila(tpila p) {
         consultado = p.datos[p.cima]; 
     }
     return consultado;
+}
+
+void liberar_pila(tpila &p) {
+    iniciar_pila(p);
 }
