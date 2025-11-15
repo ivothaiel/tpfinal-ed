@@ -15,6 +15,7 @@ int main(){
 		menu_principal(op);
 		switch(op){
 		case '1':
+			menu_jugadores();
 			break;
 		case '2':
 			break;
