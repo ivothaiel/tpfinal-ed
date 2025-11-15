@@ -1,12 +1,13 @@
+#ifndef TDA_BASE_HPP
+#define TDA_BASE_HPP
 #include <iostream>
-#include <stdio.h>    // Para gets(), fflush(stdin)
-#include <stdlib.h>   // Para system("cls"), system("pause"), NULL
-#include <string.h>   // Para strcmp(), strcpy() 
+#include <stdio.h>    
+#include <stdlib.h>   
+#include <string.h>  
 
 using namespace std;
 
 const int MAX = 50; 
-
 typedef char tcad[MAX];
 
 typedef struct tjugador {
@@ -20,8 +21,8 @@ typedef struct tjugador {
 };
 
 typedef struct tpalabra {
-    tcad palabra;
-	int longitud;
+    tcad palabra; 
+	int longitud; 
     tcad definicion;
     tcad sinonimo;
 };
@@ -30,3 +31,5 @@ struct tinfo_ranking {
     tcad alias;
     int puntaje; 
 };
+
+#endif 
