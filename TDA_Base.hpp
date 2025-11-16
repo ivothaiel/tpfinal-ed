@@ -113,7 +113,7 @@ pjugador menor_mayores(pjugador &nodo_derecho) {
     return aux;
 }
 
-void eliminar_nodo_jugador(pjugador &arbol, tcad alias_buscado) {
+void eliminarjugador(pjugador &arbol, tcad alias_buscado) {
     pjugador aux;
 
     if (arbol == NULL) {
@@ -124,10 +124,10 @@ void eliminar_nodo_jugador(pjugador &arbol, tcad alias_buscado) {
     int comparacion = strcmp(alias_buscado, arbol->dato.alias);
 
     if (comparacion < 0) { 
-        eliminar_nodo_jugador(arbol->izq, alias_buscado);
+        eliminarjugador(arbol->izq, alias_buscado);
     } 
     else if (comparacion > 0) { 
-        eliminar_nodo_jugador(arbol->der, alias_buscado);
+        eliminarjugador(arbol->der, alias_buscado);
     } 
     else { 
         if (arbol->izq == NULL && arbol->der == NULL) {
@@ -376,7 +376,7 @@ void crearnodo(pnodo_ranking &nuevo, tinfo_ranking dato_ranking) {
     }
 }
 
-void insertarordenado_rec(pnodo_ranking actual, pnodo_ranking nuevo, pnodo_ranking inicio_lista) {
+void insertarordenado(pnodo_ranking actual, pnodo_ranking nuevo, pnodo_ranking inicio_lista) {
     if (nuevo->dato.puntaje >= actual->dato.puntaje) {
         nuevo->ant = actual->ant;
         nuevo->sig = actual;
@@ -390,7 +390,7 @@ void insertarordenado_rec(pnodo_ranking actual, pnodo_ranking nuevo, pnodo_ranki
         inicio_lista->ant = nuevo;
     }
     else {
-        insertarordenado_rec(actual->sig, nuevo, inicio_lista);
+        insertarordenado(actual->sig, nuevo, inicio_lista);
     }
 }
 
@@ -403,7 +403,7 @@ void agregar_ranking(tlista_ranking &lista, pnodo_ranking nuevo) {
         lista.inicio->ant = lista.inicio;
     }
     else {
-        insertarordenado_rec(lista.inicio, nuevo, lista.inicio);
+        insertarordenado(lista.inicio, nuevo, lista.inicio);
         if (nuevo->dato.puntaje >= lista.inicio->dato.puntaje) {
             lista.inicio = nuevo;
         }
