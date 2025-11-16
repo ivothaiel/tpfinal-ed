@@ -1,5 +1,6 @@
 #ifndef TDA_BASE_HPP
 #define TDA_BASE_HPP
+
 #include <iostream>
 #include <stdio.h>    
 #include <stdlib.h>   
@@ -7,17 +8,17 @@
 
 using namespace std;
 
-const int MAX = 50; 
-typedef char tcad[MAX];
+//const int MAX = 50; 
+typedef char tcad[30];
 
-typedef struct tjugador {
-    tcad nombre;
-    tcad apellido;
-    tcad signo;
-    tcad alias; 
-    int juegos_ganados;
-    int mejor_puntaje;
-    int puntaje_acumulado;
+typedef struct tjugador{
+	tcad nombre;
+	tcad apellido;
+	tcad signo;
+	tcad alias; 
+	int juegos_ganados;
+	int mejor_puntaje;
+	int puntaje_acumulado;
 };
 
 typedef struct tpalabra {
@@ -27,7 +28,7 @@ typedef struct tpalabra {
     tcad sinonimo;
 };
 
-struct tinfo_ranking {
+typedef struct tinfo_ranking {
     tcad alias;
     int puntaje; 
 };

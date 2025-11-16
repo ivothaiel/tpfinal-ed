@@ -1,5 +1,11 @@
 #include <iostream>
 #include <stdlib.h>
+#include <string.h>
+
+#include "TDA_Base.hpp"
+//#include "TDAJugador.hpp"
+#include "modulos.hpp"
+#include "TDAJugador.hpp"
 
 // MENU PRINCIPAL DEL JUEGO
 void menu_principal(char &op){
@@ -31,7 +37,7 @@ void menu_principal(char &op){
 }
 	
 // MENU PARA LA GESTION DE JUGADORES
-void menu_jugadores(){
+void menu_jugadores(pjugador &jugadores){
 	int op;
 	do {
 		system("cls");
@@ -52,10 +58,12 @@ void menu_jugadores(){
 		
 		switch (op) {
 		case 1: 
-			cout << "* * Registrar Jugador * *" << endl; 
+			cout << "* * Registrar Jugador * *" << endl;
+			alta_jugador(jugadores);
 			break;
 		case 2: 
-			cout << "* * Consultar Jugador * *" << endl; 
+			cout << "* * Consultar Jugador * *" << endl;
+			consultar_jugador(jugadores);
 			break;
 		case 3: 
 			cout << "* * Modificar Jugador * *" << endl; 

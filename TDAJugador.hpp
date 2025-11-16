@@ -1,19 +1,25 @@
-#ifndef TDAJUGADOR_HPP
-#define TDAJUGADOR_HPP
 
-#include "TDA_Base.hpp" 
+#include <iostream>
+
+#include "modulos.hpp" 
+#include "TDA_Base.hpp"
+
+typedef char tcad[30];
 
 typedef struct tnodo_jugador *pjugador;
-struct tnodo_jugador {
+
+typedef struct tnodo_jugador {
     tjugador dato;       
     pjugador izq;   
     pjugador der;   
 };
 
+// Inicializa el arbol de jugadores
 void iniciar(pjugador &arbol) {
     arbol = NULL;
 }
 
+// Crea un nuevo puntero jugador
 void crear_jugador(pjugador &nuevo, tjugador dato_jugador) {
     nuevo = new tnodo_jugador; 
     if (nuevo != NULL) {
@@ -23,24 +29,20 @@ void crear_jugador(pjugador &nuevo, tjugador dato_jugador) {
     }
 }
 
+// Agrega un nuevo jugador al arbol de jugadores
 void insertar_jugador(pjugador &arbol, pjugador nuevo) {
     if (arbol == NULL) {
         arbol = nuevo;
     }
     else {
-        if (strcmp(nuevo->dato.alias, arbol->dato.alias) == 0) {
-            cout << "ERROR: El alias '" << nuevo->dato.alias << "' ya existe." << endl;
-            delete nuevo; 
-        }
-        else if (strcmp(nuevo->dato.alias, arbol->dato.alias) < 0) {
+        if (strcmp(nuevo->dato.alias, arbol->dato.alias) < 0)
             insertar_jugador(arbol->izq, nuevo);
-        }
-        else {
+        else
             insertar_jugador(arbol->der, nuevo);
-        }
     }
 }
 
+// Retorna un jugador de acuerdo a un alias enviado
 pjugador buscar_jugador(pjugador arbol, tcad alias_buscado) {
     if (arbol == NULL) {
         return NULL;
@@ -59,18 +61,38 @@ pjugador buscar_jugador(pjugador arbol, tcad alias_buscado) {
     }
 }
 
+// Determina la existencia de un alias en la lista de jugadores
+bool buscar_alias(pjugador arbol, tcad alias){
+	bool encontrado = false;
+	if(arbol != NULL){
+		int comparacion = strcmp(alias, arbol->dato.alias);
+		if(comparacion == 0)
+			encontrado = true;
+		else if(comparacion < 0){
+			encontrado = buscar_alias(arbol->izq, alias);
+		}else{
+			encontrado = buscar_alias(arbol->der, alias);
+		}
+	}
+	return encontrado;
+}
+
+// Muestra el listado de jugadores en recorrido PRE-ORDEN (ordenado)
+	/*
 void listar_jugadores(pjugador arbol) {
     if (arbol != NULL) {
         listar_jugadores(arbol->izq);
         cout << "----------------------------------------" << endl;
-        cout << "Alias: " << arbol->dato.alias << endl;
-        cout << "Nombre: " << arbol->dato.nombre << " " << arbol->dato.apellido << endl;
-        cout << "Signo: " << arbol->dato.signo << endl;
-        cout << "Puntaje Max: " << arbol->dato.mejor_puntaje << endl;
-        cout << "Puntaje Acum: " << arbol->dato.puntaje_acumulado << endl;
-        cout << "Juegos Ganados: " << arbol->dato.juegos_ganados << endl;
+        mostrar_jugador(arbol);
         listar_jugadores(arbol->der);
     }
+}*/
+
+int contar_jugadores(pjugador arbol) {
+	if (arbol == NULL) {
+		return 0;
+	}
+	return 1 + contar_jugadores(arbol->izq) + contar_jugadores(arbol->der);
 }
 
 pjugador menor_mayores(pjugador &nodo_derecho) {
@@ -137,4 +159,3 @@ void liberar(pjugador &arbol) {
     }
 }
 
-#endif 
