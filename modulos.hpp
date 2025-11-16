@@ -358,7 +358,7 @@ bool jugarPalabra(tpalabra &palabra_actual, int &puntaje_partida) {
 
     while (intentos > 0 && !adivinada) {
         limpiarPantalla();
-        cout << "--- 💎 ADIVINA LA PALABRA 💎 ---" << endl;
+        cout << "---  ADIVINA LA PALABRA  ---" << endl;
         cout << "Puntaje Actual: " << puntaje_partida << endl;
         cout << "Intentos Restantes: " << intentos << endl;
         cout << "\nPistas Usadas:" << endl;
@@ -514,7 +514,7 @@ void construir_ranking_rec(pjugador arbol, tlista_ranking &lista) {
 
 void mostrarVencedores(pjugador arbol_jugadores, tlista_ranking &ranking) {
     limpiarPantalla();
-    cout << "--- 🏆 VENCEDORES (Ranking por Mejor Puntaje) 🏆 ---" << endl;
+    cout << "---  VENCEDORES (Ranking por Mejor Puntaje)  ---" << endl;
 
     liberarlista(ranking); 
     construir_ranking_rec(arbol_jugadores, ranking);
