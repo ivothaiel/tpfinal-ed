@@ -18,6 +18,7 @@ int main(){
 			menu_jugadores();
 			break;
 		case '2':
+			menu_palabras();
 			break;
 		case '3':
 			break;

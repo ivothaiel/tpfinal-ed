@@ -75,3 +75,49 @@ void menu_jugadores(){
 		system("pause");
 	} while (op != 6);
 }
+	
+// MENU PARA LA GESTION DE PALABRAS
+void menu_palabras(){
+	int op;
+	do {
+		system("cls");
+		cout << "\n";
+		cout << " +----------------------------------------------+\n";
+		cout << " |     * Gestion de Palabras Magicas *          |\n";
+		cout << " +----------------------------------------------+\n\n";
+		
+		cout << "   1) Almacenar Palabra" << endl;
+		cout << "   2) Consultar Palabra" << endl;
+		cout << "   3) Modificar Palabra" << endl;
+		cout << "   4) Eliminar Palabra" << endl;
+		cout << "   5) Listar Palabras" << endl;
+		cout << "   6) Volver\n" << endl;
+		
+		cout << "> Opcion: ";
+		cin >> op;
+		
+		switch (op) {
+		case 1: 
+			cout << "* * Almacenar Palabra * *" << endl; 
+			break;
+		case 2: 
+			cout << "* * Consultar Palabra * *" << endl; 
+			break;
+		case 3: 
+			cout << "* * Modificar Palabra * *" << endl; 
+			break;
+		case 4: 
+			cout << "* * Eliminar Palabra * *" << endl; 
+			break;
+		case 5: 
+			cout << "* * Listar Palabras * *" << endl; 
+			break;
+		case 6: 
+			cout << "Redirigiendo al menu principal..." << endl;
+			break;
+		default:
+			cout << "OPCION INVALIDA" << endl;
+		}
+		system("pause");
+	} while (op != 6);
+}
