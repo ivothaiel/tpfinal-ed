@@ -1,31 +1,13 @@
-#ifndef ARCHIVOS_HPP
-#define ARCHIVOS_HPP
+#include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+using namespace std;
 
-/* * -------------------------------------------------------------------------
- * Archivo: archivos.hpp
- * -------------------------------------------------------------------------
- * Propósito: Define las funciones de persistencia (Carga y Guardado)
- * para Jugadores y Palabras, usando archivos binarios.
- * (Basado en ED24 - Unidad V - Archivos.pdf)
- * -------------------------------------------------------------------------
- */
-
-// --- 1. Inclusiones Base ---
-/* * Razón: Incluimos los TDA que vamos a guardar/cargar.
- * Estos archivos ya incluyen "TDA_Base.hpp" automáticamente.
- */
-#include "TDAJugador.hpp"     // (Usa tjugador de TDA_Base)
-#include "TDADiccionario.hpp" // (Usa tpalabra de TDA_Base)
-
-// --- 2. Nombres de los Archivos ---
-const char* ARCHIVO_JUGADOR = "jugadores.dat"; // (Cambié el nombre para que coincida con tu código)
+#include "TDA_Base.hpp"
+const char* ARCHIVO_JUGADOR = "jugadores.dat"; 
 const char* ARCHIVO_PALABRAS = "palabras.dat";
 
-// --- 3. Operaciones de Archivo de JUGADORES (ABB) ---
-
-/* * Operación: guardar_recursivo (Auxiliar)
- * Propósito: Recorre el árbol y guarda cada nodo.
- */
 void guardar_recursivo(pjugador arbol, FILE *archivo) {
     if (arbol != NULL) {
         // 1. Raíz (Procesar): Escribimos el dato
@@ -132,5 +114,3 @@ void cargarpalabras(tdiccionario &dic) {
     fclose(archivo);
     cout << "Palabras cargadas en el diccionario." << endl;
 }
-
-#endif // ARCHIVOS_HPP

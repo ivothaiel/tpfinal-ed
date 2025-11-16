@@ -1,15 +1,7 @@
-#ifndef MODULOS_HPP
-#define MODULOS_HPP
-
-#include <iostream>
 #include <stdlib.h>     
 #include <stdio.h>      
 #include <time.h>       
 #include "TDA_Base.hpp"
-#include "TDAJugador.hpp"
-#include "TDADiccionario.hpp"
-#include "TDA_Ranking.hpp"
-#include "TDAPila.hpp"
 
 using namespace std;
 
@@ -181,5 +173,3 @@ void listarPalabras(tdiccionario dic) {
         }
     }
 }
-
-#endif 
