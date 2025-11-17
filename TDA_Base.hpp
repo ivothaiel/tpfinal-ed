@@ -165,67 +165,123 @@ void liberarlista(tlista_ranking &lista) {
 void iniciar(pjugador &arbol) {
     arbol = NULL;
 }
+
 void crear_jugador(pjugador &nuevo, tjugador dato_jugador) {
     nuevo = new tnodo_jugador; 
-    if (nuevo != NULL) { nuevo->dato = dato_jugador; nuevo->izq = NULL; nuevo->der = NULL; }
+    if (nuevo != NULL) 
+	{ 
+		nuevo->dato = dato_jugador; 
+		nuevo->izq = NULL; 
+		nuevo->der = NULL; 
+	}
 }
+
+// Agrega un nuevo jugador al arbol de jugadores
 void insertar_jugador(pjugador &arbol, pjugador nuevo) {
-    if (arbol == NULL) { arbol = nuevo; }
-    else {
-        if (strcmp(nuevo->dato.alias, arbol->dato.alias) == 0) {
-            cout << "ERROR: El alias '" << nuevo->dato.alias << "' ya existe." << endl; delete nuevo; 
-        }
-        else if (strcmp(nuevo->dato.alias, arbol->dato.alias) < 0) { insertar_jugador(arbol->izq, nuevo); }
-        else { insertar_jugador(arbol->der, nuevo); }
-    }
+	if (arbol == NULL) {
+		arbol = nuevo;
+	}
+	else {
+		if (strcmp(nuevo->dato.alias, arbol->dato.alias) < 0)
+			insertar_jugador(arbol->izq, nuevo);
+		else
+			insertar_jugador(arbol->der, nuevo);
+	}
 }
+
+// Busca un jugador en el arbol de jugadores de acuerdo al alias enviado
 pjugador buscar_jugador(pjugador arbol, tcad alias_buscado) {
-    if (arbol == NULL) { return NULL; }
+    if (arbol == NULL) { 
+		return NULL; 
+	}
     else {
         int comparacion = strcmp(alias_buscado, arbol->dato.alias);
-        if (comparacion == 0) { return arbol; }
-        else if (comparacion < 0) { return buscar_jugador(arbol->izq, alias_buscado); }
-        else { return buscar_jugador(arbol->der, alias_buscado); }
+        if (comparacion == 0) { 
+			return arbol; 
+		}
+        else if (comparacion < 0) { 
+			return buscar_jugador(arbol->izq, alias_buscado); 
+		}
+        else { 
+			return buscar_jugador(arbol->der, alias_buscado); 
+		}
     }
 }
+
+// Lista todos los jugadores (recorrido EN-ORDEN) del arbol
 void listar_jugadores(pjugador arbol) {
     if (arbol != NULL) {
         listar_jugadores(arbol->izq);
-        cout << "----------------------------------------" << endl;
-        cout << "  Alias: " << arbol->dato.alias << endl;
-        cout << "  Nombre: " << arbol->dato.nombre << " " << arbol->dato.apellido << endl;
-        cout << "  Signo: " << arbol->dato.signo << endl;
-        cout << "  Puntaje Max: " << arbol->dato.mejor_puntaje << endl;
+        cout << "-----------------------------" << endl;
+		cout << "Alias: " << arbol->dato.alias << endl;
+		cout << "Nombre: " << arbol->dato.nombre << " " 
+			<< arbol->dato.apellido << endl;
+		cout << "Signo: " << arbol->dato.signo << endl;
+		cout << "Juegos Ganados: " << arbol->dato.juegos_ganados << endl;
+		cout << "Mejor Puntaje: " << arbol->dato.mejor_puntaje << endl;
+		cout << "Puntaje Acumulado: " << arbol->dato.puntaje_acumulado << endl;
         listar_jugadores(arbol->der);
     }
 }
+
+// Cuenta la cantidad de jugadores que tiene el arbol
 int contar_jugadores(pjugador arbol) {
-    if (arbol == NULL) { return 0; }
+    if (arbol == NULL) { 
+		return 0; 
+	}
     return 1 + contar_jugadores(arbol->izq) + contar_jugadores(arbol->der);
 }
-pjugador menor_mayores(pjugador &nodo_derecho) {
+
+void cambio(tjugador &a, tjugador &b){
+	tjugador aux = a;
+	a = b;
+	b = aux;
+}
+
+pjugador menor_mayores(pjugador elegido, pjugador &menor) {
     pjugador aux;
-    if (nodo_derecho->izq != NULL) { aux = menor_mayores(nodo_derecho->izq); } 
-    else { aux = nodo_derecho; nodo_derecho = nodo_derecho->der; }
+    if (menor->izq != NULL) { 
+		aux = menor_mayores(elegido, menor->izq); 
+	} 
+    else { 
+		cambio(elegido->dato, menor->dato);
+		aux = menor; 
+		menor = menor->der; 
+	}
     return aux;
 }
-void eliminarjugador(pjugador &arbol, tcad alias_buscado) {
+
+pjugador eliminar_jugador(pjugador &arbol, tcad alias_buscado) {
     pjugador aux;
-    if (arbol == NULL) { return; }
-    int comparacion = strcmp(alias_buscado, arbol->dato.alias);
-    if (comparacion < 0) { eliminarjugador(arbol->izq, alias_buscado); } 
-    else if (comparacion > 0) { eliminarjugador(arbol->der, alias_buscado); } 
-    else { 
-        if (arbol->izq == NULL && arbol->der == NULL) { aux = arbol; arbol = NULL; delete aux; }
-        else if (arbol->izq == NULL) { aux = arbol; arbol = arbol->der; delete aux; } 
-        else if (arbol->der == NULL) { aux = arbol; arbol = arbol->izq; delete aux; }
-        else {
-            aux = menor_mayores(arbol->der);
-            arbol->dato = aux->dato; 
-            eliminarjugador(arbol->der, aux->dato.alias); 
-        }
-    }
+    if (arbol == NULL) { 
+		aux = NULL; 
+	}else{
+		int comparacion = strcmp(alias_buscado, arbol->dato.alias);
+		if (comparacion < 0) { 
+			aux = eliminar_jugador(arbol->izq, alias_buscado); 
+		} 
+		else if (comparacion > 0) { 
+			aux = eliminar_jugador(arbol->der, alias_buscado); 
+		} 
+		else {
+			aux = arbol;
+			if (arbol->izq == NULL && arbol->der == NULL) { 
+				arbol = NULL; 
+			}
+			else if (arbol->izq == NULL) { 
+				arbol = arbol->der;
+			} 
+			else if (arbol->der == NULL) { 
+				arbol = arbol->izq;
+			}
+			else {
+				aux = menor_mayores(arbol, arbol->der);
+			}
+		}
+	}
+	return aux;
 }
+
 void liberar(pjugador &arbol) {
     if (arbol != NULL) {
         liberar(arbol->izq); liberar(arbol->der);
@@ -355,7 +411,7 @@ int contar_palabras(tdiccionario dic) {
 
 // --- FUNCIONES DE UTILIDAD ---
 void limpiarPantalla() {
-    system("clear"); 
+    system("cls"); 
 }
 
 void pausarPantalla() {
@@ -369,17 +425,16 @@ void leerCadenaValidada(const char* mensaje, tcad &cadena, int minLen) {
     bool valido = false;
     while (!valido) {
         cout << mensaje;
-
+		
         fgets(cadena, MAX, stdin); 
         int len = strlen(cadena);
-        if (len > 0 && cadena[len - 1] == '\n') {
+		
+        if (len > 0 && cadena[len - 1] == '\n')
             cadena[len - 1] = '\0'; 
-        }
         
-        if (strlen(cadena) >= minLen) {
+        if ((int)strlen(cadena) >= minLen)
             valido = true;
-        } else {
-            cout << "Entrada invalida. Debe tener al menos " << minLen << " caracteres." << endl;
-        }
+        else
+			cout << "Invalido: La cadena debe tener al menos " << minLen << " caracteres" << endl;
     }
 }

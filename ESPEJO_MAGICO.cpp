@@ -1,7 +1,6 @@
 #include "modulos.hpp"
 
-
-// 2. PROGRAMA PRINCIPAL
+// PROGRAMA PRINCIPAL
 int main(){
 	char op;
     
@@ -42,7 +41,6 @@ int main(){
 			    mostrarVencedores(arbol_jugadores, ranking_vencedores); 
 			    break;
 		    case '5':
-                limpiarPantalla();
                 cout << "\nGuardando datos..." << endl;
                 
                 guardarjugadores(arbol_jugadores);
@@ -56,7 +54,7 @@ int main(){
 			    cout << "Hasta pronto, viajero.\n\n";
 			    break;
 		    default:
-			    cout << "OPCION INVALIDA" << endl;
+			    cout << "\nOPCION INVALIDA" << endl;
 		}
         if (op != '5') pausarPantalla();
         

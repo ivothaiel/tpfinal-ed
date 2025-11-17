@@ -5,141 +5,207 @@ void altaJugador(pjugador &arbol_jugadores);
 void bajaJugador(pjugador &arbol_jugadores);
 void modificarJugador(pjugador arbol_jugadores);
 void consultarJugador(pjugador arbol_jugadores);
-void listarJugadores_alfabeticamente(pjugador arbol_jugadores);
+void listarJugadores(pjugador arbol_jugadores);
 void altaPalabra(tdiccionario &dic);
 void bajaPalabra(tdiccionario &dic);
 void modificarPalabra(tdiccionario &dic);
 void consultarPalabra(tdiccionario &dic);
 void listarPalabras(tdiccionario dic);
 void construir_ranking_rec(pjugador arbol, tlista_ranking &lista);
+void cargar_jugador(pjugador jugadores, tjugador &jugador);
+void mostrar_jugador(pjugador jugador);
 
-// GESTION DE JUGADORES
+// MENU PARA LA GESTION DE JUGADORES
 void gestionarJugadores(pjugador &arbol_jugadores) {
     int opc;
     bool salir = false;
     while (!salir) {
         limpiarPantalla(); 
-        cout << "--- GESTION DE JUGADORES ---" << endl;
-        cout << "1. Registrar Jugador" << endl;
-        cout << "2. Consultar Jugador" << endl;
-        cout << "3. Modificar Jugador" << endl;
-        cout << "4. Eliminar Jugador" << endl;
-        cout << "5. Listar Jugadores (Por Alias)" << endl;
-        cout << "0. Volver al Menu Principal" << endl;
-        cout << "Ingrese opcion: ";
+		cout << "\n";
+		cout << " +---------------------------------------+\n";
+		cout << " |      * Gestion de Jugadores *         |\n";
+		cout << " +---------------------------------------+\n\n";
+		
+		cout << "   1) Registrar Jugador" << endl;
+		cout << "   2) Consultar Jugador" << endl;
+		cout << "   3) Modificar Jugador" << endl;
+		cout << "   4) Eliminar Jugador" << endl;
+		cout << "   5) Listar Jugadores (Por Alias)" << endl;
+		cout << "   0) Volver\n" << endl;
+		
+		cout << "> Opcion: ";
         cin >> opc;
-
+		
         switch(opc) {
-            case 1: altaJugador(arbol_jugadores); break;
-            case 2: consultarJugador(arbol_jugadores); break;
-            case 3: modificarJugador(arbol_jugadores); break;
-            case 4: bajaJugador(arbol_jugadores); break;
-            case 5: listarJugadores_alfabeticamente(arbol_jugadores); break;
+            case 1:
+				cout << "\n* * Registrar Jugador * *\n" << endl;
+				altaJugador(arbol_jugadores); 
+				break;
+            case 2: 
+				cout << "\n* * Consultar Jugador * *" << endl;
+				consultarJugador(arbol_jugadores); 
+				break;
+            case 3:
+				cout << "\n* * Modificar Jugador * *" << endl;
+				modificarJugador(arbol_jugadores); 
+				break;
+            case 4:
+				cout << "\n* * Eliminar Jugador * *" << endl; 
+				bajaJugador(arbol_jugadores); 
+				break;
+            case 5:
+				cout << "\n* * Listado de Jugadores * *" << endl; 
+				listarJugadores(arbol_jugadores); 
+				break;
             case 0: 
-                cout << "Volviendo al menu principal..." << endl; 
+                cout << "\nVolviendo al menu principal..." << endl; 
                 salir = true;
                 break;
             default: 
-                cout << "Opcion incorrecta." << endl; 
-                break;
+				cout << "\nOPCION INVALIDA" << endl; 
         }
         if (!salir) pausarPantalla(); 
     }
 }
 
+// Muestra los datos de un jugador
+void mostrar_jugador(pjugador jugador){
+	cout << "\n* * DATOS DEL JUGADOR * *\n" << endl;
+	cout << "Alias: " << jugador->dato.alias << endl;
+	cout << "Nombre: " << jugador->dato.nombre << " " 
+		<< jugador->dato.apellido << endl;
+	cout << "Signo Zodiacal: " << jugador->dato.signo << endl;
+	cout << "Juegos Ganados: " << jugador->dato.juegos_ganados << endl;
+	cout << "Mejor Puntaje: " << jugador->dato.mejor_puntaje << endl;
+	cout << "Puntaje Acumulado: " << jugador->dato.puntaje_acumulado << endl;
+}
+
+// Permite la carga de datos de un nuevo jugador
+void cargar_jugador(pjugador jugadores, tjugador &jugador){
+	bool existe;
+	int c;
+	while((c = getchar()) != '\n' && c != EOF);
+	
+	do{
+		leerCadenaValidada("Ingrese Alias: ", jugador.alias, 4);
+		// Buscar el alias ingresado en el arbol de jugadores
+		existe = (buscar_jugador(jugadores, jugador.alias) != NULL);
+		if(existe)
+			cout << "\nEl alias '" << jugador.alias << "' ya se encuentra en uso" << endl;
+	} while(existe);
+	
+	leerCadenaValidada("Ingrese Nombre: ", jugador.nombre, 4);
+	
+	leerCadenaValidada("Ingrese Apellido: ", jugador.apellido, 4);
+	
+	leerCadenaValidada("Ingrese Signo Zodiacal: ", jugador.signo, 3);
+	
+	// Inicializar otros datos
+	jugador.juegos_ganados = 0;
+	jugador.mejor_puntaje = 0;
+	jugador.puntaje_acumulado = 0;
+}
+
+// Agrega un nuevo jugador al arbol de jugadores
 void altaJugador(pjugador &arbol_jugadores) {
     tjugador nuevo_jugador;
     pjugador nuevo_nodo;
-    limpiarPantalla();
-    cout << "--- ALTA DE JUGADOR ---" << endl;
-    int c;
-    while ((c = getchar()) != '\n' && c != EOF);
-    
-    leerCadenaValidada("Ingrese Alias (min 4 caracteres): ", nuevo_jugador.alias, 4);
-    if (buscar_jugador(arbol_jugadores, nuevo_jugador.alias) != NULL) {
-        cout << "ERROR: El alias '" << nuevo_jugador.alias << "' ya existe." << endl;
-        return;
-    }
-
-    leerCadenaValidada("Ingrese Nombre (min 4 caracteres): ", nuevo_jugador.nombre, 4);
-    leerCadenaValidada("Ingrese Apellido (min 4 caracteres): ", nuevo_jugador.apellido, 4);
-    leerCadenaValidada("Ingrese Signo Zodiacal: ", nuevo_jugador.signo, 1);
-    
-    nuevo_jugador.juegos_ganados = 0;
-    nuevo_jugador.mejor_puntaje = 0;
-    nuevo_jugador.puntaje_acumulado = 0;
+	
+	cargar_jugador(arbol_jugadores, nuevo_jugador);
 
     crear_jugador(nuevo_nodo, nuevo_jugador);
     if (nuevo_nodo != NULL) {
         insertar_jugador(arbol_jugadores, nuevo_nodo);
-        cout << "Jugador '" << nuevo_jugador.alias << "' registrado con exito." << endl;
+        cout << "\nJugador '" << nuevo_jugador.alias << "' registrado con exito" << endl;
     } else {
-        cout << "ERROR: No hay memoria para crear el jugador." << endl;
+        cout << "\nERROR: No hay memoria para crear el jugador" << endl;
     }
 }
 
 void bajaJugador(pjugador &arbol_jugadores) {
     tcad alias_buscado;
-    limpiarPantalla();
-    cout << "--- BAJA DE JUGADOR ---" << endl;
+	pjugador eliminado;
     int c;
     while ((c = getchar()) != '\n' && c != EOF);
     
-    leerCadenaValidada("Ingrese el alias del jugador a eliminar: ", alias_buscado, 1);
+    leerCadenaValidada("\nIngrese Alias del Jugador: ", alias_buscado, 1);
     if (buscar_jugador(arbol_jugadores, alias_buscado) == NULL) {
-        cout << "ERROR: No se encontro al jugador con alias '" << alias_buscado << "'." << endl;
+		cout << "\nEl alias '" << alias_buscado << "' no corresponde a ningun jugador" << endl;
     } else {
-        eliminarjugador(arbol_jugadores, alias_buscado);
-        cout << "Jugador '" << alias_buscado << "' eliminado con exito." << endl;
+        eliminado = eliminar_jugador(arbol_jugadores, alias_buscado);
+		delete eliminado;
+        cout << "\nJugador '" << alias_buscado << "' eliminado con exito" << endl;
     }
+}
+
+// Edita el campo seleccionado del jugador
+void editar_jugador(pjugador &jugador, char op){
+	switch(op){
+	case '1':
+		leerCadenaValidada("Ingrese Nuevo Nombre: ", jugador->dato.nombre, 4);
+		cout << "Nombre actualizado correctamente" << endl;
+		break;
+	case '2':
+		leerCadenaValidada("Ingrese Nuevo Apellido: ", jugador->dato.apellido, 4);
+		cout << "Apellido actualizado correctamente" << endl;
+		break;
+	case '3':
+		leerCadenaValidada("Ingrese Nuevo Signo Zodiacal: ", jugador->dato.signo, 3);
+		cout << "Signo Zodiacal actualizado correctamente" << endl;
+		break;
+	case '0': 
+		cout << "\nVolviendo al menu principal..." << endl; 
+		break;
+	default: 
+		cout << "\nOPCION INVALIDA" << endl; 
+	}
 }
 
 void modificarJugador(pjugador arbol_jugadores) {
     tcad alias_buscado;
-    limpiarPantalla();
-    cout << "--- MODIFICAR JUGADOR ---" << endl;
+	char op;
+	
     int c;
     while ((c = getchar()) != '\n' && c != EOF);
 
-    leerCadenaValidada("Ingrese el alias del jugador a modificar: ", alias_buscado, 1);
+    leerCadenaValidada("Ingrese Alias del Jugador: ", alias_buscado, 1);
     pjugador nodo_jugador = buscar_jugador(arbol_jugadores, alias_buscado);
-    if (nodo_jugador == NULL) { cout << "Jugador no encontrado." << endl; } 
+    if (nodo_jugador == NULL) { 
+		cout << "\nEl alias '" << alias_buscado << "' no corresponde a ningun jugador" << endl;
+	} 
     else {
-        cout << "Jugador encontrado. Ingrese nuevos datos:" << endl;
-        cout << "Alias: " << nodo_jugador->dato.alias << " (No modificable)" << endl;
-        leerCadenaValidada("Ingrese nuevo Nombre (min 4): ", nodo_jugador->dato.nombre, 4);
-        leerCadenaValidada("Ingrese nuevo Apellido (min 4): ", nodo_jugador->dato.apellido, 4);
-        leerCadenaValidada("Ingrese nuevo Signo Zodiacal: ", nodo_jugador->dato.signo, 1);
-        cout << "\nDatos del jugador '" << nodo_jugador->dato.alias << "' actualizados." << endl;
+        cout << "Jugador " << nodo_jugador->dato.alias << endl;
+		do{
+			submenu_modificar_jugador(op);
+			editar_jugador(nodo_jugador, op);
+		} while(op != '0');
     }
 }
 
+// Consulta un jugador del arbol de jugadores
 void consultarJugador(pjugador arbol_jugadores) {
     tcad alias_buscado;
-    limpiarPantalla();
-    cout << "--- CONSULTAR JUGADOR ---" << endl;
     int c;
     while ((c = getchar()) != '\n' && c != EOF);
 
-    leerCadenaValidada("Ingrese el alias del jugador a consultar: ", alias_buscado, 1);
+    leerCadenaValidada("\nIngrese Alias del Jugador: ", alias_buscado, 1);
     pjugador nodo_jugador = buscar_jugador(arbol_jugadores, alias_buscado);
-    if (nodo_jugador == NULL) { cout << "Jugador no encontrado." << endl; } 
+    if (nodo_jugador == NULL) { 
+		cout << "\nEl alias '" << alias_buscado << "' no corresponde a ningun jugador" << endl; 
+	} 
     else {
-        cout << "--- DATOS DEL JUGADOR ---" << endl;
-        cout << "Alias: " << nodo_jugador->dato.alias << endl;
-        cout << "Nombre: " << nodo_jugador->dato.nombre << " " << nodo_jugador->dato.apellido << endl;
-        cout << "Signo: " << nodo_jugador->dato.signo << endl;
-        cout << "Juegos Ganados: " << nodo_jugador->dato.juegos_ganados << endl;
-        cout << "Mejor Puntaje: " << nodo_jugador->dato.mejor_puntaje << endl;
-        cout << "Puntaje Acumulado: " << nodo_jugador->dato.puntaje_acumulado << endl;
+        mostrar_jugador(nodo_jugador);
     }
 }
 
-void listarJugadores_alfabeticamente(pjugador arbol_jugadores) {
-    limpiarPantalla();
-    cout << "--- LISTADO DE JUGADORES (Orden Alfabetico por Alias) ---" << endl;
-    if (arbol_jugadores == NULL) { cout << "\nNo hay jugadores registrados." << endl; } 
-    else { listar_jugadores(arbol_jugadores); }
+// Lista todos los jugadores
+void listarJugadores(pjugador arbol_jugadores) {
+    if (arbol_jugadores == NULL) { 
+		cout << "\nNo hay jugadores registrados" << endl; 
+	} 
+    else { 
+		listar_jugadores(arbol_jugadores); 
+	}
 }
 
 
@@ -376,7 +442,7 @@ bool jugarPalabra(tpalabra &palabra_actual, int &puntaje_partida) {
             if (strcmp(intento_palabra, palabra_actual.palabra) == 0) {
                 adivinada = true;
             } else {
-                cout << "Â¡Incorrecto!" << endl;
+                cout << "¡Incorrecto!" << endl;
                 intentos--;
                 pausarPantalla();
             }
@@ -400,7 +466,7 @@ bool jugarPalabra(tpalabra &palabra_actual, int &puntaje_partida) {
                 default: break;
             }
             if (costo > 0 && puntaje_partida < 0) { 
-                cout << "Â¡No tienes puntos suficientes para esta pista!" << endl;
+                cout << "¡No tienes puntos suficientes para esta pista!" << endl;
                 puntaje_partida += costo; 
                 pistas_usadas[op_pista - '1'] = false; 
                 pausarPantalla();
@@ -432,7 +498,7 @@ void iniciarJuego(pjugador arbol_jugadores, tdiccionario dic, tlista_ranking &ra
         return;
     }
     
-    cout << "Â¡Suerte, " << jugador_seleccionado->dato.alias << "! La princesa Karym Su Yang cuenta contigo." << endl;
+    cout << "¡Suerte, " << jugador_seleccionado->dato.alias << "! La princesa Karym Su Yang cuenta contigo." << endl;
     pausarPantalla();
 
     tpila pila_juego;
@@ -453,11 +519,11 @@ void iniciarJuego(pjugador arbol_jugadores, tdiccionario dic, tlista_ranking &ra
         bool adivino_esta_palabra = jugarPalabra(palabra_actual, puntaje_partida);
 
         if (adivino_esta_palabra) {
-            cout << "Â¡Correcto! La palabra era: " << palabra_actual.palabra << endl;
+            cout << "¡Correcto! La palabra era: " << palabra_actual.palabra << endl;
             cout << "Has ganado 7 puntos." << endl;
             puntaje_partida += 7;
         } else {
-            cout << "Â¡HAS FALLADO! La palabra correcta era: " << palabra_actual.palabra << endl;
+            cout << "¡HAS FALLADO! La palabra correcta era: " << palabra_actual.palabra << endl;
             cout << "La guardiana del espejo te convierte en piedra..." << endl;
             gano_partida = false;
         }
@@ -466,8 +532,8 @@ void iniciarJuego(pjugador arbol_jugadores, tdiccionario dic, tlista_ranking &ra
     limpiarPantalla();
     if (gano_partida) {
         cout << "*****************************************************" << endl;
-        cout << "Â¡FELICIDADES, " << jugador_seleccionado->dato.alias << "!" << endl;
-        cout << "Â¡Has adivinado las 6 palabras y liberado a la princesa!" << endl;
+        cout << "¡FELICIDADES, " << jugador_seleccionado->dato.alias << "!" << endl;
+        cout << "¡Has adivinado las 6 palabras y liberado a la princesa!" << endl;
         cout << "Puntaje Final de la partida: " << puntaje_partida << endl;
         cout << "*****************************************************" << endl;
         
