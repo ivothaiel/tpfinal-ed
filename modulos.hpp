@@ -46,7 +46,7 @@ void gestionarJugadores(pjugador &arbol_jugadores) {
 				consultarJugador(arbol_jugadores); 
 				break;
             case 3:
-				cout << "\n* * Modificar Jugador * *" << endl;
+				cout << "\n* * Modificar Jugador * *\n" << endl;
 				modificarJugador(arbol_jugadores); 
 				break;
             case 4:
@@ -64,7 +64,6 @@ void gestionarJugadores(pjugador &arbol_jugadores) {
             default: 
 				cout << "\nOPCION INVALIDA" << endl; 
         }
-        if (!salir) pausarPantalla(); 
     }
 }
 
@@ -120,8 +119,10 @@ void altaJugador(pjugador &arbol_jugadores) {
     } else {
         cout << "\nERROR: No hay memoria para crear el jugador" << endl;
     }
+	pausarPantalla();
 }
 
+// Elimina un jugador del arbol de jugadores
 void bajaJugador(pjugador &arbol_jugadores) {
     tcad alias_buscado;
 	pjugador eliminado;
@@ -133,25 +134,28 @@ void bajaJugador(pjugador &arbol_jugadores) {
 		cout << "\nEl alias '" << alias_buscado << "' no corresponde a ningun jugador" << endl;
     } else {
         eliminado = eliminar_jugador(arbol_jugadores, alias_buscado);
+		cout << "\nJugador '" << eliminado->dato.alias << "' eliminado con exito" << endl;
 		delete eliminado;
-        cout << "\nJugador '" << alias_buscado << "' eliminado con exito" << endl;
     }
+	pausarPantalla();
 }
 
 // Edita el campo seleccionado del jugador
 void editar_jugador(pjugador &jugador, char op){
+	int c;
+	while ((c = getchar()) != '\n' && c != EOF);
 	switch(op){
 	case '1':
 		leerCadenaValidada("Ingrese Nuevo Nombre: ", jugador->dato.nombre, 4);
-		cout << "Nombre actualizado correctamente" << endl;
+		cout << "\nNombre actualizado correctamente" << endl;
 		break;
 	case '2':
 		leerCadenaValidada("Ingrese Nuevo Apellido: ", jugador->dato.apellido, 4);
-		cout << "Apellido actualizado correctamente" << endl;
+		cout << "\nApellido actualizado correctamente" << endl;
 		break;
 	case '3':
 		leerCadenaValidada("Ingrese Nuevo Signo Zodiacal: ", jugador->dato.signo, 3);
-		cout << "Signo Zodiacal actualizado correctamente" << endl;
+		cout << "\nSigno Zodiacal actualizado correctamente" << endl;
 		break;
 	case '0': 
 		cout << "\nVolviendo al menu principal..." << endl; 
@@ -161,6 +165,7 @@ void editar_jugador(pjugador &jugador, char op){
 	}
 }
 
+// Modifica un jugador seleccionado por alias
 void modificarJugador(pjugador arbol_jugadores) {
     tcad alias_buscado;
 	char op;
@@ -172,12 +177,15 @@ void modificarJugador(pjugador arbol_jugadores) {
     pjugador nodo_jugador = buscar_jugador(arbol_jugadores, alias_buscado);
     if (nodo_jugador == NULL) { 
 		cout << "\nEl alias '" << alias_buscado << "' no corresponde a ningun jugador" << endl;
+		pausarPantalla();
 	} 
     else {
-        cout << "Jugador " << nodo_jugador->dato.alias << endl;
 		do{
+			limpiarPantalla();
+			cout << "\nEdicion del Jugador: " << nodo_jugador->dato.alias << endl;
 			submenu_modificar_jugador(op);
 			editar_jugador(nodo_jugador, op);
+			pausarPantalla();
 		} while(op != '0');
     }
 }
@@ -196,6 +204,7 @@ void consultarJugador(pjugador arbol_jugadores) {
     else {
         mostrar_jugador(nodo_jugador);
     }
+	pausarPantalla();
 }
 
 // Lista todos los jugadores
@@ -206,6 +215,7 @@ void listarJugadores(pjugador arbol_jugadores) {
     else { 
 		listar_jugadores(arbol_jugadores); 
 	}
+	pausarPantalla();
 }
 
 
@@ -224,7 +234,7 @@ void gestionarPalabras(tdiccionario &dic) {
         cout << "0. Volver al Menu Principal" << endl;
         cout << "Ingrese opcion: ";
         cin >> opc;
-
+		
         switch(opc) {
             case 1: altaPalabra(dic); break;
             case 2: bajaPalabra(dic); break;
