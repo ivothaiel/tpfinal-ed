@@ -1,7 +1,9 @@
+
+
 #include "TDA_Base.hpp"
+
 const char* ARCHIVO_JUGADOR = "jugadores.dat"; 
 const char* ARCHIVO_PALABRAS = "palabras.dat";
-
 
 void guardar(pjugador arbol, FILE *archivo) {
     if (arbol != NULL) {
@@ -41,9 +43,6 @@ void cargarjugadores(pjugador &arbol_jugadores) {
     fclose(archivo); 
     cout << "Jugadores cargados en el arbol." << endl;
 }
-
-
-//  Operaciones de Archivo de PALABRAS (Diccionario) ---
 
 void guardarpalabras(tdiccionario dic) {
     FILE *archivo;

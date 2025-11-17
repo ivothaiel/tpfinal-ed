@@ -1,5 +1,7 @@
 #include "modulos.hpp"
-//PROGRAMA PRINCIPAL
+
+
+// 2. PROGRAMA PRINCIPAL
 int main(){
 	char op;
     
@@ -10,7 +12,7 @@ int main(){
 
     // Inicializar estructuras
     iniciar(arbol_jugadores);                 
-    creardic(diccionario_palabras);          
+    creardic(diccionario_palabras);           
     iniciarlista(ranking_vencedores);        
 
     // Cargar datos desde archivos
@@ -18,12 +20,12 @@ int main(){
     cargarpalabras(diccionario_palabras);
     
     cout << "\nDatos cargados. Presione Enter para iniciar..." << endl;
-    int c; 
+    int c; // Limpieza manual del buffer
     while ((c = getchar()) != '\n' && c != EOF);
     getchar(); // Espera al Enter
 
 	do{
-		limpiarPantalla();
+		limpiarPantalla(); 
 		menu_principal(op); 
         
 		switch(op){

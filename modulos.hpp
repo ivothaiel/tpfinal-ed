@@ -1,6 +1,6 @@
 #include "menus.hpp"
 
-
+// Prototipos
 void altaJugador(pjugador &arbol_jugadores);
 void bajaJugador(pjugador &arbol_jugadores);
 void modificarJugador(pjugador arbol_jugadores);
@@ -13,9 +13,7 @@ void consultarPalabra(tdiccionario &dic);
 void listarPalabras(tdiccionario dic);
 void construir_ranking_rec(pjugador arbol, tlista_ranking &lista);
 
-
-
-
+// GESTION DE JUGADORES
 void gestionarJugadores(pjugador &arbol_jugadores) {
     int opc;
     bool salir = false;
@@ -145,8 +143,7 @@ void listarJugadores_alfabeticamente(pjugador arbol_jugadores) {
 }
 
 
-// GESTIÓN DE PALABRAS
-
+// GESTION DE PALABRAS
 void gestionarPalabras(tdiccionario &dic) {
     int opc;
     bool salir = false;
@@ -271,8 +268,7 @@ void listarPalabras(tdiccionario dic) {
 }
 
 
-// LÓGICA COORDINADORA
-
+// LOGICA COORDINADORA
 pjugador seleccionarJugador(pjugador arbol_jugadores) {
     tcad alias_buscado;
     pjugador jugador_encontrado = NULL;
