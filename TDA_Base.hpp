@@ -1,4 +1,5 @@
 
+
 #include <iostream>
 #include <stdio.h>    
 #include <stdlib.h>   
@@ -74,10 +75,7 @@ struct tpila {
     int cima;         
 };
 
-/* * -------------------------------------------------------------------------
- *  IMPLEMENTACIÓN TDA PILA 
- * -------------------------------------------------------------------------
- */
+// --- IMPLEMENTACION TDA PILA ---
 void iniciarpila(tpila &p) {
     p.cima = -1;
 }
@@ -105,10 +103,7 @@ tpalabra topepila(tpila p) {
 }
 
 
-/* * -------------------------------------------------------------------------
- * IMPLEMENTACIÓN TDA RANKING
- * -------------------------------------------------------------------------
- */
+// --- IMPLEMENTACION TDA RANKING ---
 void iniciarlista(tlista_ranking &lista) {
     lista.inicio = NULL;
     lista.cont = 0;
@@ -166,10 +161,7 @@ void liberarlista(tlista_ranking &lista) {
 }
 
 
-/* * -------------------------------------------------------------------------
- * IMPLEMENTACIÓN TDA JUGADOR 
- * -------------------------------------------------------------------------
- */
+// --- IMPLEMENTACION TDA JUGADOR ---
 void iniciar(pjugador &arbol) {
     arbol = NULL;
 }
@@ -242,7 +234,7 @@ void liberar(pjugador &arbol) {
 }
 
 
-// TDA DICCIONARIO
+// --- TDA DICCIONARIO ---
 void iniciarlista_palabras(tlista_palabras &lis) {
     lis.inicio = NULL;
     lis.fin = NULL;
@@ -361,14 +353,10 @@ int contar_palabras(tdiccionario dic) {
 }
 
 
-/* * -------------------------------------------------------------------------
- * 8. FUNCIONES DE UTILIDAD
- * -------------------------------------------------------------------------
- */
+// --- FUNCIONES DE UTILIDAD ---
 void limpiarPantalla() {
     system("clear"); 
 }
-
 
 void pausarPantalla() {
     cout << "\nPresione Enter para continuar...";
@@ -376,7 +364,6 @@ void pausarPantalla() {
     while ((c = getchar()) != '\n' && c != EOF);
     getchar(); 
 }
-
 
 void leerCadenaValidada(const char* mensaje, tcad &cadena, int minLen) {
     bool valido = false;
