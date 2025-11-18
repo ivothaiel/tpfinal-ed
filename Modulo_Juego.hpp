@@ -2,7 +2,8 @@
 using namespace std;
 const int PISTAS = 4;  
 typedef bool tpistas[PISTAS];
-
+typedef int indicesSeleccionados[7];
+typedef int costos[4];
 pjugador seleccionarJugador(pjugador arbol_jugadores) {
     tcad alias_buscado;
     pjugador jugador_encontrado = NULL;
@@ -16,7 +17,7 @@ pjugador seleccionarJugador(pjugador arbol_jugadores) {
         
         cout << "\nIngrese el alias del jugador (o '0' para cancelar): ";
         int c;
-        while ((c = getchar()) != '\n' && c != EOF);
+        while ((c = getchar()) != '\n');
         
         fgets(alias_buscado, MAX, stdin);
         int len = strlen(alias_buscado);
@@ -39,7 +40,7 @@ pjugador seleccionarJugador(pjugador arbol_jugadores) {
 
 void seleccionarPalabrasAleatorias(tdiccionario dic, tpila &pila_juego, int totalPalabras) {
 	// 1. Array estático de índices para las 6 palabras a seleccionar.
-	int indices_seleccionados[7]; 
+	indicesSeleccionados indices; 
 	int indice_aleatorio;
 	int indices_encontrados = 0;
 	
@@ -52,20 +53,20 @@ void seleccionarPalabrasAleatorias(tdiccionario dic, tpila &pila_juego, int tota
 		
 		// Verificar repetición de índice
 		for (int j = 0; j < indices_encontrados; j++) {
-			if (indices_seleccionados[j] == indice_aleatorio) {
+			if (indices[j] == indice_aleatorio) {
 				repetido = true;
 				break; 
 			}
 		}
 		
 		if (!repetido) {
-			indices_seleccionados[indices_encontrados] = indice_aleatorio;
+			indices[indices_encontrados] = indice_aleatorio;
 			indices_encontrados++;
 		}
 	}
 	
-	// 2. Recorrer la estructura del diccionario una SOLA VEZ para cargar las palabras
-	tpalabra palabra_actual;
+	// se recorre la estructura del diccionario una SOLA VEZ para cargar las palabras
+	
 	int indice_global = 0;
 	int palabras_cargadas_pila = 0;
 	pnodo_palabra p;
@@ -79,7 +80,7 @@ void seleccionarPalabrasAleatorias(tdiccionario dic, tpila &pila_juego, int tota
 		while (p != NULL) {
 			// Buscamos si el índice global actual (indice_global) coincide con uno de los 6 índices aleatorios
 			for (int j = 0; j < 6; j++) {
-				if (indices_seleccionados[j] == indice_global) {
+				if (indices[j] == indice_global) {
 					// Si coincide, guardamos la palabra y marcamos que fue encontrada.
 					palabras_a_apilar[palabras_cargadas_pila] = p->dato;
 					palabras_cargadas_pila++;
@@ -154,10 +155,10 @@ bool jugarPalabra(tpalabra &palabra_actual, int &puntaje_partida) {
             cin >> opcion;
 
             int idx = opcion - '1';
-            int costos[] = {2, 3, 4, 5};
+            costos c = {2, 3, 4, 5};
 
             if (idx >= 0 && idx < 4) {
-                int costo = costos[idx];
+                int costo = c[idx];
 
                 if (!pistas_usadas[idx] && puntaje_partida >= costo) {
                     puntaje_partida -= costo;
@@ -247,12 +248,12 @@ void iniciarJuego(pjugador arbol_jugadores, tdiccionario dic, tlista_ranking &ra
     }
 }
 
-void construir_ranking_rec(pjugador arbol, tlista_ranking &lista) {
+void construir_ranking(pjugador arbol, tlista_ranking &lista) {
     if (arbol == NULL) {
         return;
     }
     
-    construir_ranking_rec(arbol->izq, lista);
+    construir_ranking(arbol->izq, lista);
     
     if (arbol->dato.juegos_ganados > 0) {
         tinfo_ranking info;
@@ -266,7 +267,7 @@ void construir_ranking_rec(pjugador arbol, tlista_ranking &lista) {
         }
     }
     
-    construir_ranking_rec(arbol->der, lista);
+    construir_ranking(arbol->der, lista);
 }
 
 void mostrarVencedores(pjugador arbol_jugadores, tlista_ranking &ranking) {
@@ -274,7 +275,7 @@ void mostrarVencedores(pjugador arbol_jugadores, tlista_ranking &ranking) {
     cout << "---  VENCEDORES (Ranking por Mejor Puntaje)  ---" << endl;
 
     liberarlista(ranking); 
-    construir_ranking_rec(arbol_jugadores, ranking);
+    construir_ranking(arbol_jugadores, ranking);
 
     char orden_op;
     cout << "\nVer ranking en orden:" << endl;

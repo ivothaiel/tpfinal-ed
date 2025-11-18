@@ -2,8 +2,8 @@
 #include <string.h>
 #include <stdio.h>
 using namespace std;
-const char* ARCHIVO_JUGADOR = "jugadores.dat"; 
-const char* ARCHIVO_PALABRAS = "palabras.dat";
+const char* ARCHIVO_JUGADOR = "jugadores.txt"; 
+const char* ARCHIVO_PALABRAS = "palabras.txt";
 
 void guardar(pjugador arbol, FILE *archivo) {
     if (arbol != NULL) {

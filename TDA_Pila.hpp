@@ -30,12 +30,22 @@ bool pilallena(tpila p) {
     return p.cima == MAXPILA - 1;
 }
 void agregarpila(tpila &p, tpalabra_simple nuevo) {
-    if (pilallena(p) == true) { cout << "ERROR: Pila llena." << endl; }
-    else { p.cima++; p.datos[p.cima] = nuevo; }
+    if (pilallena(p) == true){ 
+		cout << "ERROR: Pila llena." << endl; 
+	}else{ 
+		p.cima++; 
+		p.datos[p.cima] = nuevo; 
+	}
 }
+
+
 tpalabra_simple quitarpila(tpila &p) {
     tpalabra_simple extraido;
-    if (pilavacia(p) == true) { strcpy(extraido.palabra, "ERROR_VACIA"); }
-    else { extraido = p.datos[p.cima]; p.cima--; }
+    if (pilavacia(p) == true){ 
+		strcpy(extraido.palabra, "ERROR_VACIA"); 
+	}else{ 
+		extraido = p.datos[p.cima]; 
+		p.cima--; 
+	}
     return extraido;
 }
