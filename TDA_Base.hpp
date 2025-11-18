@@ -1,5 +1,4 @@
 
-
 #include <iostream>
 #include <stdio.h>    
 #include <stdlib.h>   
@@ -11,6 +10,7 @@ using namespace std;
 const int MAX = 50; 
 typedef char tcad[MAX];
 
+// Definicion de la estructura ABB para los jugadores
 struct tjugador {
     tcad nombre;
     tcad apellido;
@@ -22,12 +22,14 @@ struct tjugador {
 };
 
 typedef struct tnodo_jugador *pjugador;
+
 struct tnodo_jugador {
     tjugador dato;       
     pjugador izq;   
     pjugador der;   
 };
 
+// Definicion de la estructura de diccionario para las palabras magicas
 struct tpalabra {
     tcad palabra; 
 	int longitud; 
@@ -36,6 +38,7 @@ struct tpalabra {
 };
 
 typedef struct tnodo_palabra *pnodo_palabra;
+
 struct tnodo_palabra {
     tpalabra dato;          
     pnodo_palabra ant;     
@@ -46,30 +49,39 @@ struct tlista_palabras {
     pnodo_palabra inicio;
     pnodo_palabra fin;
 };
+
 const int MAX_CLAVES = 26; 
+
 struct tclave {
     char clave;                 
     tlista_palabras listado;    
 };
+
 typedef tclave tdiccionario[MAX_CLAVES];
 
+// Definicion de la estructura de lista doble para el ranking de jugadores
 struct tinfo_ranking {
     tcad alias;
     int puntaje; 
 };
+
 typedef struct tnodo_ranking *pnodo_ranking;
+
 struct tnodo_ranking {
     tinfo_ranking dato;
     pnodo_ranking ant;
     pnodo_ranking sig;
 };
+
 struct tlista_ranking {
     pnodo_ranking inicio; 
     int cont;             
 };
 
 const int MAXPILA = 6;  
+
 typedef tpalabra tcontenedor[MAXPILA]; 
+
 struct tpila {
     tcontenedor datos; 
     int cima;         
@@ -103,7 +115,9 @@ tpalabra topepila(tpila p) {
 }
 
 
-// --- IMPLEMENTACION TDA RANKING ---
+//-------------------------------------
+// --- IMPLEMENTACION TDA RANKING -----
+//-------------------------------------
 void iniciarlista(tlista_ranking &lista) {
     lista.inicio = NULL;
     lista.cont = 0;
@@ -161,7 +175,9 @@ void liberarlista(tlista_ranking &lista) {
 }
 
 
-// --- IMPLEMENTACION TDA JUGADOR ---
+//-------------------------------------
+// --- IMPLEMENTACION TDA JUGADOR -----
+//-------------------------------------
 void iniciar(pjugador &arbol) {
     arbol = NULL;
 }
@@ -251,6 +267,8 @@ pjugador menor_mayores(pjugador elegido, pjugador &menor) {
     return aux;
 }
 
+// Elimina un jugador del arbol
+// Se aplica criterio menor de mayores si es necesario
 pjugador eliminar_jugador(pjugador &arbol, tcad alias_buscado) {
     pjugador aux;
     if (arbol == NULL) { 
@@ -284,17 +302,22 @@ pjugador eliminar_jugador(pjugador &arbol, tcad alias_buscado) {
 
 void liberar(pjugador &arbol) {
     if (arbol != NULL) {
-        liberar(arbol->izq); liberar(arbol->der);
-        delete arbol; arbol = NULL; 
+        liberar(arbol->izq); 
+		liberar(arbol->der);
+        delete arbol; 
+		arbol = NULL; 
     }
 }
 
 
-// --- TDA DICCIONARIO ---
+//-------------------------------------
+// -- IMPLEMENTACION TDA DICCIONARIO --
+//-------------------------------------
 void iniciarlista_palabras(tlista_palabras &lis) {
     lis.inicio = NULL;
     lis.fin = NULL;
 }
+
 void creardic(tdiccionario &dic) {
     int i;
     char letra = 'A';
@@ -304,42 +327,65 @@ void creardic(tdiccionario &dic) {
         letra++; 
     }
 }
+
 void crearnodo_palabra(pnodo_palabra &nuevo, tpalabra datos) { 
     nuevo = new tnodo_palabra;
-    if (nuevo != NULL) { nuevo->dato = datos; nuevo->sig = NULL; nuevo->ant = NULL; }
-    else { cout<<"Memoria llena"<<endl; }
+    if (nuevo != NULL) { 
+		nuevo->dato = datos; 
+		nuevo->sig = NULL; 
+		nuevo->ant = NULL; 
+	}
+    else
+		cout<<"\nMemoria Llena"<<endl; 
 }
-void insertarordenado_palabras(tlista_palabras &lis, pnodo_palabra nuevo) {
+
+void insertar_ordenado_palabras(tlista_palabras &lis, pnodo_palabra nuevo) {
     pnodo_palabra p;
-    if (lis.inicio == NULL) { lis.inicio = nuevo; lis.fin = nuevo; }
-    else if (strcmp(nuevo->dato.palabra, lis.inicio->dato.palabra) < 0) { 
-        nuevo->sig = lis.inicio; lis.inicio->ant = nuevo; lis.inicio = nuevo;
-    }
-    else if (strcmp(nuevo->dato.palabra, lis.fin->dato.palabra) > 0) { 
-        lis.fin->sig = nuevo; nuevo->ant = lis.fin; lis.fin = nuevo;
-    }
-    else { 
+    if (lis.inicio == NULL) { 
+		lis.inicio = nuevo; 
+		lis.fin = nuevo; 
+	} else if (strcmp(nuevo->dato.palabra, lis.inicio->dato.palabra) < 0) { 
+        nuevo->sig = lis.inicio; 
+		lis.inicio->ant = nuevo; 
+		lis.inicio = nuevo;
+    } else if (strcmp(nuevo->dato.palabra, lis.fin->dato.palabra) > 0) { 
+        lis.fin->sig = nuevo; 
+		nuevo->ant = lis.fin; 
+		lis.fin = nuevo;
+    } else { 
         p = lis.inicio->sig;
-        while (strcmp(nuevo->dato.palabra, p->dato.palabra) > 0) { p = p->sig; }
-        nuevo->ant = p->ant; nuevo->sig = p;
-        p->ant->sig = nuevo; p->ant = nuevo;
+        while (strcmp(nuevo->dato.palabra, p->dato.palabra) > 0) { 
+			p = p->sig; 
+		}
+        nuevo->ant = p->ant; 
+		nuevo->sig = p;
+        p->ant->sig = nuevo; 
+		p->ant = nuevo;
     }
 }
+
+// Obtiene el indice del diccionario
+int obtener_indice(tdiccionario dic, tpalabra datos){
+	int i = 0;
+	bool encontrado = false;
+	while (i < MAX_CLAVES && encontrado == false) {
+		if (datos.palabra[0] == dic[i].clave)
+			encontrado = true;
+		else
+			i++;
+	}
+	return i;
+}
+
 void agregar_palabra(tdiccionario &dic, tpalabra datos) { 
-    int i = 0;
-    bool encontrado = false;
     pnodo_palabra nuevo;
-    while (i < MAX_CLAVES && encontrado == false) {
-        if (datos.palabra[0] == dic[i].clave)
-            encontrado = true;
-        else
-            i++;
-    }
-    if (encontrado) {
-        crearnodo_palabra(nuevo, datos); 
-        insertarordenado_palabras(dic[i].listado, nuevo); 
-    }
+	// Si se controla que 'datos' solo contenga letras no hace falta un
+	// booleano para saber si se encontró el indice
+	int indice = obtener_indice(dic, datos);
+    crearnodo_palabra(nuevo, datos); 
+	insertar_ordenado_palabras(dic[indice].listado, nuevo); 
 }
+
 pnodo_palabra buscar_palabra_diccionario(tdiccionario &dic, tcad palabra_buscada) {
     int i = 0;
     bool encontrado = false;
@@ -350,15 +396,19 @@ pnodo_palabra buscar_palabra_diccionario(tdiccionario &dic, tcad palabra_buscada
         else
             i++;
     }
+	
     if (encontrado) {
         p = dic[i].listado.inicio;
         while (p != NULL && strcmp(p->dato.palabra, palabra_buscada) != 0) {
-            if (strcmp(p->dato.palabra, palabra_buscada) > 0) { p = NULL; } 
-            else { p = p->sig; }
+            if (strcmp(p->dato.palabra, palabra_buscada) > 0) 
+				p = NULL; 
+            else
+				p = p->sig; 
         }
     }
     return p;
 }
+
 bool quitar_de_lista(tlista_palabras &lis, pnodo_palabra &nodo_a_quitar) {
     if (nodo_a_quitar == NULL) return false;
     if (nodo_a_quitar == lis.inicio && nodo_a_quitar == lis.fin) { lis.inicio = NULL; lis.fin = NULL; }

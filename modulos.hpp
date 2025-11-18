@@ -15,6 +15,12 @@ void construir_ranking_rec(pjugador arbol, tlista_ranking &lista);
 void cargar_jugador(pjugador jugadores, tjugador &jugador);
 void mostrar_jugador(pjugador jugador);
 
+// Gestion de Cadenas
+bool es_letra(char c);
+bool verificar_letras(tcad palabra);
+void convertir_letra(char &c);
+void mostrar_cadena(tcad palabra);
+
 // MENU PARA LA GESTION DE JUGADORES
 void gestionarJugadores(pjugador &arbol_jugadores) {
     int opc;
@@ -221,55 +227,121 @@ void listarJugadores(pjugador arbol_jugadores) {
 
 // GESTION DE PALABRAS
 void gestionarPalabras(tdiccionario &dic) {
-    int opc;
+	char opc;
     bool salir = false;
     while (!salir) {
-        limpiarPantalla();
-        cout << "--- GESTION DE PALABRAS ---" << endl;
-        cout << "1. Alta de Palabra" << endl;
-        cout << "2. Baja de Palabra" << endl;
-        cout << "3. Modificar Palabra" << endl;
-        cout << "4. Consultar Palabra" << endl;
-        cout << "5. Listar todas las Palabras" << endl;
-        cout << "0. Volver al Menu Principal" << endl;
-        cout << "Ingrese opcion: ";
-        cin >> opc;
+		limpiarPantalla(); 
+		cout << "\n";
+		cout << " +---------------------------------------+\n";
+		cout << " |      * Gestion de Palabras *          |\n";
+		cout << " +---------------------------------------+\n\n";
+		
+		cout << "   1) Registrar Palabra" << endl;
+		cout << "   2) Eliminar Palabra" << endl;
+		cout << "   3) Modificar Palabra" << endl;
+		cout << "   4) Consultar Palabra" << endl;
+		cout << "   5) Listar Palabras" << endl;
+		cout << "   0) Volver\n" << endl;
+		
+		cout << "> Opcion: ";
+		cin >> opc;
 		
         switch(opc) {
-            case 1: altaPalabra(dic); break;
-            case 2: bajaPalabra(dic); break;
-            case 3: modificarPalabra(dic); break;
-            case 4: consultarPalabra(dic); break;
-            case 5: listarPalabras(dic); break;
-            case 0: cout << "Volviendo al menu principal..." << endl; salir = true; break;
-            default: cout << "Opcion incorrecta." << endl; break;
+            case '1': 
+				cout << "\n* * Registrar Palabra * *\n" << endl;
+				altaPalabra(dic); 
+				break;
+            case '2': 
+				bajaPalabra(dic); 
+				break;
+            case '3': 
+				modificarPalabra(dic); 
+				break;
+            case '4': 
+				consultarPalabra(dic); 
+				break;
+            case '5': 
+				listarPalabras(dic); 
+				break;
+            case '0': 
+				cout << "\nVolviendo al menu principal..." << endl; 
+				salir = true; 
+				break;
+            default: 
+				cout << "\nOPCION INVALIDA" << endl; 
         }
         if (!salir) pausarPantalla();
     }
 }
 
+bool es_letra(char c){
+	return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
+}
+
+// Valida que la palabra solo contenga letras
+bool verificar_letras(tcad palabra){
+	bool valido = true;
+	int i;
+	for(i = 0; i < (int)strlen(palabra) && valido == true; i++){
+		char c = palabra[i];
+		if(!es_letra(c))
+			valido = false;
+	}
+	return valido;
+}
+
+// Convierte la primer letra de la palabra a mayuscula solo si es minuscula
+void convertir_letra(char &c) {
+	if (c >= 'a' && c <= 'z') {
+		c = c - 32;  // convierte a mayúscula
+	}
+}
+	
+void mostrar_cadena(tcad palabra){
+	int i;
+	for(i = 0; i < (int)strlen(palabra); i++){
+		char c = palabra[i];
+		cout << c;
+	}
+}
+
 void altaPalabra(tdiccionario &dic) {
     tpalabra nueva_palabra;
-    limpiarPantalla();
-    cout << "--- ALTA DE PALABRA ---" << endl;
+    bool validar;
     
-    int c;
+	int c;
     while ((c = getchar()) != '\n' && c != EOF);
 
-    leerCadenaValidada("Ingrese la palabra (min 5 caracteres): ", nueva_palabra.palabra, 5);
+	do{
+		leerCadenaValidada("Ingrese Palabra: ", nueva_palabra.palabra, 5);
+		mostrar_cadena(nueva_palabra.palabra);
+		validar = verificar_letras(nueva_palabra.palabra);
+		if(!validar)
+			cout << "\nLa palabra solo debe contener letras" << endl;
+	} while(!validar);
+	convertir_letra(nueva_palabra.palabra[0]);
+	/*
+	Solo valida que la primer posicion sea letra
     if (nueva_palabra.palabra[0] < 'A' || nueva_palabra.palabra[0] > 'Z') {
         cout << "ERROR: La palabra debe comenzar con una letra mayuscula (A-Z)." << endl;
         return;
-    }
-    if (buscar_palabra_diccionario(dic, nueva_palabra.palabra) != NULL) {
-        cout << "ERROR: La palabra '" << nueva_palabra.palabra << "' ya existe." << endl;
-        return;
-    }
-    leerCadenaValidada("Ingrese la definicion: ", nueva_palabra.definicion, 1);
-    leerCadenaValidada("Ingrese un sinonimo: ", nueva_palabra.sinonimo, 1);
-    nueva_palabra.longitud = strlen(nueva_palabra.palabra);
-    agregar_palabra(dic, nueva_palabra);
-    cout << "Palabra '" << nueva_palabra.palabra << "' registrada con exito." << endl;
+    }*/
+    if (buscar_palabra_diccionario(dic, nueva_palabra.palabra) != NULL) 
+        cout << "\nLa palabra '" << nueva_palabra.palabra << "' ya esta registrada" << endl;
+	else{
+		do{
+			// Definicion no contiene solo letras ¡ARREGLAR!
+			leerCadenaValidada("Ingrese Definicion: ", nueva_palabra.definicion, 1);
+			leerCadenaValidada("Ingrese Sinonimo: ", nueva_palabra.sinonimo, 1);
+			nueva_palabra.longitud = (int)strlen(nueva_palabra.palabra);
+			validar = verificar_letras(nueva_palabra.definicion) &&
+				verificar_letras(nueva_palabra.sinonimo);
+			if(!validar)
+				cout << "\nLas cadenas solo deben contener letras" << endl;
+		} while(!validar);
+		agregar_palabra(dic, nueva_palabra);
+		cout << "Palabra '" << nueva_palabra.palabra << "' registrada con exito." << endl;
+	}
 }
 
 void bajaPalabra(tdiccionario &dic) {
