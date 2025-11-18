@@ -20,7 +20,7 @@ int main(){
     
     cout << "\nDatos cargados. Presione Enter para iniciar..." << endl;
     int c; // Limpieza manual del buffer
-    while ((c = getchar()) != '\n' && c != EOF);
+    while ((c = getchar()) != '\n');
     getchar(); // Espera al Enter
 
 	do{
