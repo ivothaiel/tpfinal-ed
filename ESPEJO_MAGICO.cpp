@@ -1,5 +1,5 @@
-// ORDEN DE INCLUSION ESTRICTO - NO MODIFICAR
-// Se incluyen en cascada segun dependencias
+#include <iostream>
+using namespace std;
 #include "comunes.hpp"
 #include "menus_Textos.hpp"
 #include "TDA_Pila.hpp"

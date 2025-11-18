@@ -1,3 +1,5 @@
+#include <iostream>
+using namespace std;
 // --- DEFINICION ---
 struct tinfo_ranking {
     tcad alias;

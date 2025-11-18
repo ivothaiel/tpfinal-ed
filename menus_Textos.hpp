@@ -1,3 +1,6 @@
+#include <iostream>
+using namespace std;
+
 // MENU PRINCIPAL DEL JUEGO
 void menu_principal(char &op){
     cout << "\n\n";

@@ -1,3 +1,6 @@
+#include <iostream>
+using namespace std;
+
 // --- DEFINICION ---
 struct tjugador {
     tcad nombre;

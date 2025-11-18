@@ -1,3 +1,5 @@
+#include <iostream>
+using namespace std;
 const int PISTAS = 4;  
 typedef bool tpistas[PISTAS];
 

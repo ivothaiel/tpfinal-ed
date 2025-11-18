@@ -1,5 +1,5 @@
-// --- DEFINICION ---
-// Reutilizamos tpalabra_simple definiendo tpalabra como alias para mantener compatibilidad
+#include <iostream>
+using namespace std;
 typedef tpalabra_simple tpalabra;
 
 typedef struct tnodo_palabra *pnodo_palabra;

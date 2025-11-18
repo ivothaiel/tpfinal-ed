@@ -1,12 +1,13 @@
+#include <iostream>
+using namespace std;
 // --- DEFINICION TDA PILA ---
-struct tpalabra_simple { // Estructura minima necesaria para la pila si no incluimos diccionario aun
+struct tpalabra_simple { // estructura minima necesaria para la pila si no incluimos diccionario aun
     tcad palabra; 
     int longitud; 
     tcad definicion;
     tcad sinonimo;
 };
-// Nota: Usaremos tpalabra_simple aqui para mantener orden, 
-// pero compatible con la del diccionario mas adelante.
+// se usa tpalabra_simple aca para mantener orden
 
 const int MAXPILA = 6;  
 typedef tpalabra_simple tcontenedor[MAXPILA]; 

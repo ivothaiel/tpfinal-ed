@@ -1,3 +1,5 @@
+#include <iostream>
+using namespace std;
 void mostrar_jugador(pjugador jugador){
     cout << "\n* * DATOS DEL JUGADOR * *" << endl;
     cout << "----------------------------------" << endl;

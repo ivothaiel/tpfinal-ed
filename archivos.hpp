@@ -1,3 +1,5 @@
+#include <iostream>
+using namespace std;
 const char* ARCHIVO_JUGADOR = "jugadores.dat"; 
 const char* ARCHIVO_PALABRAS = "palabras.dat";
 
