@@ -365,11 +365,11 @@ void insertar_ordenado_palabras(tlista_palabras &lis, pnodo_palabra nuevo) {
 }
 
 // Obtiene el indice del diccionario
-int obtener_indice(tdiccionario dic, tpalabra datos){
+int obtener_indice(tdiccionario dic, char clave){
 	int i = 0;
 	bool encontrado = false;
 	while (i < MAX_CLAVES && encontrado == false) {
-		if (datos.palabra[0] == dic[i].clave)
+		if (clave == dic[i].clave)
 			encontrado = true;
 		else
 			i++;
@@ -381,40 +381,40 @@ void agregar_palabra(tdiccionario &dic, tpalabra datos) {
     pnodo_palabra nuevo;
 	// Si se controla que 'datos' solo contenga letras no hace falta un
 	// booleano para saber si se encontró el indice
-	int indice = obtener_indice(dic, datos);
+	int indice = obtener_indice(dic, datos.palabra[0]);
     crearnodo_palabra(nuevo, datos); 
 	insertar_ordenado_palabras(dic[indice].listado, nuevo); 
 }
 
 pnodo_palabra buscar_palabra_diccionario(tdiccionario &dic, tcad palabra_buscada) {
-    int i = 0;
-    bool encontrado = false;
-    pnodo_palabra p = NULL;
-    while (i < MAX_CLAVES && encontrado == false) {
-        if (palabra_buscada[0] == dic[i].clave)
-            encontrado = true;
-        else
-            i++;
-    }
+    int indice = obtener_indice(dic, palabra_buscada[0]);
+    pnodo_palabra p;
 	
-    if (encontrado) {
-        p = dic[i].listado.inicio;
-        while (p != NULL && strcmp(p->dato.palabra, palabra_buscada) != 0) {
-            if (strcmp(p->dato.palabra, palabra_buscada) > 0) 
-				p = NULL; 
-            else
-				p = p->sig; 
-        }
-    }
+    p = dic[indice].listado.inicio;
+    while (p != NULL && strcmp(p->dato.palabra, palabra_buscada) != 0) {
+        if (strcmp(p->dato.palabra, palabra_buscada) > 0) 
+			p = NULL; 
+        else
+			p = p->sig; 
+	}
+    
     return p;
 }
 
+/*
 bool quitar_de_lista(tlista_palabras &lis, pnodo_palabra &nodo_a_quitar) {
-    if (nodo_a_quitar == NULL) return false;
-    if (nodo_a_quitar == lis.inicio && nodo_a_quitar == lis.fin) { lis.inicio = NULL; lis.fin = NULL; }
-    else if (nodo_a_quitar == lis.inicio) { lis.inicio = nodo_a_quitar->sig; lis.inicio->ant = NULL; }
-    else if (nodo_a_quitar == lis.fin) { lis.fin = nodo_a_quitar->ant; lis.fin->sig = NULL; }
-    else {
+    if (nodo_a_quitar == NULL) 
+		return false;
+    if (nodo_a_quitar == lis.inicio && nodo_a_quitar == lis.fin) { 
+		lis.inicio = NULL; 
+		lis.fin = NULL; 
+	} else if (nodo_a_quitar == lis.inicio) { 
+		lis.inicio = nodo_a_quitar->sig; 
+		lis.inicio->ant = NULL; 
+	} else if (nodo_a_quitar == lis.fin) { 
+		lis.fin = nodo_a_quitar->ant; 
+		lis.fin->sig = NULL; 
+	} else {
         nodo_a_quitar->ant->sig = nodo_a_quitar->sig;
         nodo_a_quitar->sig->ant = nodo_a_quitar->ant;
     }
@@ -433,11 +433,55 @@ bool quitar_palabra(tdiccionario &dic, tcad palabra_buscada) {
     if (!encontrado) return false; 
     pnodo_palabra nodo = buscar_palabra_diccionario(dic, palabra_buscada);
     return quitar_de_lista(dic[i].listado, nodo);
+}*/
+
+pnodo_palabra quitar_palabra(tlista_palabras &lista, tcad buscado){
+	pnodo_palabra extraido, i;
+	if(strcmp(lista.inicio->dato.palabra, buscado) == 0){
+		if(lista.inicio == lista.fin){
+			extraido = lista.inicio;
+			lista.inicio = NULL;
+			lista.fin = NULL;
+		}else{
+			extraido = lista.inicio;
+			lista.inicio = lista.inicio->sig;
+			lista.inicio->ant = NULL;
+			extraido->sig = NULL;
+		}
+	}else{
+		if(strcmp(lista.fin->dato.palabra, buscado) == 0){
+			extraido = lista.fin;
+			lista.fin = lista.fin->ant;
+			lista.fin->sig = NULL;
+			extraido->ant = NULL;
+		}else{
+			for(i = lista.inicio->sig; i != lista.fin && 
+				strcmp(i->dato.palabra, buscado) != 0; i = i->sig);
+			extraido = i;
+			(i->ant)->sig = extraido->sig;
+			(i->sig)->ant = extraido->ant;
+			extraido->sig = NULL;
+			extraido->ant = NULL;
+		}
+	}
+	return extraido;
 }
+
+pnodo_palabra eliminar_palabra(tdiccionario &dic, tcad buscado){
+	int indice = obtener_indice(dic, buscado[0]);
+	pnodo_palabra quitado = quitar_palabra(dic[indice].listado, buscado);
+	return quitado;
+}
+
 void liberar_lista_palabras(pnodo_palabra &lis) {
     pnodo_palabra aux;
-    while (lis != NULL) { aux = lis; lis = lis->sig; delete aux; }
+    while (lis != NULL) { 
+		aux = lis; 
+		lis = lis->sig; 
+		delete aux; 
+	}
 }
+
 void liberar_diccionario(tdiccionario &dic) {
     for (int i = 0; i < MAX_CLAVES; i++) {
         liberar_lista_palabras(dic[i].listado.inicio);
@@ -445,6 +489,7 @@ void liberar_diccionario(tdiccionario &dic) {
         dic[i].listado.fin = NULL;
     }
 }
+
 int contar_palabras(tdiccionario dic) {
     int contador = 0;
     pnodo_palabra p;
@@ -458,8 +503,10 @@ int contar_palabras(tdiccionario dic) {
     return contador;
 }
 
+//-----------------------------
+//--- FUNCIONES DE UTILIDAD ---
+//-----------------------------
 
-// --- FUNCIONES DE UTILIDAD ---
 void limpiarPantalla() {
     system("cls"); 
 }
@@ -467,7 +514,7 @@ void limpiarPantalla() {
 void pausarPantalla() {
     cout << "\nPresione Enter para continuar...";
     int c;
-    while ((c = getchar()) != '\n' && c != EOF);
+    while ((c = getchar()) != '\n');
     getchar(); 
 }
 

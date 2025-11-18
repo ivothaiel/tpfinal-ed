@@ -50,8 +50,7 @@ int main(){
                 liberar_diccionario(diccionario_palabras);
                 liberarlista(ranking_vencedores);
                 
-			    cout << "\nQue los espiritus guardianes guien tu camino.\n";
-			    cout << "Hasta pronto, viajero.\n\n";
+			    cout << "\nQue los espiritus guardianes guien tu camino. Hasta pronto, viajero" << endl;
 			    break;
 		    default:
 			    cout << "\nOPCION INVALIDA" << endl;
