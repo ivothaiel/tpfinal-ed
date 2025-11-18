@@ -39,19 +39,19 @@ pjugador seleccionarJugador(pjugador arbol_jugadores) {
 }
 
 void seleccionarPalabrasAleatorias(tdiccionario dic, tpila &pila_juego, int totalPalabras) {
-	// 1. Array estático de índices para las 6 palabras a seleccionar.
+	// 1. Array estï¿½tico de ï¿½ndices para las 6 palabras a seleccionar.
 	indicesSeleccionados indices; 
 	int indice_aleatorio;
 	int indices_encontrados = 0;
 	
-	// Generar 6 índices aleatorios únicos
+	// Generar 6 ï¿½ndices aleatorios ï¿½nicos
 	srand(time(NULL)); 
 	
 	while (indices_encontrados < 6) {
 		indice_aleatorio = rand() % totalPalabras;
 		bool repetido = false;
 		
-		// Verificar repetición de índice
+		// Verificar repeticiï¿½n de ï¿½ndice
 		for (int j = 0; j < indices_encontrados; j++) {
 			if (indices[j] == indice_aleatorio) {
 				repetido = true;
@@ -78,7 +78,7 @@ void seleccionarPalabrasAleatorias(tdiccionario dic, tpila &pila_juego, int tota
 	for (int i = 0; i < MAX_CLAVES; i++) {
 		p = dic[i].listado.inicio;
 		while (p != NULL) {
-			// Buscamos si el índice global actual (indice_global) coincide con uno de los 6 índices aleatorios
+			// Buscamos si el ï¿½ndice global actual (indice_global) coincide con uno de los 6 ï¿½ndices aleatorios
 			for (int j = 0; j < 6; j++) {
 				if (indices[j] == indice_global) {
 					// Si coincide, guardamos la palabra y marcamos que fue encontrada.
@@ -137,7 +137,8 @@ bool jugarPalabra(tpalabra &palabra_actual, int &puntaje_partida) {
         limpiarPantalla();
         mostrarMenuAdivinar(puntaje_partida, intentos, pistas_usadas, palabra_actual);
         cin >> opcion;
-
+        int c;
+        while ((c = getchar()) != '\n');
         if (opcion == 'a' || opcion == 'A') {
             int c;
             while ((c = getchar()) != '\n');
