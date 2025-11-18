@@ -1,9 +1,19 @@
-#include "modulos.hpp"
+// ORDEN DE INCLUSION ESTRICTO - NO MODIFICAR
+// Se incluyen en cascada segun dependencias
+#include "comunes.hpp"
+#include "menus_Textos.hpp"
+#include "TDA_Pila.hpp"
+#include "TDA_Ranking.hpp"
+#include "TDA_Jugador.hpp"
+#include "TDA_Diccionario.hpp"
+#include "archivos.hpp"
+#include "Modulo_Jugadores.hpp"
+#include "Modulo_Palabras.hpp"
+#include "Modulo_Juego.hpp"
 
-
-// 2. PROGRAMA PRINCIPAL
+// PROGRAMA PRINCIPAL
 int main(){
-	char op;
+    char op;
     
     // Declarar estructuras
     pjugador arbol_jugadores;
@@ -21,28 +31,27 @@ int main(){
     
     cout << "\nDatos cargados. Presione Enter para iniciar..." << endl;
     int c; // Limpieza manual del buffer
-    while ((c = getchar()) != '\n' && c != EOF);
+    while ((c = getchar()) != '\n');
     getchar(); // Espera al Enter
 
-	do{
-		limpiarPantalla(); 
-		menu_principal(op); 
+    do{
+        limpiarPantalla(); 
+        menu_principal(op); 
         
-		switch(op){
-		    case '1':
-			    gestionarJugadores(arbol_jugadores); 
-			    break;
-		    case '2':
-			    gestionarPalabras(diccionario_palabras); 
-			    break;
-		    case '3':
-			    iniciarJuego(arbol_jugadores, diccionario_palabras, ranking_vencedores); 
-			    break;
-		    case '4':
-			    mostrarVencedores(arbol_jugadores, ranking_vencedores); 
-			    break;
-		    case '5':
-                limpiarPantalla();
+        switch(op){
+            case '1':
+                gestionarJugadores(arbol_jugadores); 
+                break;
+            case '2':
+                gestionarPalabras(diccionario_palabras); 
+                break;
+            case '3':
+                iniciarJuego(arbol_jugadores, diccionario_palabras, ranking_vencedores); 
+                break;
+            case '4':
+                mostrarVencedores(arbol_jugadores, ranking_vencedores); 
+                break;
+            case '5':
                 cout << "\nGuardando datos..." << endl;
                 
                 guardarjugadores(arbol_jugadores);
@@ -52,15 +61,14 @@ int main(){
                 liberar_diccionario(diccionario_palabras);
                 liberarlista(ranking_vencedores);
                 
-			    cout << "\nQue los espiritus guardianes guien tu camino.\n";
-			    cout << "Hasta pronto, viajero.\n\n";
-			    break;
-		    default:
-			    cout << "OPCION INVALIDA" << endl;
-		}
+                cout << "\nQue los espiritus guardianes guien tu camino. Hasta pronto, viajero" << endl;
+                break;
+            default:
+                cout << "\nOPCION INVALIDA" << endl;
+        }
         if (op != '5') pausarPantalla();
         
-	} while(op != '5');
-	
-	return 0;
+    } while(op != '5');
+    
+    return 0;
 }
