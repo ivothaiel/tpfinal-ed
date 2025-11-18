@@ -1,4 +1,6 @@
 #include <iostream>
+#include <string.h>
+#include <stdio.h>
 using namespace std;
 bool es_letra(char c){
     return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');

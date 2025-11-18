@@ -1,4 +1,6 @@
 #include <iostream>
+#include <string.h>
+#include <stdio.h>
 using namespace std;
 // --- DEFINICION TDA PILA ---
 struct tpalabra_simple { // estructura minima necesaria para la pila si no incluimos diccionario aun

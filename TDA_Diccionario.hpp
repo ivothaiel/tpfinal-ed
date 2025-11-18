@@ -1,4 +1,6 @@
 #include <iostream>
+#include <string.h>
+#include <stdio.h>
 using namespace std;
 typedef tpalabra_simple tpalabra;
 

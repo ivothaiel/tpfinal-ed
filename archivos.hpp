@@ -1,4 +1,6 @@
 #include <iostream>
+#include <string.h>
+#include <stdio.h>
 using namespace std;
 const char* ARCHIVO_JUGADOR = "jugadores.dat"; 
 const char* ARCHIVO_PALABRAS = "palabras.dat";

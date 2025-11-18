@@ -1,4 +1,6 @@
 #include <iostream>
+#include <string.h>
+#include <stdio.h>
 using namespace std;
 // --- DEFINICION ---
 struct tinfo_ranking {
