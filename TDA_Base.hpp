@@ -122,30 +122,56 @@ void iniciarlista(tlista_ranking &lista) {
     lista.inicio = NULL;
     lista.cont = 0;
 }
+
 void crearnodo_ranking(pnodo_ranking &nuevo, tinfo_ranking dato_ranking) {
     nuevo = new tnodo_ranking; 
-    if (nuevo != NULL) { nuevo->dato = dato_ranking; nuevo->ant = NULL; nuevo->sig = NULL; }
+    if (nuevo != NULL) { 
+        nuevo->dato = dato_ranking; 
+        nuevo->ant = NULL; 
+        nuevo->sig = NULL;
+    }
 }
+
+//Inserta un nuevo jugador en la lista de ranking, manteniéndola ordenada de mayor a menor puntaje.
 void insertarordenado_ranking(pnodo_ranking actual, pnodo_ranking nuevo, pnodo_ranking inicio_lista) {
     if (nuevo->dato.puntaje >= actual->dato.puntaje) {
-        nuevo->ant = actual->ant; nuevo->sig = actual;
-        actual->ant->sig = nuevo; actual->ant = nuevo;
+        nuevo->ant = actual->ant; 
+        nuevo->sig = actual;
+        actual->ant->sig = nuevo; 
+        actual->ant = nuevo;
     }
     else if (actual->sig == inicio_lista) {
-        nuevo->ant = actual; nuevo->sig = inicio_lista;
-        actual->sig = nuevo; inicio_lista->ant = nuevo;
+        nuevo->ant = actual; 
+        nuevo->sig = inicio_lista;
+        actual->sig = nuevo; 
+        inicio_lista->ant = nuevo;
+    }else{ 
+        insertarordenado_ranking(actual->sig, nuevo, inicio_lista);
     }
-    else { insertarordenado_ranking(actual->sig, nuevo, inicio_lista); }
 }
+
+
+/*
+agrega un nuevo jugador al ranking de forma ordenada y, 
+se asegura de que el puntero lista.inicio siempre 
+apunte al jugador con el puntaje más alto.
+*/
 void agregar_ranking(tlista_ranking &lista, pnodo_ranking nuevo) {
     if (lista.inicio == NULL) {
-        lista.inicio = nuevo; lista.inicio->sig = lista.inicio; lista.inicio->ant = lista.inicio;
+        lista.inicio = nuevo; 
+        lista.inicio->sig = lista.inicio; 
+        lista.inicio->ant = lista.inicio;
     } else {
         insertarordenado_ranking(lista.inicio, nuevo, lista.inicio); 
-        if (nuevo->dato.puntaje >= lista.inicio->dato.puntaje) { lista.inicio = nuevo; }
+        if (nuevo->dato.puntaje >= lista.inicio->dato.puntaje){ 
+            lista.inicio = nuevo;
+        }
     }
     lista.cont++;
 }
+
+
+//Esta función recorre y muestra la lista circular de vencedores.
 void mostrarlista(tlista_ranking lista, bool creciente) {
     pnodo_ranking i;
     if (lista.inicio == NULL) { cout << "  No hay vencedores para mostrar." << endl; }
@@ -165,11 +191,18 @@ void mostrarlista(tlista_ranking lista, bool creciente) {
         }
     }
 }
+
+//ibera toda la memoria de la lista del ranking, es la "limpieza" que se hace después de mostrar los vencedores.
 void liberarlista(tlista_ranking &lista) {
     pnodo_ranking p, aux;
     if (lista.inicio != NULL) {
-        p = lista.inicio; lista.inicio->ant->sig = NULL; 
-        while (p != NULL) { aux = p; p = p->sig; delete aux; }
+        p = lista.inicio; 
+        lista.inicio->ant->sig = NULL; 
+        while (p != NULL){ 
+            aux = p; 
+            p = p->sig; 
+            delete aux;
+        }
         iniciarlista(lista);
     }
 }
@@ -184,8 +217,7 @@ void iniciar(pjugador &arbol) {
 
 void crear_jugador(pjugador &nuevo, tjugador dato_jugador) {
     nuevo = new tnodo_jugador; 
-    if (nuevo != NULL) 
-	{ 
+    if (nuevo != NULL) { 
 		nuevo->dato = dato_jugador; 
 		nuevo->izq = NULL; 
 		nuevo->der = NULL; 
@@ -240,6 +272,8 @@ void listar_jugadores(pjugador arbol) {
     }
 }
 
+
+
 // Cuenta la cantidad de jugadores que tiene el arbol
 int contar_jugadores(pjugador arbol) {
     if (arbol == NULL) { 
@@ -248,12 +282,20 @@ int contar_jugadores(pjugador arbol) {
     return 1 + contar_jugadores(arbol->izq) + contar_jugadores(arbol->der);
 }
 
+
+
+//intercambia los datos entre dos jugadores.
 void cambio(tjugador &a, tjugador &b){
 	tjugador aux = a;
 	a = b;
 	b = aux;
 }
 
+
+//borrar un nodo que tiene 2 hijos
+//Baja por la rama izquierda del subárbol derecho
+//busca al menor de los mayores
+//una vez que lo encuentra, intercambia sus datos con el nodo que quiere borrar
 pjugador menor_mayores(pjugador elegido, pjugador &menor) {
     pjugador aux;
     if (menor->izq != NULL) { 
@@ -339,6 +381,7 @@ void crearnodo_palabra(pnodo_palabra &nuevo, tpalabra datos) {
 		cout<<"\nMemoria Llena"<<endl; 
 }
 
+//inserta una nueva palabra en el diccionario (que es una lista doble) de forma ordenada alfabéticamente.
 void insertar_ordenado_palabras(tlista_palabras &lis, pnodo_palabra nuevo) {
     pnodo_palabra p;
     if (lis.inicio == NULL) { 
@@ -377,15 +420,25 @@ int obtener_indice(tdiccionario dic, char clave){
 	return i;
 }
 
+
+/*
+agrega una nueva palabra al diccionario, 
+encontrando primero la letra correcta (indice) 
+y luego llamando a la función insertar_ordenado_palabras 
+para que la ponga en su lista.
+*/
 void agregar_palabra(tdiccionario &dic, tpalabra datos) { 
     pnodo_palabra nuevo;
 	// Si se controla que 'datos' solo contenga letras no hace falta un
-	// booleano para saber si se encontr� el indice
+	// booleano para saber si se encontr� el indice
 	int indice = obtener_indice(dic, datos.palabra[0]);
     crearnodo_palabra(nuevo, datos); 
 	insertar_ordenado_palabras(dic[indice].listado, nuevo); 
 }
 
+
+
+//busca una palabra en el diccionario, devuelve un puntero al nodo de la palabra si la encuentra, o NULL si no la encuentra
 pnodo_palabra buscar_palabra_diccionario(tdiccionario &dic, tcad palabra_buscada) {
     int indice = obtener_indice(dic, palabra_buscada[0]);
     pnodo_palabra p;
@@ -421,6 +474,15 @@ bool quitar_de_lista(tlista_palabras &lis, pnodo_palabra &nodo_a_quitar) {
     delete nodo_a_quitar;
     return true;
 }
+
+
+
+/**
+ * primero, encuentra la lista correcta (basandose en la primera letra). 
+ * luego, llama a buscar_palabra_diccionario para encontrar el nodo exacto 
+ * finalmente, pasa ese nodo a quitar_de_lista para que lo borre
+ */
+ /*
 bool quitar_palabra(tdiccionario &dic, tcad palabra_buscada) {
     int i = 0;
     bool encontrado = false;
@@ -473,15 +535,18 @@ pnodo_palabra eliminar_palabra(tdiccionario &dic, tcad buscado){
 	return quitado;
 }
 
+//Libera toda la memoria de una sola lista enlazada
 void liberar_lista_palabras(pnodo_palabra &lis) {
     pnodo_palabra aux;
-    while (lis != NULL) { 
-		aux = lis; 
-		lis = lis->sig; 
-		delete aux; 
-	}
+    while (lis != NULL){ 
+        aux = lis; 
+        lis = lis->sig; 
+        delete aux;
+    }
 }
 
+
+//Libera toda la memoria de CADA UNA DE LAS 26 LISTAS que forman el diccionario
 void liberar_diccionario(tdiccionario &dic) {
     for (int i = 0; i < MAX_CLAVES; i++) {
         liberar_lista_palabras(dic[i].listado.inicio);
@@ -511,6 +576,8 @@ void limpiarPantalla() {
     system("cls"); 
 }
 
+
+//pausa la ejecucion del programa hasta que el usuario presione la tecla Enter
 void pausarPantalla() {
     cout << "\nPresione Enter para continuar...";
     int c;
@@ -518,6 +585,13 @@ void pausarPantalla() {
     getchar(); 
 }
 
+
+
+/*
+pide al usuario que ingrese una cadena de texto y 
+se asegura de que esa cadena tenga un largo mínimo antes de aceptarla
+si la cadena es muy corta, sigue pidiendo hasta que sea válida.
+*/
 void leerCadenaValidada(const char* mensaje, tcad &cadena, int minLen) {
     bool valido = false;
     while (!valido) {
