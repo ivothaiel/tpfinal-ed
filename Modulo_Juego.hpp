@@ -38,45 +38,64 @@ pjugador seleccionarJugador(pjugador arbol_jugadores) {
 }
 
 void seleccionarPalabrasAleatorias(tdiccionario dic, tpila &pila_juego, int totalPalabras) {
-    tpalabra palabras_seleccionadas[6];
-    int palabras_encontradas = 0;
-    
-    tpalabra* todas_las_palabras = new tpalabra[totalPalabras];
-    int k = 0;
-    pnodo_palabra p;
-    for (int i = 0; i < MAX_CLAVES; i++) {
-        p = dic[i].listado.inicio;
-        while (p != NULL) {
-            todas_las_palabras[k] = p->dato;
-            k++;
-            p = p->sig;
-        }
-    }
-    
-    srand(time(NULL)); 
-    int indice_aleatorio;
-    bool repetida;
-    
-    while (palabras_encontradas < 6) {
-        indice_aleatorio = rand() % totalPalabras;
-        repetida = false;
-        for (int j = 0; j < palabras_encontradas; j++) {
-            if (strcmp(palabras_seleccionadas[j].palabra, todas_las_palabras[indice_aleatorio].palabra) == 0) {
-                repetida = true;
-            }
-        }
-        
-        if (!repetida) {
-            palabras_seleccionadas[palabras_encontradas] = todas_las_palabras[indice_aleatorio];
-            palabras_encontradas++;
-        }
-    }
-    
-    for (int i = 0; i < 6; i++) {
-        agregarpila(pila_juego, palabras_seleccionadas[i]);
-    }
-    
-    delete[] todas_las_palabras;
+	// 1. Array estático de índices para las 6 palabras a seleccionar.
+	int indices_seleccionados[7]; 
+	int indice_aleatorio;
+	int indices_encontrados = 0;
+	
+	// Generar 6 índices aleatorios únicos
+	srand(time(NULL)); 
+	
+	while (indices_encontrados < 6) {
+		indice_aleatorio = rand() % totalPalabras;
+		bool repetido = false;
+		
+		// Verificar repetición de índice
+		for (int j = 0; j < indices_encontrados; j++) {
+			if (indices_seleccionados[j] == indice_aleatorio) {
+				repetido = true;
+				break; 
+			}
+		}
+		
+		if (!repetido) {
+			indices_seleccionados[indices_encontrados] = indice_aleatorio;
+			indices_encontrados++;
+		}
+	}
+	
+	// 2. Recorrer la estructura del diccionario una SOLA VEZ para cargar las palabras
+	tpalabra palabra_actual;
+	int indice_global = 0;
+	int palabras_cargadas_pila = 0;
+	pnodo_palabra p;
+	
+	// Arreglo temporal para sostener las 6 palabras encontradas (para el orden final)
+	tpalabra palabras_a_apilar[6]; 
+	
+	// Recorremos el diccionario
+	for (int i = 0; i < MAX_CLAVES; i++) {
+		p = dic[i].listado.inicio;
+		while (p != NULL) {
+			// Buscamos si el índice global actual (indice_global) coincide con uno de los 6 índices aleatorios
+			for (int j = 0; j < 6; j++) {
+				if (indices_seleccionados[j] == indice_global) {
+					// Si coincide, guardamos la palabra y marcamos que fue encontrada.
+					palabras_a_apilar[palabras_cargadas_pila] = p->dato;
+					palabras_cargadas_pila++;
+				}
+			}
+			// NO usamos else if, por si acaso.
+			
+			indice_global++;
+			p = p->sig;
+		}
+	}
+	
+	// 3. Cargar las 6 palabras encontradas en la pila (el orden de carga no importa, ya que la pila es LIFO)
+	for (int i = 0; i < 6; i++) {
+		agregarpila(pila_juego, palabras_a_apilar[i]);
+	}
 }
 
 void mostrarMenuAdivinar(int puntaje, int intentos, tpistas pistas_usadas, tpalabra palabra_actual) {

@@ -11,7 +11,7 @@ void menu_principal(char &op){
     cout << "+-------------------------------------------------------+\n";
     cout << "\n";
     cout << "  -----------------------------------------------\n";
-    cout << "   Hace mas de 500 años, una princesa fue\n"; 
+    cout << "   Hace mas de 500 anios, una princesa fue\n"; 
     cout << "   atrapada en un espejo maldito. Solo quien\n";
     cout << "   descubra las 6 palabras magicas podra romper\n";
     cout << "   el hechizo y liberarla...\n";

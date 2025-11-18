@@ -17,7 +17,7 @@ void mostrar_jugador(pjugador jugador){
 void cargar_jugador(pjugador jugadores, tjugador &jugador){
     bool existe;
     int c;
-    while((c = getchar()) != '\n' && c != EOF);
+    while((c = getchar()) != '\n');
     
     do{
         leerCadenaValidada("Ingrese Alias: ", jugador.alias, 4);
