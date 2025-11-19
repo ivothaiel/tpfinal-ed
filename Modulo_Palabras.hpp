@@ -3,11 +3,12 @@
 #include <stdio.h>
 using namespace std;
 
-
+//valida si un caracter es letra
 bool es_letra(char c){
     return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
 }
 
+	//verifica que una palabra solo tenga caracteres alfabeticos
 bool verificar_letras(tcad palabra){
     bool valido = true;
     int i;
@@ -19,12 +20,14 @@ bool verificar_letras(tcad palabra){
     return valido;
 }
 
+	//convierte un caracter a mayuscula si es minuscula
 void convertir_letra(char &c) {
     if (c >= 'a' && c <= 'z') {
         c = c - 32; 
     }
 }
 
+//imprime una cadena de caracteres, caracter por caracter
 void mostrar_cadena(tcad palabra){
     int i;
     for(i = 0; i < (int)strlen(palabra); i++){
@@ -33,11 +36,14 @@ void mostrar_cadena(tcad palabra){
     }
 }
 
+	
+	
+	//permite que se ingrese una palabra, luego se valida su formato y si cumple la longitud
 void altaPalabra(tdiccionario &dic) {
     tpalabra nueva_palabra;
     bool validar;
     int c;
-    while ((c = getchar()) != '\n'); 
+    while ((c = getchar()) != '\n'); //para limpiar el buffer
     do{
         leerCadenaValidada("Ingrese Palabra: ", nueva_palabra.palabra, 5);
         mostrar_cadena(nueva_palabra.palabra);
@@ -47,7 +53,7 @@ void altaPalabra(tdiccionario &dic) {
             cout << "\nLa palabra solo debe contener letras" << endl;
     } while(!validar); 
     
-    convertir_letra(nueva_palabra.palabra[0]);
+    convertir_letra(nueva_palabra.palabra[0]); //capitaliza la primer letra
     
     if (buscar_palabra_diccionario(dic, nueva_palabra.palabra) != NULL) 
         cout << "\nLa palabra '" << nueva_palabra.palabra << "' ya esta registrada" << endl;
@@ -60,6 +66,7 @@ void altaPalabra(tdiccionario &dic) {
     }
 }
 
+//busca y elimina una palabra del diccionario
 void bajaPalabra(tdiccionario &dic){
     tcad palabra_buscada;
     pnodo_palabra eliminado;
@@ -78,6 +85,8 @@ void bajaPalabra(tdiccionario &dic){
         cout << "\n'" << palabra_buscada << "' no existe en el diccionario" << endl;
 }
 
+	
+	//busca una palabra y modifica sus campos
 void modificarPalabra(tdiccionario &dic) {
     tcad palabra_buscada;
     int c;
@@ -108,14 +117,16 @@ void mostrar_palabra(pnodo_palabra palabra){
 }
 
 void consultarPalabra(tdiccionario &dic) {
+	pnodo_palabra palabra;
+	
     tcad palabra_buscada;
     int c;
     while ((c = getchar()) != '\n');
 
     leerCadenaValidada("Ingrese Palabra a Consultar: ", palabra_buscada, 1);
     convertir_letra(palabra_buscada[0]);
-    pnodo_palabra nodo_palabra = buscar_palabra_diccionario(dic, palabra_buscada);
-    if (nodo_palabra == NULL)
+    palabra = buscar_palabra_diccionario(dic, palabra_buscada);
+    if (palabra == NULL)
         cout << "\n'" << palabra_buscada << "' no existe en el diccionario" << endl; 
     else
         mostrar_palabra(nodo_palabra);

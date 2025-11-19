@@ -75,11 +75,11 @@ void editar_jugador(pjugador &jugador, char op){
     case '1':
         leerCadenaValidada("Ingrese Nuevo Nombre: ", jugador->dato.nombre, 4);
         cout << "\nNombre actualizado correctamente" << endl;
-        break;
+		break;
     case '2':
         leerCadenaValidada("Ingrese Nuevo Apellido: ", jugador->dato.apellido, 4);
         cout << "\nApellido actualizado correctamente" << endl;
-        break;
+		break;
     case '3':
         leerCadenaValidada("Ingrese Nuevo Signo Zodiacal: ", jugador->dato.signo, 3);
         cout << "\nSigno Zodiacal actualizado correctamente" << endl;
