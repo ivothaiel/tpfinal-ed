@@ -1,9 +1,10 @@
 #include <iostream>
 #include <string.h>
 #include <stdio.h>
+
 using namespace std;
 
-// --- DEFINICION ---
+// --- DEFINICION JUGADOR ---
 struct tjugador {
     tcad nombre;
     tcad apellido;
@@ -16,7 +17,7 @@ struct tjugador {
     int puntaje_acumulado;
 };
 
-// Define el puntero al nodo, según convención TDA/PE
+// Define el puntero al nodo, segun convencion TDA/PE
 typedef struct tnodo_jugador *pjugador;
 
 struct tnodo_jugador {
@@ -27,14 +28,14 @@ struct tnodo_jugador {
 
 // --- IMPLEMENTACION ---
 
-// Inicializa el puntero raíz del árbol a NULL.
-// Criterio: TDA ABB (Inicialización).
+// Inicializa el puntero raiz del arbol a NULL
+// Criterio: TDA ABB (Inicializacion)
 void iniciar(pjugador &arbol) {
     arbol = NULL;
 }
 
-// Reserva memoria para un nuevo nodo del jugador y asigna datos.
-// Criterio: TDA ABB (Crear Nodo).
+// Reserva memoria para un nuevo nodo del jugador y asigna datos
+// Criterio: TDA ABB (Crear Nodo)
 void crear_jugador(pjugador &nuevo, tjugador dato_jugador) {
     nuevo = new tnodo_jugador;
     
@@ -45,8 +46,8 @@ void crear_jugador(pjugador &nuevo, tjugador dato_jugador) {
     }
 }
 
-// Agrega un nuevo jugador en el árbol según el alias (criterio de orden).
-// Criterio: TDA ABB (Inserción Recursiva).
+// Agrega un nuevo jugador en el arbol segun el alias (criterio de orden)
+// Criterio: TDA ABB (Insercion Recursiva)
 void insertar_jugador(pjugador &arbol, pjugador nuevo) {
     if (arbol == NULL) {
         arbol = nuevo;
@@ -60,15 +61,15 @@ void insertar_jugador(pjugador &arbol, pjugador nuevo) {
     }
 }
 
-// Busca un jugador por alias de forma recursiva.
-// Criterio: TDA ABB (Búsqueda Eficiente Recursiva).
+// Busca un jugador por alias de forma recursiva
+// Criterio: TDA ABB (Busqueda Eficiente Recursiva).
 pjugador buscar_jugador(pjugador arbol, tcad alias_buscado) {
     if (arbol == NULL) {
         return NULL;
     }
     else {
         int comparacion = strcmp(alias_buscado, arbol->dato.alias);
-
+		
         if (comparacion == 0) {
             return arbol;
         }
@@ -81,12 +82,12 @@ pjugador buscar_jugador(pjugador arbol, tcad alias_buscado) {
     }
 }
 
-// Muestra todos los jugadores ordenados alfabéticamente por alias.
-// Criterio: TDA ABB (Recorrido En-Orden: Izquierda-Raíz-Derecha).
+// Muestra todos los jugadores ordenados alfabeticamente por alias
+// Criterio: TDA ABB (Recorrido En-Orden: Izquierda-Raiz-Derecha)
 void listar_jugadores(pjugador arbol) {
     if (arbol != NULL) {
         listar_jugadores(arbol->izq); // Recorre Izquierda
-
+		
         cout << "-----------------------------" << endl;
         cout << "Alias: " << arbol->dato.alias << endl;
         cout << "Nombre: " << arbol->dato.nombre << endl;
@@ -95,13 +96,28 @@ void listar_jugadores(pjugador arbol) {
         cout << "Juegos Ganados: " << arbol->dato.juegos_ganados << endl;
         cout << "Mejor Puntaje: " << arbol->dato.mejor_puntaje << endl;
         cout << "Puntaje Acumulado: " << arbol->dato.puntaje_acumulado << endl;
-
+		
         listar_jugadores(arbol->der); // Recorre Derecha
     }
 }
 
-// Cuenta la cantidad de nodos (jugadores) en el árbol de forma recursiva.
-// Criterio: ABB (Contar Nodos Recursivo).
+// Muestra los jugadores para poder elegirlos una vez iniciado el juego
+// Solo muestra los datos mas relevantes 
+void mostrar_jugadores(pjugador arbol){
+	if(arbol != NULL){
+		mostrar_jugadores(arbol->izq);
+		
+		cout << "-----------------------------" << endl;
+		cout << "  Alias: " << arbol->dato.alias << endl;
+		cout << "  Juegos Ganados: " << arbol->dato.juegos_ganados << endl;
+		cout << "  Mejor Puntaje: " << arbol->dato.mejor_puntaje << endl;
+		
+		mostrar_jugadores(arbol->der);
+	}
+}
+
+// Cuenta la cantidad de nodos (jugadores) en el arbol de forma recursiva
+// Criterio: ABB (Contar Nodos Recursivo)
 int contar_jugadores(pjugador arbol) {
     if (arbol == NULL) {
         return 0;
@@ -110,15 +126,15 @@ int contar_jugadores(pjugador arbol) {
     return 1 + contar_jugadores(arbol->izq) + contar_jugadores(arbol->der);
 }
 
-// Intercambia los datos de dos nodos (usado en la eliminación).
+// Intercambia los datos de dos nodos (usado en la eliminacion)
 void cambio(tjugador &a, tjugador &b) {
     tjugador aux = a; 
     a = b;
     b = aux;
 }
 
-// Busca el menor nodo en el subárbol derecho (el sucesor in-order) para sustituir.
-// Criterio: ABB (Menor de los Mayores / Sustitución Recursiva).
+// Busca el menor nodo en el subarbol derecho (el sucesor in-order) para sustituir
+// Criterio: ABB (Menor de los Mayores / Sustitucion Recursiva)
 pjugador menor_mayores(pjugador elegido, pjugador &menor) {
     pjugador aux;
 
@@ -128,18 +144,18 @@ pjugador menor_mayores(pjugador elegido, pjugador &menor) {
     else {
         // Cuando se encuentra el menor, se intercambian los datos con el 'elegido'
         cambio(elegido->dato, menor->dato);
-
+		
         aux = menor;
-
-        // El puntero 'menor' (pasado por referencia) se actualiza a su subárbol derecho
+		
+        // El puntero 'menor' (pasado por referencia) se actualiza a su subarbol derecho
         menor = menor->der;
     }
 
     return aux;
 }
 
-// Elimina un jugador por alias, aplicando el criterio de Menor de los Mayores para 2 hijos.
-// Criterio: ABB (Eliminación Recursiva).
+// Elimina un jugador por alias, aplicando el criterio de Menor de los Mayores para 2 hijos
+// Criterio: ABB (Eliminacion Recursiva)
 pjugador eliminar_jugador(pjugador &arbol, tcad alias_buscado) {
     pjugador aux;
 
@@ -148,7 +164,7 @@ pjugador eliminar_jugador(pjugador &arbol, tcad alias_buscado) {
     }
     else {
         int comparacion = strcmp(alias_buscado, arbol->dato.alias);
-
+		
         if (comparacion < 0) {
             aux = eliminar_jugador(arbol->izq, alias_buscado);
         }
@@ -157,7 +173,7 @@ pjugador eliminar_jugador(pjugador &arbol, tcad alias_buscado) {
         }
         else { // Nodo encontrado
             aux = arbol;
-
+			
             if (arbol->izq == NULL && arbol->der == NULL) { 
                 // Caso 1: Nodo Hoja
                 arbol = NULL;
@@ -180,13 +196,13 @@ pjugador eliminar_jugador(pjugador &arbol, tcad alias_buscado) {
     return aux;
 }
 
-// Libera toda la memoria dinámica del árbol de forma recursiva (Post-orden).
-// Criterio: Liberación Recursiva de TDA.
+// Libera toda la memoria dinamica del arbol de forma recursiva (Post-orden)
+// Criterio: Liberacion Recursiva de TDA
 void liberar(pjugador &arbol) {
     if (arbol != NULL) {
         liberar(arbol->izq);  // Libera Izquierda
         liberar(arbol->der);  // Libera Derecha
-        delete arbol;         // Libera Raíz
+        delete arbol;         // Libera Raiz
         arbol = NULL;
     }
 }

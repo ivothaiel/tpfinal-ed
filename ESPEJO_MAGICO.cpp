@@ -51,7 +51,7 @@ int main(){
             case '4':
                 mostrarVencedores(arbol_jugadores, ranking_vencedores); 
                 break;
-            case '5':
+            case '0':
                 cout << "\nGuardando datos..." << endl;
                 
                 guardarjugadores(arbol_jugadores);
@@ -61,14 +61,14 @@ int main(){
                 liberar_diccionario(diccionario_palabras);
                 liberarlista(ranking_vencedores);
                 
-                cout << "\nQue los espiritus guardianes guien tu camino. Hasta pronto, viajero" << endl;
+                cout << "\nQue los espiritus guardianes guien tu camino. ¡Hasta pronto viajero!" << endl;
                 break;
             default:
                 cout << "\nOPCION INVALIDA" << endl;
         }
-        if (op != '5') pausarPantalla();
+        if (op != '0') pausarPantalla();
         
-    } while(op != '5');
+    } while(op != '0');
     
     return 0;
 }

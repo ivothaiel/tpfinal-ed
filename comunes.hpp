@@ -37,35 +37,35 @@ void leerCadenaValidada(const tcad mensaje, tcad &cadena, int minLen) {
     while (!valido) {
         cout << mensaje;
         fgets(cadena, MAX, stdin);
-
+		
         int len = strlen(cadena);
-
+		
         // Eliminar salto de linea
         if (len > 0 && cadena[len - 1] == '\n') {
             cadena[len - 1] = '\0';
         }
-
+		
         if ((int)strlen(cadena) >= minLen) {
             valido = true;
         } else {
-            cout << "Invalido: La cadena debe tener al menos "
-                 << minLen << " caracteres" << endl;
+            cout << "Invalido: La cadena debe tener al menos " 
+				<< minLen << " caracteres" << endl;
         }
     }
 }
 
 // Lee una cadena asegurando limpiar el buffer antes
 void leer_ingreso(tcad &cadena) {
-    int c;
+    //int c;
 
     // Limpia el buffer antes de la lectura
-    while ((c = getchar()) != '\n');
+    //while ((c = getchar()) != '\n');
 
     // Lee la cadena
     fgets(cadena, MAX, stdin);
 
     // Elimina salto de linea final
-    int len = strlen(cadena);
+    int len = (int)strlen(cadena);
     if (len > 0 && cadena[len - 1] == '\n') {
         cadena[len - 1] = '\0';
     }

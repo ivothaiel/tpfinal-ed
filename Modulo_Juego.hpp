@@ -11,7 +11,13 @@ typedef bool tpistas[PISTAS];
 typedef int costos[4];
 typedef int indices[7];
 
-// Permite al jugador seleccionar un alias existente para iniciar la partida.
+// Muestra una lista de los jugadores disponibles para empezar a jugar
+void jugadores_disponibles(pjugador jugadores){
+	cout << "\n=============== LISTA DE JUGADORES ===============\n";
+	mostrar_jugadores(jugadores);
+}
+
+// Permite al jugador seleccionar un alias existente para iniciar la partida
 // ABB (Busqueda de Nodos)
 pjugador seleccionarJugador(pjugador arbol_jugadores) {
     tcad alias_buscado;
@@ -20,21 +26,20 @@ pjugador seleccionarJugador(pjugador arbol_jugadores) {
 
     while (jugador_encontrado == NULL && !salir) {
         limpiarPantalla();
-        cout << "--- SELECCIONAR JUGADOR ---" << endl;
-        cout << "Jugadores disponibles:" << endl;
-        listar_jugadores(arbol_jugadores);
-
+		
+		jugadores_disponibles(arbol_jugadores);
         cout << "\nIngrese el alias del jugador (o '0' para cancelar): ";
-
+		
         // Lectura segura
         leer_ingreso(alias_buscado);
-
+		
         if (strcmp(alias_buscado, "0") == 0) {
             salir = true;
         } else {
             jugador_encontrado = buscar_jugador(arbol_jugadores, alias_buscado);
             if (jugador_encontrado == NULL) {
-                cout << "Alias no encontrado. Intente de nuevo." << endl;
+				cout << "\nEl alias '" << alias_buscado 
+					<< "' no corresponde a ningun jugador. Intente nuevamente" << endl;
                 pausarPantalla();
             }
         }
@@ -179,26 +184,30 @@ bool jugarPalabra(tpalabra &palabra_actual, int &puntaje_partida) {
 
 // Coordina toda la partida
 void iniciarJuego(pjugador arbol_jugadores, tdiccionario dic, tlista_ranking &ranking) {
-    limpiarPantalla();
-    cout << "--- INICIAR JUEGO ---" << endl;
 
     int total_jugadores = contar_jugadores(arbol_jugadores);
     int total_palabras = contar_palabras(dic);
 
     if (total_jugadores < 2) {
-        cout << "No hay suficientes jugadores (minimo 2)." << endl;
+        cout << "\nDebe registrar al menos 2 jugadores para iniciar el juego" << endl;
+		return;
     }
     if (total_palabras < 6) {
-        cout << "No hay suficientes palabras (minimo 6)." << endl;
+        cout << "\nDebe registrar al menos 6 palabras para iniciar el juego" << endl;
+		return;
     }
 
+	limpiarPantalla();
+	cartel_inicio_juego();
+	
     pjugador jugador_seleccionado = seleccionarJugador(arbol_jugadores);
     if (jugador_seleccionado == NULL) {
-        cout << "Inicio cancelado." << endl;
+        juego_cancelado();
+		pausarPantalla();
         return;
     }
 
-    cout << "Suerte, " << jugador_seleccionado->dato.alias << "!" << endl;
+    bienvenida(jugador_seleccionado->dato.alias);
     pausarPantalla();
 
     tpila pila_juego;

@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string.h>
 #include <stdio.h>
+
 using namespace std;
 
 const char* ARCHIVO_JUGADOR = "jugadores.dat";

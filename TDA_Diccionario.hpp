@@ -51,6 +51,7 @@ void crearnodo_palabra(pnodo_palabra &nuevo, tpalabra datos) {
         cout<<"\nMemoria Llena"<<endl; 
 }
 
+// Agrega (de manera ordenada) una nueva palabra a la lista de palabras de una clave
 void insertar_ordenado_palabras(tlista_palabras &lis, pnodo_palabra nuevo) {
     pnodo_palabra p;
     if (lis.inicio == NULL) { 
@@ -66,16 +67,17 @@ void insertar_ordenado_palabras(tlista_palabras &lis, pnodo_palabra nuevo) {
         lis.fin = nuevo;
     } else { 
         p = lis.inicio->sig;
-        while (strcmp(nuevo->dato.palabra, p->dato.palabra) > 0) { 
+        while (p != lis.fin && strcmp(nuevo->dato.palabra, p->dato.palabra) > 0) { 
             p = p->sig; 
         }
         nuevo->ant = p->ant; 
         nuevo->sig = p;
-        p->ant->sig = nuevo; 
+        (p->ant)->sig = nuevo; 
         p->ant = nuevo;
     }
 }
 
+// Obtiene el indice del diccionario que concuerda con la clave
 int obtener_indice(tdiccionario dic, char clave){
     int i = 0;
     bool encontrado = false;
@@ -88,6 +90,7 @@ int obtener_indice(tdiccionario dic, char clave){
     return i;
 }
 
+// Agrega una palabra a la lista de palabras de una clave
 void agregar_palabra(tdiccionario &dic, tpalabra datos) { 
     pnodo_palabra nuevo;
     int indice = obtener_indice(dic, datos.palabra[0]);
@@ -95,11 +98,12 @@ void agregar_palabra(tdiccionario &dic, tpalabra datos) {
     insertar_ordenado_palabras(dic[indice].listado, nuevo); 
 }
 
+// Busca una palabra en la lista de palabras de una clave
 pnodo_palabra buscar_palabra_diccionario(tdiccionario &dic, tcad palabra_buscada) {
     int indice = obtener_indice(dic, palabra_buscada[0]);
     pnodo_palabra p;
-    
     p = dic[indice].listado.inicio;
+	
     while (p != NULL && strcmp(p->dato.palabra, palabra_buscada) != 0) {
         if (strcmp(p->dato.palabra, palabra_buscada) > 0) 
             p = NULL; 
@@ -111,33 +115,41 @@ pnodo_palabra buscar_palabra_diccionario(tdiccionario &dic, tcad palabra_buscada
 
 pnodo_palabra quitar_palabra(tlista_palabras &lista, tcad buscado){
     pnodo_palabra extraido, i;
-    if(strcmp(lista.inicio->dato.palabra, buscado) == 0){
-        if(lista.inicio == lista.fin){
-            extraido = lista.inicio;
-            lista.inicio = NULL;
-            lista.fin = NULL;
-        }else{
-            extraido = lista.inicio;
-            lista.inicio = lista.inicio->sig;
-            lista.inicio->ant = NULL;
-            extraido->sig = NULL;
-        }
-    }else{
-        if(strcmp(lista.fin->dato.palabra, buscado) == 0){
-            extraido = lista.fin;
-            lista.fin = lista.fin->ant;
-            lista.fin->sig = NULL;
-            extraido->ant = NULL;
-        }else{
-            for(i = lista.inicio->sig; i != lista.fin && 
-                strcmp(i->dato.palabra, buscado) != 0; i = i->sig);
-            extraido = i;
-            (i->ant)->sig = extraido->sig;
-            (i->sig)->ant = extraido->ant;
-            extraido->sig = NULL;
-            extraido->ant = NULL;
-        }
-    }
+	if(lista.inicio == NULL)
+		extraido = NULL;
+	else{
+		if(strcmp(lista.inicio->dato.palabra, buscado) == 0){
+			if(lista.inicio == lista.fin){
+				extraido = lista.inicio;
+				lista.inicio = NULL;
+				lista.fin = NULL;
+			}else{
+				extraido = lista.inicio;
+				lista.inicio = lista.inicio->sig;
+				lista.inicio->ant = NULL;
+				extraido->sig = NULL;
+			}
+		}else{
+			if(strcmp(lista.fin->dato.palabra, buscado) == 0){
+				extraido = lista.fin;
+				lista.fin = lista.fin->ant;
+				lista.fin->sig = NULL;
+				extraido->ant = NULL;
+			}else{
+				for(i = lista.inicio->sig; i != lista.fin && 
+					strcmp(i->dato.palabra, buscado) != 0; i = i->sig);
+				if(i != lista.fin){
+					extraido = i;
+					(i->ant)->sig = extraido->sig;
+					(i->sig)->ant = extraido->ant;
+					extraido->sig = NULL;
+					extraido->ant = NULL;
+				}
+				else
+				   extraido = NULL;
+			}
+		}
+	}
     return extraido;
 }
 
