@@ -1,5 +1,7 @@
 #include <iostream>
+
 using namespace std;
+
 #include "comunes.hpp"
 #include "menus_Textos.hpp"
 #include "TDA_Pila.hpp"
@@ -15,6 +17,8 @@ using namespace std;
 int main(){
     char op;
     
+	srand(time(NULL));
+	
     // Declarar estructuras
     pjugador arbol_jugadores;
     tdiccionario diccionario_palabras;

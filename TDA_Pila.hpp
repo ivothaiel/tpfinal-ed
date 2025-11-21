@@ -17,22 +17,34 @@ struct tpila {
 };
 
 // --- IMPLEMENTACION TDA PILA ---
-void iniciarpila(tpila &p) {
+void iniciar_pila(tpila &p) {
     p.cima = -1;
 }
-bool pilavacia(tpila p) {
+
+bool pila_vacia(tpila p) {
     return p.cima == -1;
 }
-bool pilallena(tpila p) {
+
+bool pila_llena(tpila p) {
     return p.cima == MAXPILA - 1;
 }
-void agregarpila(tpila &p, tpalabra_simple nuevo) {
-    if (pilallena(p) == true) { cout << "ERROR: Pila llena." << endl; }
-    else { p.cima++; p.datos[p.cima] = nuevo; }
+
+void agregar_pila(tpila &p, tpalabra_simple nuevo) {
+    if (pila_llena(p) == true)
+		cout << "ERROR: Pila Llena" << endl; 
+    else { 
+		p.cima++; 
+		p.datos[p.cima] = nuevo; 
+	}
 }
-tpalabra_simple quitarpila(tpila &p) {
+
+tpalabra_simple quitar_pila(tpila &p) {
     tpalabra_simple extraido;
-    if (pilavacia(p) == true) { strcpy(extraido.palabra, "ERROR_VACIA"); }
-    else { extraido = p.datos[p.cima]; p.cima--; }
+    if (pila_vacia(p) == true)
+		strcpy(extraido.palabra, "ERROR_VACIA"); 
+    else { 
+		extraido = p.datos[p.cima]; 
+		p.cima--; 
+	}
     return extraido;
 }

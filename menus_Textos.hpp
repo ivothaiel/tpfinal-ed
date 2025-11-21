@@ -1,4 +1,5 @@
 #include <iostream>
+
 using namespace std;
 
 // MENU PRINCIPAL DEL JUEGO
@@ -6,7 +7,7 @@ void menu_principal(char &op){
     cout << "\n\n";
     cout << "+-------------------------------------------------------+\n";
     cout << "|                                                       |\n";
-    cout << "|              EL HECHIZO DEL ESPEJO                    |\n";
+    cout << "|       E L  H E C H I Z O  D E L  E S P E J O          |\n";
     cout << "|                                                       |\n";
     cout << "+-------------------------------------------------------+\n";
     cout << "\n";
@@ -43,7 +44,7 @@ void cartel_inicio_juego(){
 	limpiarPantalla();
 	cout << "===============================================================\n";
 	cout << "||                                                           ||\n";
-	cout << "||           L A   P R I N C E S A   D E   F U E G O         ||\n";
+	cout << "||          L A   P R I N C E S A   D E   F U E G O          ||\n";
 	cout << "||                                                           ||\n";
 	cout << "||   -----------------------------------------------------   ||\n";
 	cout << "||        PRESIONA UNA TECLA PARA INICIAR LA AVENTURA        ||\n";
@@ -58,14 +59,17 @@ void juego_cancelado(){
 	cout << "+---------------------------------------+\n";
 	cout << "|    P A R T I D A  C A N C E L A D A   |\n"; 
 	cout << "+---------------------------------------+\n";
+	pausarPantalla();
 }
 	
 void bienvenida(tcad alias){
+	limpiarPantalla();
 	cout << endl;
 	cout << "------------------------------------------------------\n";
 	cout << "|       ¡ B I E N V E N I D O  A L  J U E G O !      |\n";
 	cout << "------------------------------------------------------\n";
 	cout << " La aventura comienza, el destino de la princesa\n";
 	cout << " Karym Su Yang esta en tus manos " << alias << "\n";
-	cout << " \n¡Que el fuego te acompañe!\n";
+	cout << " \n ¡Que el fuego te acompañe!\n";
+	pausarPantalla();
 }
