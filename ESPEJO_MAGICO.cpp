@@ -50,7 +50,14 @@ int main(){
                 gestionarPalabras(diccionario_palabras); 
                 break;
             case '3':
-                iniciarJuego(arbol_jugadores, diccionario_palabras, ranking_vencedores); 
+				// Pongo los controles aqui ya que no esta permitido usar
+				// RETURN en los procedimientos
+				if(contar_jugadores(arbol_jugadores) < 2)
+					cout << "\nDebe registrar al menos 2 jugadores para iniciar el juego" << endl;
+				else if(contar_palabras(diccionario_palabras) < 6)
+					cout << "\nDebe registrar al menos 6 palabras para iniciar el juego" << endl;
+				else
+					iniciarJuego(arbol_jugadores, diccionario_palabras, ranking_vencedores); 
                 break;
             case '4':
                 mostrarVencedores(arbol_jugadores, ranking_vencedores); 

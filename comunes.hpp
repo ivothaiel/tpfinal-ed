@@ -70,3 +70,9 @@ void leer_ingreso(tcad &cadena) {
         cadena[len - 1] = '\0';
     }
 }
+
+// Limpia el buffer
+void limpiar_buffer(){
+	int c;
+	while ((c = getchar()) != '\n');
+}

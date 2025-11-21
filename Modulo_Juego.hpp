@@ -13,39 +13,32 @@ typedef int indices[7];
 
 // Muestra una lista de los jugadores disponibles para empezar a jugar
 void jugadores_disponibles(pjugador jugadores){
+	limpiarPantalla();
 	cout << "\n=============== LISTA DE JUGADORES ===============\n";
 	mostrar_jugadores(jugadores);
 }
 
-// Permite al jugador seleccionar un alias existente para iniciar la partida
-// ABB (Busqueda de Nodos)
-pjugador seleccionarJugador(pjugador arbol_jugadores) {
-    tcad alias_buscado;
-    pjugador jugador_encontrado = NULL;
-    bool salir = false;
-
-    while (jugador_encontrado == NULL && !salir) {
-        limpiarPantalla();
-		
-		jugadores_disponibles(arbol_jugadores);
-        cout << "\n> Ingrese Alias del Jugador - '0' para Cancelar: ";
-		
-        // Lectura segura
-        leer_ingreso(alias_buscado);
-		
-        if (strcmp(alias_buscado, "0") == 0) {
-            salir = true;
-        } else {
-            jugador_encontrado = buscar_jugador(arbol_jugadores, alias_buscado);
-            if (jugador_encontrado == NULL) {
-				cout << "\nEl alias '" << alias_buscado 
-					<< "' no corresponde a ningun jugador. Intente nuevamente" << endl;
-                pausarPantalla();
-            }
-        }
-    }
-
-    return jugador_encontrado;
+// Permite al jugador selccionar un jugador para iniciar la partida
+void seleccion_jugador(pjugador jugadores, pjugador &seleccionado){
+	tcad alias;
+	bool salir = false;
+	while(seleccionado == NULL && !salir){
+		limpiarPantalla();
+		jugadores_disponibles(jugadores);
+		cout << "\n> Ingrese Alias del Jugador - '0' para Cancelar: ";
+		leer_ingreso(alias);
+		if(strcmp(alias, "0") == 0){
+			salir = true;
+			juego_cancelado();
+		}
+		else{
+			seleccionado = buscar_jugador(jugadores, alias);
+			if(seleccionado == NULL){
+				cout << "\nEl alias '" << alias << "' no corresponde a ningun jugador. Intente nuevamente" << endl;
+				pausarPantalla();
+			}
+		}
+	}
 }
 
 // Devuelve true si el indice aleatorio ya existe dentro del arreglo 'ind'
@@ -60,16 +53,17 @@ bool indice_repetido(indices ind, int encontrados, int aleatorio){
 	return false;
 }
 
-// Selecciona 6 palabras aleatorias del diccionario sin repeticion y las carga en la Pila.
+// Selecciona 6 palabras aleatorias del diccionario sin repeticion y las carga en la Pila
 // TDA Diccionario/Pila
-void seleccionarPalabrasAleatorias(tdiccionario dic, tpila &pila_juego, int totalPalabras) {
+void seleccionarPalabrasAleatorias(tdiccionario dic, tpila &pila_juego) {
     indices in;
     int indice_aleatorio;
     int indices_encontrados = 0;
+	int total_palabras = contar_palabras(dic);
 
     // Generar 6 indices aleatorios unicos
     while (indices_encontrados < 6) {
-        indice_aleatorio = rand() % totalPalabras;
+        indice_aleatorio = rand() % total_palabras;
 		
         if (indice_repetido(in, indices_encontrados, indice_aleatorio) == false) {
             in[indices_encontrados] = indice_aleatorio;
@@ -108,158 +102,148 @@ void seleccionarPalabrasAleatorias(tdiccionario dic, tpila &pila_juego, int tota
 }
 
 // Muestra interfaz de adivinanza con puntajes y pistas
-void mostrarMenuAdivinar(int puntaje, int intentos, tpistas pistas_usadas, tpalabra palabra_actual) {
-    //cout << "--- ADIVINA LA PALABRA ---" << endl;
+void mostrarMenuAdivinar(int puntaje, int intentos, tpistas pistas_usadas, 
+	tpalabra actual, char &op) {
+	limpiarPantalla();
 	cout << endl;
 	cout << "+---------------------------------------+\n";
 	cout << "|   A D I V I N A  L A  P A L A B R A   |\n"; 
 	cout << "+---------------------------------------+\n";
-    cout << "Puntaje Actual: " << puntaje  << " puntos" << endl;
-    cout << "Intentos Restantes: " << intentos << " intentos" << endl;
+    cout << " Puntaje Actual: " << puntaje  << " puntos" << endl;
+    cout << " Intentos Restantes: " << intentos << " intentos" << endl;
 
-    cout << "\nPistas Usadas:" << endl;
-    if (pistas_usadas[0]) cout << " - Longitud: " << palabra_actual.longitud << " caracteres" << endl;
-    if (pistas_usadas[1]) cout << " - Primer Letra: " << palabra_actual.palabra[0] << endl;
-    if (pistas_usadas[2]) cout << " - Definicion: " << palabra_actual.definicion << endl;
-    if (pistas_usadas[3]) cout << " - Sinonimo: " << palabra_actual.sinonimo << endl;
+    cout << "\n Pistas Usadas:" << endl;
+    if (pistas_usadas[0]) cout << " - Longitud: " << actual.longitud << " caracteres" << endl;
+    if (pistas_usadas[1]) cout << " - Primer Letra: " << actual.palabra[0] << endl;
+    if (pistas_usadas[2]) cout << " - Definicion: " << actual.definicion << endl;
+    if (pistas_usadas[3]) cout << " - Sinonimo: " << actual.sinonimo << endl;
 
-    //cout << "\nOpciones:" << endl;
-    cout << " Adivinar la Palabra (a)" << endl;
-    cout << " Pedir una Pista (p)" << endl;
-    cout << "\n> Opcion: ";
+    cout << "\n 1) Adivinar la Palabra" << endl;
+    cout << " 2) Pedir una Pista" << endl;
+    cout << "\n > Opcion: ";
+	cin >> op;
 }
 
 // Submenu de pistas
 void mostrarMenuPistas(char &op) {
 	cout << "\n";
 	cout << " +---------------------------------------+\n";
-	cout << " |        * Pistas Disponibles *          |\n";
+	cout << " |        * Pistas Disponibles *         |\n";
 	cout << " +---------------------------------------+\n\n";
-    cout << "  1) Cantidad de Letras (Costo: 2 puntos)" << endl;
-    cout << "  2) Primera Letra (Costo: 3 puntos)" << endl;
-    cout << "  3) Definicion (Costo: 4 puntos)" << endl;
-    cout << "  4) Sinonimo (Costo: 5 puntos)" << endl;
+    cout << "  1) Cantidad de Letras - 2 puntos" << endl;
+    cout << "  2) Primera Letra - 3 puntos" << endl;
+    cout << "  3) Definicion - 4 puntos" << endl;
+    cout << "  4) Sinonimo - 5 puntos" << endl;
     cout << "  0) Cancelar" << endl;
     cout << "\n> Opcion: ";
 	cin >> op;
 }
 
+// Verifica que las palabras sean iguales
+bool palabra_adivinada(tcad actual, tcad intento){
+	return strcmp(intento, actual) == 0;
+}
+	
+void elegir_pistas(tpistas &pistas_usadas, int &puntaje, char op){
+	costos costos_pistas = {2, 3, 4, 5};
+	int indice = op - '1';
+	if(indice >= 0 && indice < 4){
+		int costo = costos_pistas[indice];
+		if(!pistas_usadas[indice] && puntaje >= costo){
+			puntaje -= costo;
+			pistas_usadas[indice] = true;
+		}else{
+			if(!pistas_usadas[indice])
+				cout << "\nYa has usado esta pista" << endl;
+			if(puntaje < costo)
+				cout << "\nNo tienes puntos suficientes para usar la pista" << endl;
+		}
+	}
+	else
+		cout << "\nOPCION INVALIDA" << endl;
+}
+
 // Logica de jugar una palabra
-bool jugarPalabra(tpalabra &palabra_actual, int &puntaje_partida) {
-    tcad intento_palabra;
+void jugar_palabra(tpalabra &actual, int &puntaje, bool &adivinada) {
+    tcad intento;
     int intentos = 3;
-    bool adivinada = false;
     tpistas pistas_usadas = {false, false, false, false};
     char opcion;
 
     while (intentos > 0 && !adivinada) {
-        limpiarPantalla();
-        mostrarMenuAdivinar(puntaje_partida, intentos, pistas_usadas, palabra_actual);
-        cin >> opcion;
+        mostrarMenuAdivinar(puntaje, intentos, pistas_usadas, actual, opcion);
         
-		int c;
-        while ((c = getchar()) != '\n');
+		limpiar_buffer();
 		
-        if (opcion == 'a' || opcion == 'A') {
-            leerCadenaValidada("Ingresa tu Respuesta: ", intento_palabra, 1);
-			
-            if (strcmp(intento_palabra, palabra_actual.palabra) == 0) {
-                adivinada = true;
-            } else {
-                intentos--;
-                pausarPantalla();
-            }
-        }else if (opcion == 'p' || opcion == 'P') {
+        if (opcion == '1') {
+            leerCadenaValidada("Ingresa tu Respuesta: ", intento, 1);
+			adivinada = palabra_adivinada(actual.palabra, intento);
+			if(!adivinada)
+				intentos--;
+        }else if (opcion == '2') {
             mostrarMenuPistas(opcion);
-            //cin >> opcion;
-			
-            int idx = opcion - '1';
-			
-            costos costos_pistas = {2, 3, 4, 5};
-			
-            if (idx >= 0 && idx < 4) {
-                int costo = costos_pistas[idx];
-
-                if (!pistas_usadas[idx] && puntaje_partida >= costo) {
-                    puntaje_partida -= costo;
-                    pistas_usadas[idx] = true;
-                } else {
-                    cout << "No tienes puntos suficientes o ya usaste esa pista." << endl;
-                    pausarPantalla();
-                }
-            }
+			elegir_pistas(pistas_usadas, puntaje, opcion);
         }
+		else
+			cout << "\nOPCION INVALIDA" << endl;
+		pausarPantalla();
     }
+}
 
-    return adivinada;
+// Actualiza el puntaje del jugador despues de ganar la partida
+void actualizar_puntaje(pjugador &seleccionado, int puntaje){
+	seleccionado->dato.juegos_ganados++;
+	seleccionado->dato.puntaje_acumulado += puntaje;
+	if (puntaje > seleccionado->dato.mejor_puntaje) {
+		seleccionado->dato.mejor_puntaje = puntaje;
+	}
 }
 
 // Coordina toda la partida
 void iniciarJuego(pjugador arbol_jugadores, tdiccionario dic, tlista_ranking &ranking) {
-
-    int total_jugadores = contar_jugadores(arbol_jugadores);
-    int total_palabras = contar_palabras(dic);
-
-    if (total_jugadores < 2) {
-        cout << "\nDebe registrar al menos 2 jugadores para iniciar el juego" << endl;
-		return;
-    }
-    if (total_palabras < 6) {
-        cout << "\nDebe registrar al menos 6 palabras para iniciar el juego" << endl;
-		return;
-    }
-
-	limpiarPantalla();
+	pjugador seleccionado = NULL;
+	
 	cartel_inicio_juego();
 	
-    pjugador jugador_seleccionado = seleccionarJugador(arbol_jugadores);
-    if (jugador_seleccionado == NULL) {
-        juego_cancelado();
-        return;
-    }
-
-    bienvenida(jugador_seleccionado->dato.alias);
-    
-	tpila pila_juego;
-    iniciar_pila(pila_juego);
-    seleccionarPalabrasAleatorias(dic, pila_juego, total_palabras);
-
-    int puntaje_partida = 7;
-    bool victoria = true;
-    int palabras_adivinadas = 0;
-
-    while (!pila_vacia(pila_juego) && victoria) {
-        tpalabra palabra_actual = quitar_pila(pila_juego);
-        palabras_adivinadas++;
+	seleccion_jugador(arbol_jugadores, seleccionado);
+	
+	if(seleccionado != NULL){
 		
-        cout << "\n--- Preparando palabra " << palabras_adivinadas << " de 6 ---" << endl;
-        pausarPantalla();
+		bienvenida(seleccionado->dato.alias);
 		
-        bool adivino = jugarPalabra(palabra_actual, puntaje_partida);
+		tpila pila_juego;
+		iniciar_pila(pila_juego);
+		seleccionarPalabrasAleatorias(dic, pila_juego);
 		
-        if (adivino) {
-            cout << "Correcto! La palabra era: " << palabra_actual.palabra << endl;
-            cout << "Ganas 7 puntos." << endl;
-            puntaje_partida += 7;
-        } else {
-            cout << "HAS FALLADO! La palabra correcta era: " << palabra_actual.palabra << endl;
-            cout << "GAME OVER" << endl;
-            victoria = false;
-        }
-    }
-
-    limpiarPantalla();
-
-    if (victoria) {
-        jugador_seleccionado->dato.juegos_ganados++;
-        jugador_seleccionado->dato.puntaje_acumulado += puntaje_partida;
-
-        if (puntaje_partida > jugador_seleccionado->dato.mejor_puntaje) {
-            jugador_seleccionado->dato.mejor_puntaje = puntaje_partida;
-        }
-    } else {
-        cout << "Puntaje Final: 0" << endl;
-    }
+		int puntaje_partida = 7;
+		bool victoria = true;
+		int palabras_adivinadas = 0;
+		
+		while (!pila_vacia(pila_juego) && victoria) {
+			tpalabra palabra_actual = quitar_pila(pila_juego);
+			
+			cout << "\nJ O Y A  " << palabras_adivinadas + 1 << " D E  6" << endl;
+			
+			bool adivinada = false;
+			jugar_palabra(palabra_actual, puntaje_partida, adivinada);
+			
+			if (adivinada) {
+				cout << "\n¡ C O R R E C T O ! La Palabra era: " << palabra_actual.palabra << endl;
+				cout << "\n¡ G A N A S T E  7  P U N T O S !" << endl;
+				puntaje_partida += 7;
+				palabras_adivinadas++;
+			} else {
+				cout << "¡ H A S  F A L L A D O ! La Palabra Correcta era: " << palabra_actual.palabra << endl;
+				cartel_derrota();
+				victoria = false;
+			}
+		}
+		
+		if (victoria){
+			cartel_victoria();
+			actualizar_puntaje(seleccionado, puntaje_partida);
+		}
+	}
 }
 
 // Construye ranking (recorrido en orden)

@@ -59,7 +59,6 @@ void juego_cancelado(){
 	cout << "+---------------------------------------+\n";
 	cout << "|    P A R T I D A  C A N C E L A D A   |\n"; 
 	cout << "+---------------------------------------+\n";
-	pausarPantalla();
 }
 	
 void bienvenida(tcad alias){
@@ -71,5 +70,43 @@ void bienvenida(tcad alias){
 	cout << " La aventura comienza, el destino de la princesa\n";
 	cout << " Karym Su Yang esta en tus manos " << alias << "\n";
 	cout << " \n ¡Que el fuego te acompañe!\n";
+	pausarPantalla();
+}
+	
+void cartel_victoria(){
+	limpiarPantalla();
+	cout << "\n";
+	cout << "=====================================================\n";
+	cout << "|                                                   |\n";
+	cout << "|    ¡ H A S  R O T O  L A  M A L D I C I O N !     |\n";
+	cout << "|                                                   |\n";
+	cout << "|  	  Adivinaste las 6 palabras magicas y        |\n";
+	cout << "|      el espejo ancestral se ha roto por fin       |\n";
+	cout << "|                                                   |\n";
+	cout << "|     La princesa Karym Su Yang ha sido liberada    |\n";
+	cout << "|      del hechicero después de mas de 500 años     |\n";
+	cout << "|                                                   |\n";
+	cout << "|       El Reino de Fuego celebra tu valentia       |\n";
+	cout << "|                                                   |\n";
+	cout << "=====================================================\n";
+	cout << "\n";
+	pausarPantalla();
+}
+	
+void cartel_derrota(){
+	limpiarPantalla();
+	cout << "\n";
+	cout << "=====================================================\n";
+	cout << "|                                                   |\n";
+	cout << "|         		¡ H A S  F A L L A D O !             |\n";
+	cout << "|                                                   |\n";
+	cout << "|   Las palabras magicas permaneceran ocultas       |\n";
+	cout << "|   dentro de las joyas del espejo...               |\n";
+	cout << "|                                                   |\n";
+	cout << "|   Tu destino es convertirte en piedra para		 |\n";
+	cout << "|   toda la eternidad				                 |\n";
+	cout << "|                                                   |\n";
+	cout << "=====================================================\n";
+	cout << "\n";
 	pausarPantalla();
 }
