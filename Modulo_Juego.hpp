@@ -102,9 +102,10 @@ void seleccionarPalabrasAleatorias(tdiccionario dic, tpila &pila_juego) {
 }
 
 // Muestra interfaz de adivinanza con puntajes y pistas
-void mostrarMenuAdivinar(int puntaje, int intentos, tpistas pistas_usadas, 
+void mostrarMenuAdivinar(int puntaje, int intentos, int adivinadas, tpistas pistas_usadas, 
 	tpalabra actual, char &op) {
 	limpiarPantalla();
+	cout << "\n	   J O Y A  " << adivinadas + 1 << "  D E  6" << endl;
 	cout << endl;
 	cout << "+---------------------------------------+\n";
 	cout << "|   A D I V I N A  L A  P A L A B R A   |\n"; 
@@ -131,10 +132,9 @@ void mostrarMenuPistas(char &op) {
 	cout << " |        * Pistas Disponibles *         |\n";
 	cout << " +---------------------------------------+\n\n";
     cout << "  1) Cantidad de Letras - 2 puntos" << endl;
-    cout << "  2) Primera Letra - 3 puntos" << endl;
+    cout << "  2) Primer Letra - 3 puntos" << endl;
     cout << "  3) Definicion - 4 puntos" << endl;
     cout << "  4) Sinonimo - 5 puntos" << endl;
-    cout << "  0) Cancelar" << endl;
     cout << "\n> Opcion: ";
 	cin >> op;
 }
@@ -153,7 +153,7 @@ void elegir_pistas(tpistas &pistas_usadas, int &puntaje, char op){
 			puntaje -= costo;
 			pistas_usadas[indice] = true;
 		}else{
-			if(!pistas_usadas[indice])
+			if(pistas_usadas[indice])
 				cout << "\nYa has usado esta pista" << endl;
 			if(puntaje < costo)
 				cout << "\nNo tienes puntos suficientes para usar la pista" << endl;
@@ -161,32 +161,40 @@ void elegir_pistas(tpistas &pistas_usadas, int &puntaje, char op){
 	}
 	else
 		cout << "\nOPCION INVALIDA" << endl;
+	pausarPantalla();
 }
 
 // Logica de jugar una palabra
-void jugar_palabra(tpalabra &actual, int &puntaje, bool &adivinada) {
+void jugar_palabra(tpalabra &actual, int &puntaje, bool &adivinada, int adivinadas) {
     tcad intento;
     int intentos = 3;
     tpistas pistas_usadas = {false, false, false, false};
     char opcion;
-
     while (intentos > 0 && !adivinada) {
-        mostrarMenuAdivinar(puntaje, intentos, pistas_usadas, actual, opcion);
+        mostrarMenuAdivinar(puntaje, intentos, adivinadas, pistas_usadas, actual, opcion);
         
 		limpiar_buffer();
 		
         if (opcion == '1') {
-            leerCadenaValidada("Ingresa tu Respuesta: ", intento, 1);
+            leerCadenaValidada("\nIngresa tu Respuesta: ", intento, 1);
+			// Controla que siempre la primer letra sea mayuscula
+			// para una comparacion correcta
+			convertir_letra(intento[0]);
 			adivinada = palabra_adivinada(actual.palabra, intento);
-			if(!adivinada)
+			if(!adivinada){
+				cout << "\nNo ha adivinado la palabra. Intente nuevamente" << endl;
 				intentos--;
+				pausarPantalla();
+			}
         }else if (opcion == '2') {
             mostrarMenuPistas(opcion);
 			elegir_pistas(pistas_usadas, puntaje, opcion);
+			limpiarPantalla();
         }
-		else
+		else{
 			cout << "\nOPCION INVALIDA" << endl;
-		pausarPantalla();
+			pausarPantalla();
+		}
     }
 }
 
@@ -222,10 +230,8 @@ void iniciarJuego(pjugador arbol_jugadores, tdiccionario dic, tlista_ranking &ra
 		while (!pila_vacia(pila_juego) && victoria) {
 			tpalabra palabra_actual = quitar_pila(pila_juego);
 			
-			cout << "\nJ O Y A  " << palabras_adivinadas + 1 << " D E  6" << endl;
-			
 			bool adivinada = false;
-			jugar_palabra(palabra_actual, puntaje_partida, adivinada);
+			jugar_palabra(palabra_actual, puntaje_partida, adivinada, palabras_adivinadas);
 			
 			if (adivinada) {
 				cout << "\n¡ C O R R E C T O ! La Palabra era: " << palabra_actual.palabra << endl;
@@ -233,10 +239,12 @@ void iniciarJuego(pjugador arbol_jugadores, tdiccionario dic, tlista_ranking &ra
 				puntaje_partida += 7;
 				palabras_adivinadas++;
 			} else {
-				cout << "¡ H A S  F A L L A D O ! La Palabra Correcta era: " << palabra_actual.palabra << endl;
+				limpiarPantalla();
+				cout << "\n¡ H A S  F A L L A D O ! La Palabra Correcta era: " << palabra_actual.palabra << endl;
 				cartel_derrota();
 				victoria = false;
 			}
+			pausarPantalla();
 		}
 		
 		if (victoria){

@@ -94,19 +94,17 @@ void cartel_victoria(){
 }
 	
 void cartel_derrota(){
-	limpiarPantalla();
 	cout << "\n";
 	cout << "=====================================================\n";
 	cout << "|                                                   |\n";
-	cout << "|         		¡ H A S  F A L L A D O !             |\n";
+	cout << "|            ¡ H A S  F A L L A D O !               |\n";
 	cout << "|                                                   |\n";
 	cout << "|   Las palabras magicas permaneceran ocultas       |\n";
-	cout << "|   dentro de las joyas del espejo...               |\n";
+	cout << "|     dentro de las joyas del espejo...             |\n";
 	cout << "|                                                   |\n";
-	cout << "|   Tu destino es convertirte en piedra para		 |\n";
-	cout << "|   toda la eternidad				                 |\n";
+	cout << "|   Tu destino es convertirte en piedra para        |\n";
+	cout << "|     toda la eternidad...                          |\n";
 	cout << "|                                                   |\n";
 	cout << "=====================================================\n";
 	cout << "\n";
-	pausarPantalla();
 }
