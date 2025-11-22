@@ -31,7 +31,7 @@ void pausarPantalla() {
 }
 
 // Lee una cadena con longitud minima, eliminando salto de linea
-void leerCadenaValidada(const tcad mensaje, tcad &cadena, int minLen) {
+void leerCadenaValidada( const tcad mensaje, tcad &cadena, int minLen) {
     bool valido = false;
 
     while (!valido) {
@@ -76,3 +76,6 @@ void limpiar_buffer(){
 	int c;
 	while ((c = getchar()) != '\n');
 }
+
+	
+
