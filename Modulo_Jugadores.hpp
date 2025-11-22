@@ -160,14 +160,14 @@ void listarJugadores(pjugador arbol_jugadores) {
 }
 
 void gestionarJugadores(pjugador &arbol_jugadores) {
-    char op;
+    int opc;
     bool salir = false;
 
     while (!salir) {
         limpiarPantalla();
         cout << "\n";
         cout << " +---------------------------------------+\n";
-        cout << " |        * Gestion de Jugadores * |\n";
+        cout << " |        * Gestion de Jugadores *       |\n";
         cout << " +---------------------------------------+\n\n";
         cout << "   1) Registrar Jugador" << endl;
         cout << "   2) Consultar Jugador" << endl;
@@ -176,35 +176,36 @@ void gestionarJugadores(pjugador &arbol_jugadores) {
         cout << "   5) Listar Jugadores (Por Alias)" << endl;
         cout << "   0) Volver" << endl;
         cout << "\n> Opcion: ";
-        cin >> op;
 		
-        switch (op) {
-            case '1':
+        cin >> opc;
+		
+        switch (opc) {
+            case 1:
                 cout << "\n* * Registrar Jugador * *\n" << endl;
                 altaJugador(arbol_jugadores);
                 break;
 				
-            case '2':
+            case 2:
                 cout << "\n* * Consultar Jugador * *\n" << endl;
                 consultarJugador(arbol_jugadores);
                 break;
 				
-            case '3':
+            case 3:
                 cout << "\n* * Modificar Jugador * *\n" << endl;
                 modificarJugador(arbol_jugadores);
                 break;
 				
-            case '4':
+            case 4:
                 cout << "\n* * Eliminar Jugador * *\n" << endl;
                 bajaJugador(arbol_jugadores);
                 break;
 				
-            case '5':
+            case 5:
                 cout << "\n* * Listado de Jugadores * *" << endl;
                 listarJugadores(arbol_jugadores);
                 break;
 				
-            case '0':
+            case 0:
                 cout << "\nVolviendo al menu principal..." << endl;
                 salir = true;
                 break;

@@ -23,7 +23,7 @@ void menu_principal(char &op){
     cout << "  3)  Iniciar Juego\n";
     cout << "  4)  Vencedores\n";
     cout << "  0)  Salir del Juego\n\n";
-	cout << "> Opcion: ";
+    cout << "> Opcion: ";
     cin >> op;
 }
 
