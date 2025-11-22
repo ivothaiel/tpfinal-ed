@@ -42,7 +42,6 @@ int main(){
     do{
         limpiarPantalla(); 
         menu_principal(op); 
-        op = leer_opcion_caracter(msg_menu, '0', '4');
         switch(op){
             case '1':
                 gestionarJugadores(arbol_jugadores); 
