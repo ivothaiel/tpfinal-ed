@@ -34,7 +34,7 @@ void mostrar_cadena(tcad palabra) {
 	}
 }
 	
-void leerPalabra(tcad palabra){
+void leerPalabra(tcad &palabra){
 	leerCadenaValidada("Ingrese palabra: ", palabra, 5);
 	convertir_letra(palabra[0]);
 }
