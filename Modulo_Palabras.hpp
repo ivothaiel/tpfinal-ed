@@ -196,7 +196,7 @@ void listarPalabras(tdiccionario dic) {
 
     for (int i = 0; i < MAX_CLAVES; i++) {
         if (dic[i].listado.inicio != NULL) {
-			
+			dd
             hayPalabras = true;
 			
             cout << "\n>>> Palabras que comienzan con '" << dic[i].clave << "':" << endl;
@@ -217,7 +217,7 @@ void listarPalabras(tdiccionario dic) {
 }*/
 
 void gestionarPalabras(tdiccionario &dic) {
-    char opc;
+    char op;
     bool salir = false;
     tcad msg_menu = "\n> Opcion: ";
 
@@ -233,11 +233,10 @@ void gestionarPalabras(tdiccionario &dic) {
         cout << "   4) Consultar Palabra" << endl;
         cout << "   5) Listar Palabras" << endl;
         cout << "   0) Volver\n" << endl;
-        
-
-        opc = leer_opcion_caracter(msg_menu, '0', '5');
+        cout << "\n> Opcion: ";
+        cin >> op;
 		
-        switch (opc) {
+        switch (op) {
             case '1':
                 cout << "\n* * Registrar Palabra * *\n" << endl;
                 altaPalabra(dic);

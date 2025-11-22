@@ -160,9 +160,8 @@ void listarJugadores(pjugador arbol_jugadores) {
 }
 
 void gestionarJugadores(pjugador &arbol_jugadores) {
-    char opc;
+    char op;
     bool salir = false;
-    tcad msg_menu = "\n> Opcion: "; 
 
     while (!salir) {
         limpiarPantalla();
@@ -176,11 +175,10 @@ void gestionarJugadores(pjugador &arbol_jugadores) {
         cout << "   4) Eliminar Jugador" << endl;
         cout << "   5) Listar Jugadores (Por Alias)" << endl;
         cout << "   0) Volver" << endl;
-        
-
-        opc = leer_opcion_caracter(msg_menu, '0', '5');
+        cout << "\n> Opcion: ";
+        cin >> op;
 		
-        switch (opc) {
+        switch (op) {
             case '1':
                 cout << "\n* * Registrar Jugador * *\n" << endl;
                 altaJugador(arbol_jugadores);
