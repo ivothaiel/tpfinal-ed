@@ -219,12 +219,13 @@ void listarPalabras(tdiccionario dic) {
 void gestionarPalabras(tdiccionario &dic) {
     char opc;
     bool salir = false;
+    tcad msg_menu = "\n> Opcion: ";
 
     while (!salir) {
         limpiarPantalla();
         cout << "\n";
         cout << " +---------------------------------------+\n";
-        cout << " |      * Gestion de Palabras *          |\n";
+        cout << " |      * Gestion de Palabras * |\n";
         cout << " +---------------------------------------+\n\n";
         cout << "   1) Registrar Palabra" << endl;
         cout << "   2) Eliminar Palabra" << endl;
@@ -232,8 +233,9 @@ void gestionarPalabras(tdiccionario &dic) {
         cout << "   4) Consultar Palabra" << endl;
         cout << "   5) Listar Palabras" << endl;
         cout << "   0) Volver\n" << endl;
-        cout << "> Opcion: ";
-        cin >> opc;
+        
+
+        opc = leer_opcion_caracter(msg_menu, '0', '5');
 		
         switch (opc) {
             case '1':

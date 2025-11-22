@@ -16,7 +16,7 @@ using namespace std;
 // PROGRAMA PRINCIPAL
 int main(){
     char op;
-    
+    tcad msg_menu = "\n> Opcion: "; 
 	srand(time(NULL));
 	
     // Declarar estructuras
@@ -27,6 +27,7 @@ int main(){
     // Inicializar estructuras
     iniciar(arbol_jugadores);                 
     creardic(diccionario_palabras);           
+    
     iniciarlista(ranking_vencedores);        
 
     // Cargar datos desde archivos
@@ -41,7 +42,7 @@ int main(){
     do{
         limpiarPantalla(); 
         menu_principal(op); 
-        
+        op = leer_opcion_caracter(msg_menu, '0', '4');
         switch(op){
             case '1':
                 gestionarJugadores(arbol_jugadores); 
@@ -50,8 +51,6 @@ int main(){
                 gestionarPalabras(diccionario_palabras); 
                 break;
             case '3':
-				// Pongo los controles aqui ya que no esta permitido usar
-				// RETURN en los procedimientos
 				if(contar_jugadores(arbol_jugadores) < 2)
 					cout << "\nDebe registrar al menos 2 jugadores para iniciar el juego" << endl;
 				else if(contar_palabras(diccionario_palabras) < 6)
@@ -72,7 +71,7 @@ int main(){
                 liberar_diccionario(diccionario_palabras);
                 liberarlista(ranking_vencedores);
                 
-                cout << "\nQue los espiritus guardianes guien tu camino. ¡Hasta pronto viajero!" << endl;
+                cout << "\nQue los espiritus guardianes guien tu camino. ï¿½Hasta pronto viajero!" << endl;
                 break;
             default:
                 cout << "\nOPCION INVALIDA" << endl;
