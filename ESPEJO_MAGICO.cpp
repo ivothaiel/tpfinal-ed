@@ -16,7 +16,6 @@ using namespace std;
 // PROGRAMA PRINCIPAL
 int main(){
     char op;
-    tcad msg_menu = "\n> Opcion: "; 
 	srand(time(NULL));
 	
     // Declarar estructuras

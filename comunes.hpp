@@ -65,24 +65,3 @@ void limpiar_buffer(){
 }
 
 
-
-char leer_opcion_caracter(tcad mensaje, char min, char max) {
-    char opcion;
-    bool valido = false;
-    tcad entrada; 
-    while (!valido) {
-        cout << mensaje;
-        leer_ingreso(entrada);
-        if (strlen(entrada) == 1) {
-            opcion = entrada[0];
-            if (opcion >= min && opcion <= max) {
-                valido = true;
-            } else {
-                cout << "\n>>> Opcion invalida. Ingrese entre '" << min << "' y '" << max << "'.\n";
-            }
-        } else {
-            cout << "\n>>> Entrada invalida. Ingrese un solo caracter.\n";
-        }
-    }
-    return opcion;
-}
