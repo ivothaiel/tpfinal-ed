@@ -5,11 +5,6 @@
 #include <time.h>
 
 using namespace std;
-
-// ------------------------------------------------------------
-// CONSTANTES Y TIPOS GLOBALES
-// ------------------------------------------------------------
-
 const int MAX = 50;
 typedef char tcad[MAX];
 
@@ -31,7 +26,7 @@ void pausarPantalla() {
 }
 
 // Lee una cadena con longitud minima, eliminando salto de linea
-void leerCadenaValidada(const tcad mensaje, tcad &cadena, int minLen) {
+void leerCadenaValidada( const tcad mensaje, tcad &cadena, int minLen) {
     bool valido = false;
 
     while (!valido) {
@@ -56,15 +51,7 @@ void leerCadenaValidada(const tcad mensaje, tcad &cadena, int minLen) {
 
 // Lee una cadena asegurando limpiar el buffer antes
 void leer_ingreso(tcad &cadena) {
-    //int c;
-
-    // Limpia el buffer antes de la lectura
-    //while ((c = getchar()) != '\n');
-
-    // Lee la cadena
     fgets(cadena, MAX, stdin);
-
-    // Elimina salto de linea final
     int len = (int)strlen(cadena);
     if (len > 0 && cadena[len - 1] == '\n') {
         cadena[len - 1] = '\0';
@@ -75,4 +62,27 @@ void leer_ingreso(tcad &cadena) {
 void limpiar_buffer(){
 	int c;
 	while ((c = getchar()) != '\n');
+}
+
+
+
+char leer_opcion_caracter(tcad mensaje, char min, char max) {
+    char opcion;
+    bool valido = false;
+    tcad entrada; 
+    while (!valido) {
+        cout << mensaje;
+        leer_ingreso(entrada);
+        if (strlen(entrada) == 1) {
+            opcion = entrada[0];
+            if (opcion >= min && opcion <= max) {
+                valido = true;
+            } else {
+                cout << "\n>>> Opcion invalida. Ingrese entre '" << min << "' y '" << max << "'.\n";
+            }
+        } else {
+            cout << "\n>>> Entrada invalida. Ingrese un solo caracter.\n";
+        }
+    }
+    return opcion;
 }

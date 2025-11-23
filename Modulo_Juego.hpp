@@ -11,6 +11,10 @@ typedef bool tpistas[PISTAS];
 typedef int costos[4];
 typedef int indices[7];
 
+// ------------------------------------------------------------
+// SECCIÃ“N: SELECCIÃ“N DE JUGADOR
+// ------------------------------------------------------------
+
 // Muestra una lista de los jugadores disponibles para empezar a jugar
 void jugadores_disponibles(pjugador jugadores){
 	limpiarPantalla();
@@ -19,7 +23,7 @@ void jugadores_disponibles(pjugador jugadores){
 }
 
 // Permite al jugador selccionar un jugador para iniciar la partida
-void seleccion_jugador(pjugador jugadores, pjugador &seleccionado){
+/*void seleccion_jugador(pjugador jugadores, pjugador &seleccionado){
 	tcad alias;
 	bool salir = false;
 	while(seleccionado == NULL && !salir){
@@ -39,8 +43,38 @@ void seleccion_jugador(pjugador jugadores, pjugador &seleccionado){
 			}
 		}
 	}
-}
-
+}*/
+	void seleccion_jugador(pjugador jugadores, pjugador &seleccionado){
+		tcad alias;
+		bool salir = false;
+		
+		while(seleccionado == NULL && salir == false){
+			
+			limpiarPantalla();
+			jugadores_disponibles(jugadores);
+			
+			cout << "\n> Ingrese Alias del Jugador - '0' para Cancelar: ";
+			leer_ingreso(alias);
+			
+			if(strcmp(alias, "0") == 0){
+				salir = true;
+				juego_cancelado();
+			}
+			else{
+				seleccionado = buscar_jugador(jugadores, alias);
+				
+				if(seleccionado == NULL){
+					cout << "\nEl alias '" << alias 
+						<< "' no corresponde a ningun jugador." << endl;
+					cout << "Intente nuevamente." << endl;
+					pausarPantalla();
+				}
+			}
+		}
+	}
+		
+		
+	
 // Devuelve true si el indice aleatorio ya existe dentro del arreglo 'ind'
 // Recorre unicamente los elementos cargados hasta el momento (encontrados)
 // evitando seleccionar indices repetidos
@@ -53,9 +87,112 @@ bool indice_repetido(indices ind, int encontrados, int aleatorio){
 	return false;
 }
 
-// Selecciona 6 palabras aleatorias del diccionario sin repeticion y las carga en la Pila
-// TDA Diccionario/Pila
+
+/*void generar_indices_azar(int total_palabras, indices &in) {
+    int encontrados = 0;
+    int aleatorio;
+    
+    while (encontrados < 6) {
+        aleatorio = rand() % total_palabras;
+        if (!indice_repetido(in, encontrados, aleatorio)) {
+            in[encontrados] = aleatorio;
+            encontrados++;
+        }
+    }
+}*/
+void generar_indices_azar(int total_palabras, indices &in) {
+	int i;
+	// Inicializar todo a -1 para que no haya basura
+	for(i = 0; i < 7; i++){
+		in[i] = -1;
+	}
+	int objetivo;
+	if(total_palabras < 6)
+		objetivo = total_palabras;
+	else
+		objetivo = 6;
+	int encontrados = 0;
+	int aleatorio;
+	while(encontrados < objetivo){
+		aleatorio = rand() % total_palabras;
+		if(!indice_repetido(in, encontrados, aleatorio)){
+			in[encontrados] = aleatorio;
+			encontrados++;
+		}
+	}
+}
+	
+
+/*void cargar_pila_desde_indices(tdiccionario dic, indices in, tpila &pila_juego) {
+    int indice_global = 0;
+    int palabras_cargadas = 0;
+    pnodo_palabra p;
+    tpalabra pila_temporal[6]; 
+
+    for (int i = 0; i < MAX_CLAVES && palabras_cargadas < 6; i++) {
+        p = dic[i].listado.inicio;
+        while (p != NULL && palabras_cargadas < 6) {
+            for (int j = 0; j < 6; j++) {
+                if (in[j] == indice_global) {
+                    pila_temporal[palabras_cargadas] = p->dato;
+                    palabras_cargadas++;
+                }
+            }
+            indice_global++;
+            p = p->sig;
+        }
+    }
+    for (int i = 0; i < MAXPILA; i++) {
+        agregar_pila(pila_juego, pila_temporal[i]);
+    }
+}*/
+void cargar_pila_desde_indices(tdiccionario dic, indices in, tpila &pila_juego) {
+	int indice_global = 0;
+	int palabras_cargadas = 0;
+	int i, j;
+	pnodo_palabra p;
+	tpalabra pila_temporal[6];
+	for(i = 0; i < MAX_CLAVES && palabras_cargadas < 6; i++){
+		p = dic[i].listado.inicio;
+		while(p != NULL && palabras_cargadas < 6){
+			for(j = 0; j < 6; j++){
+				if(in[j] == -1){
+					// ya no quedan índices válidos
+				}else{
+					if(in[j] == indice_global){
+						pila_temporal[palabras_cargadas] = p->dato;
+						palabras_cargadas++;
+					}
+				}
+			}
+			indice_global++;
+			p = p->sig;
+		}
+	}
+	// cargar solo lo encontrado
+	for(i = 0; i < palabras_cargadas; i++){
+		agregar_pila(pila_juego, pila_temporal[i]);
+	}
+}
+
+
+
+// FunciÃ³n Principal Modularizada
 void seleccionarPalabrasAleatorias(tdiccionario dic, tpila &pila_juego) {
+    indices in;
+    int total = contar_palabras(dic);
+    
+    // 1. Generar los nÃºmeros
+    generar_indices_azar(total, in);
+    
+    // 2. Llenar la pila usando esos nÃºmeros
+    cargar_pila_desde_indices(dic, in, pila_juego);
+}
+
+
+
+
+/*void seleccionarPalabrasAleatorias(tdiccionario dic, tpila &pila_juego) {
     indices in;
     int indice_aleatorio;
     int indices_encontrados = 0;
@@ -99,7 +236,7 @@ void seleccionarPalabrasAleatorias(tdiccionario dic, tpila &pila_juego) {
     for (int i = 0; i < MAXPILA; i++) {
         agregar_pila(pila_juego, pila_palabras[i]);
     }
-}
+}*/
 
 // Muestra interfaz de adivinanza con puntajes y pistas
 void mostrarMenuAdivinar(int puntaje, int intentos, int adivinadas, tpistas pistas_usadas, 
@@ -127,6 +264,8 @@ void mostrarMenuAdivinar(int puntaje, int intentos, int adivinadas, tpistas pist
 
 // Submenu de pistas
 void mostrarMenuPistas(char &op) {
+    tcad msg_menu = "\n> Opcion: ";
+    limpiarPantalla();
 	cout << "\n";
 	cout << " +---------------------------------------+\n";
 	cout << " |        * Pistas Disponibles *         |\n";
@@ -146,7 +285,7 @@ bool palabra_adivinada(tcad actual, tcad intento){
 	
 void elegir_pistas(tpistas &pistas_usadas, int &puntaje, char op){
 	costos costos_pistas = {2, 3, 4, 5};
-	int indice = op - '1';
+	int indice = op - '1'; // Convierte '1' a 0, '2' a 1, etc.
 	if(indice >= 0 && indice < 4){
 		int costo = costos_pistas[indice];
 		if(!pistas_usadas[indice] && puntaje >= costo){
@@ -165,7 +304,7 @@ void elegir_pistas(tpistas &pistas_usadas, int &puntaje, char op){
 }
 
 // Logica de jugar una palabra
-void jugar_palabra(tpalabra &actual, int &puntaje, bool &adivinada, int adivinadas) {
+/*void jugar_palabra(tpalabra &actual, int &puntaje, bool &adivinada, int adivinadas) {
     tcad intento;
     int intentos = 3;
     tpistas pistas_usadas = {false, false, false, false};
@@ -196,7 +335,41 @@ void jugar_palabra(tpalabra &actual, int &puntaje, bool &adivinada, int adivinad
 			pausarPantalla();
 		}
     }
+}*/
+
+void jugar_palabra(tpalabra &actual, int &puntaje, bool &adivinada, int adivinadas) {
+	tcad intento;
+	int intentos = 3;
+	char opcion;
+	tpistas pistas_usadas = {false, false, false, false};
+	while(intentos > 0 && adivinada == false){
+		mostrarMenuAdivinar(puntaje, intentos, adivinadas, pistas_usadas, actual, opcion);
+		if(opcion == '1'){
+			limpiar_buffer();
+			leerCadenaValidada("\nIngresa tu Respuesta: ", intento, 1);
+			convertir_letra(intento[0]);
+			if(strcmp(intento, actual.palabra) == 0){
+				adivinada = true;
+			}else{
+				cout << "\nNo ha adivinado la palabra." << endl;
+				intentos--;
+				pausarPantalla();
+			}
+		}else if(opcion == '2'){
+			mostrarMenuPistas(opcion);
+			if(opcion == '1' || opcion == '2' || opcion == '3' || opcion == '4'){
+				elegir_pistas(pistas_usadas, puntaje, opcion);
+			}else{
+				cout << "\nOPCION INVALIDA" << endl;
+				pausarPantalla();
+			}
+		}else {
+			cout << "\nOPCION INVALIDA" << endl;
+			pausarPantalla();
+		}
+	}
 }
+	
 
 // Actualiza el puntaje del jugador despues de ganar la partida
 void actualizar_puntaje(pjugador &seleccionado, int puntaje){
@@ -210,43 +383,33 @@ void actualizar_puntaje(pjugador &seleccionado, int puntaje){
 // Coordina toda la partida
 void iniciarJuego(pjugador arbol_jugadores, tdiccionario dic, tlista_ranking &ranking) {
 	pjugador seleccionado = NULL;
-	
 	cartel_inicio_juego();
-	
 	seleccion_jugador(arbol_jugadores, seleccionado);
-	
 	if(seleccionado != NULL){
-		
 		bienvenida(seleccionado->dato.alias);
-		
 		tpila pila_juego;
 		iniciar_pila(pila_juego);
 		seleccionarPalabrasAleatorias(dic, pila_juego);
-		
 		int puntaje_partida = 7;
 		bool victoria = true;
 		int palabras_adivinadas = 0;
-		
 		while (!pila_vacia(pila_juego) && victoria) {
 			tpalabra palabra_actual = quitar_pila(pila_juego);
-			
 			bool adivinada = false;
 			jugar_palabra(palabra_actual, puntaje_partida, adivinada, palabras_adivinadas);
-			
 			if (adivinada) {
-				cout << "\n¡ C O R R E C T O ! La Palabra era: " << palabra_actual.palabra << endl;
-				cout << "\n¡ G A N A S T E  7  P U N T O S !" << endl;
+				cout << "\nï¿½ C O R R E C T O ! La Palabra era: " << palabra_actual.palabra << endl;
+				cout << "\nï¿½ G A N A S T E  7  P U N T O S !" << endl;
 				puntaje_partida += 7;
 				palabras_adivinadas++;
 			} else {
 				limpiarPantalla();
-				cout << "\n¡ H A S  F A L L A D O ! La Palabra Correcta era: " << palabra_actual.palabra << endl;
+				cout << "\nï¿½ H A S  F A L L A D O ! La Palabra Correcta era: " << palabra_actual.palabra << endl;
 				cartel_derrota();
 				victoria = false;
 			}
 			pausarPantalla();
 		}
-		
 		if (victoria){
 			cartel_victoria();
 			actualizar_puntaje(seleccionado, puntaje_partida);

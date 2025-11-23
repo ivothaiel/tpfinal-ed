@@ -18,10 +18,6 @@ void mostrar_jugador(pjugador jugador) {
 
 void cargar_jugador(pjugador jugadores, tjugador &jugador) {
     bool existe;
-    int c;
-
-    while ((c = getchar()) != '\n');
-
     do {
         leerCadenaValidada("Ingrese Alias: ", jugador.alias, 4);
         
@@ -61,10 +57,6 @@ void altaJugador(pjugador &jugadores) {
 void bajaJugador(pjugador &arbol_jugadores) {
     tcad alias_buscado;
     pjugador eliminado;
-    
-	int c;
-    while ((c = getchar()) != '\n');
-
     leerCadenaValidada("Ingrese Alias del Jugador: ", alias_buscado, 4);
 
     if (buscar_jugador(arbol_jugadores, alias_buscado) == NULL) {
@@ -79,9 +71,6 @@ void bajaJugador(pjugador &arbol_jugadores) {
 }
 
 void editar_jugador(pjugador &jugador, char op) {
-    int c;
-    while ((c = getchar()) != '\n');
-
     switch (op) {
         case '1':
             leerCadenaValidada("Ingrese Nuevo Nombre: ", jugador->dato.nombre, 4);
@@ -110,10 +99,6 @@ void editar_jugador(pjugador &jugador, char op) {
 void modificarJugador(pjugador arbol_jugadores) {
     tcad alias_buscado;
     char op;
-    int c;
-
-    while ((c = getchar()) != '\n');
-
     leerCadenaValidada("Ingrese Alias del Jugador: ", alias_buscado, 4);
     pjugador nodo_jugador = buscar_jugador(arbol_jugadores, alias_buscado);
 
@@ -133,10 +118,6 @@ void modificarJugador(pjugador arbol_jugadores) {
 
 void consultarJugador(pjugador arbol_jugadores) {
     tcad alias_buscado;
-    
-	int c;
-    while ((c = getchar()) != '\n');
-
     leerCadenaValidada("Ingrese Alias del Jugador: ", alias_buscado, 4);
     pjugador nodo_jugador = buscar_jugador(arbol_jugadores, alias_buscado);
 

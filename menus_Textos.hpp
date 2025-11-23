@@ -65,11 +65,11 @@ void bienvenida(tcad alias){
 	limpiarPantalla();
 	cout << endl;
 	cout << "------------------------------------------------------\n";
-	cout << "|       ¡ B I E N V E N I D O  A L  J U E G O !      |\n";
+	cout << "|       ï¿½ B I E N V E N I D O  A L  J U E G O !      |\n";
 	cout << "------------------------------------------------------\n";
 	cout << " La aventura comienza, el destino de la princesa\n";
 	cout << " Karym Su Yang esta en tus manos " << alias << "\n";
-	cout << " \n ¡Que el fuego te acompañe!\n";
+	cout << " \n ï¿½Que el fuego te acompaï¿½e!\n";
 	pausarPantalla();
 }
 	
@@ -78,13 +78,13 @@ void cartel_victoria(){
 	cout << "\n";
 	cout << "=====================================================\n";
 	cout << "|                                                   |\n";
-	cout << "|    ¡ H A S  R O T O  L A  M A L D I C I O N !     |\n";
+	cout << "|    ï¿½ H A S  R O T O  L A  M A L D I C I O N !     |\n";
 	cout << "|                                                   |\n";
 	cout << "|  	  Adivinaste las 6 palabras magicas y        |\n";
 	cout << "|      el espejo ancestral se ha roto por fin       |\n";
 	cout << "|                                                   |\n";
 	cout << "|     La princesa Karym Su Yang ha sido liberada    |\n";
-	cout << "|      del hechicero después de mas de 500 años     |\n";
+	cout << "|      del hechicero despuï¿½s de mas de 500 aï¿½os     |\n";
 	cout << "|                                                   |\n";
 	cout << "|       El Reino de Fuego celebra tu valentia       |\n";
 	cout << "|                                                   |\n";
@@ -97,7 +97,7 @@ void cartel_derrota(){
 	cout << "\n";
 	cout << "=====================================================\n";
 	cout << "|                                                   |\n";
-	cout << "|            ¡ H A S  F A L L A D O !               |\n";
+	cout << "|            ï¿½ H A S  F A L L A D O !               |\n";
 	cout << "|                                                   |\n";
 	cout << "|   Las palabras magicas permaneceran ocultas       |\n";
 	cout << "|     dentro de las joyas del espejo...             |\n";
