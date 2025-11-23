@@ -34,20 +34,16 @@ void mostrar_cadena(tcad palabra) {
 	}
 }
 	
-void leerPalabra(tcad &palabra){
+/*void leerPalabra(tcad &palabra){
 	leerCadenaValidada("Ingrese palabra: ", palabra, 5);
 	convertir_letra(palabra[0]);
-}
+}*/
 
-bool validarPalabra(tcad palabra){
-	return verificar_letras(palabra);
-}
-
-void leerDatosPalabra(tpalabra_simple &pal){
+/*void leerDatosPalabra(tpalabra_simple &pal){
 	leerCadenaValidada("Ingrese Definicion: ", pal.definicion, 5);
 	leerCadenaValidada("Ingrese Sinonimo: ", pal.sinonimo,2);
 	pal.longitud = strlen(pal.palabra);
-}
+}*/
 
 bool existePalabra(tdiccionario &dic, tcad palabra){
 	return buscar_palabra_diccionario(dic, palabra) != NULL;
@@ -56,16 +52,20 @@ bool existePalabra(tdiccionario &dic, tcad palabra){
 // Permite que se ingrese una palabra, luego se valida su formato y si cumple la longitud
 void altaPalabra(tdiccionario &dic) {
     limpiar_buffer();
-	tpalabra nueva;
+	tpalabra_simple nueva;
 	bool ok = false;
 	do{
-		leerPalabra(nueva.palabra);
-		ok = validarPalabra(nueva.palabra);
+		//leerPalabra(nueva.palabra);
+		leerCadenaValidada("Ingrese palabra: ", nueva.palabra, 5);
+		convertir_letra(nueva.palabra[0]);
+		ok = verificar_letras(nueva.palabra);
 		if(!ok){
 			cout << "\nLa palabra solo debe contener letras\n";
 		}
 	} while(!ok);
-	leerDatosPalabra(nueva);
+	leerCadenaValidada("Ingrese Definicion: ", nueva.definicion, 5);
+	leerCadenaValidada("Ingrese Sinonimo: ", nueva.sinonimo,2);
+	nueva.longitud = strlen(nueva.palabra);
 	agregar_palabra(dic,nueva);
 }
 
@@ -73,7 +73,9 @@ void altaPalabra(tdiccionario &dic) {
 void bajaPalabra(tdiccionario &dic) {
    limpiar_buffer();
    tcad buscada;
-   leerPalabra(buscada);
+   //leerPalabra(buscada);
+   leerCadenaValidada("Ingrese palabra: ", buscada, 5);
+   convertir_letra(buscada[0]);
    pnodo_palabra nodo = buscar_palabra_diccionario(dic,buscada);
    
    if(nodo == NULL){
@@ -96,7 +98,9 @@ void editarPalabra(pnodo_palabra nodo) {
 void modificarPalabra(tdiccionario &dic) {
 	limpiar_buffer();
 	tcad buscada;
-	leerPalabra(buscada);
+	//leerPalabra(buscada);
+	leerCadenaValidada("Ingrese palabra: ", buscada, 5);
+	convertir_letra(buscada[0]);
 	pnodo_palabra nodo = buscar_palabra_diccionario(dic, buscada);
 	if (nodo == NULL) {
 		cout << "\n'" << buscada << "' no existe\n";
@@ -143,7 +147,9 @@ void mostrar_palabra(pnodo_palabra palabra) {
 void consultarPalabra(tdiccionario &dic) {
 	limpiar_buffer();
 	tcad buscada;
-	leerPalabra(buscada);
+	//leerPalabra(buscada);
+	leerCadenaValidada("Ingrese palabra: ", buscada, 5);
+	convertir_letra(buscada[0]);
 	pnodo_palabra nodo = buscar_palabra_diccionario(dic, buscada);
 	if (nodo == NULL) {
 		cout << "\n'" << buscada << "' no existe\n";
