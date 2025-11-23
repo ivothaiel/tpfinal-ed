@@ -87,156 +87,68 @@ bool indice_repetido(indices ind, int encontrados, int aleatorio){
 	return false;
 }
 
-
-/*void generar_indices_azar(int total_palabras, indices &in) {
-    int encontrados = 0;
+void generar_indices_azar(int total, indices &in) {
+    int usados = 0;
     int aleatorio;
-    
-    while (encontrados < 6) {
-        aleatorio = rand() % total_palabras;
-        if (!indice_repetido(in, encontrados, aleatorio)) {
-            in[encontrados] = aleatorio;
-            encontrados++;
+
+    // Inicializar
+    for (int i = 0; i < 7; i++) in[i] = -1;
+
+    while (usados < 6) {
+        aleatorio = rand() % total;
+
+        bool repetido = false;
+        for (int j = 0; j < usados; j++)
+            if (in[j] == aleatorio)
+                repetido = true;
+
+        if (!repetido) {
+            in[usados] = aleatorio;
+            usados++;
         }
     }
-}*/
-void generar_indices_azar(int total_palabras, indices &in) {
-	int i;
-	// Inicializar todo a -1 para que no haya basura
-	for(i = 0; i < 7; i++){
-		in[i] = -1;
-	}
-	int objetivo;
-	if(total_palabras < 6)
-		objetivo = total_palabras;
-	else
-		objetivo = 6;
-	int encontrados = 0;
-	int aleatorio;
-	while(encontrados < objetivo){
-		aleatorio = rand() % total_palabras;
-		if(!indice_repetido(in, encontrados, aleatorio)){
-			in[encontrados] = aleatorio;
-			encontrados++;
-		}
-	}
 }
-	
+bool obtener_palabra_por_indice(tdiccionario dic, int buscado, tpalabra &out) {
+    int indice_actual = 0;
 
-/*void cargar_pila_desde_indices(tdiccionario dic, indices in, tpila &pila_juego) {
-    int indice_global = 0;
-    int palabras_cargadas = 0;
-    pnodo_palabra p;
-    tpalabra pila_temporal[6]; 
+    for (int i = 0; i < MAX_CLAVES; i++) {
+        pnodo_palabra p = dic[i].listado.inicio;
 
-    for (int i = 0; i < MAX_CLAVES && palabras_cargadas < 6; i++) {
-        p = dic[i].listado.inicio;
-        while (p != NULL && palabras_cargadas < 6) {
-            for (int j = 0; j < 6; j++) {
-                if (in[j] == indice_global) {
-                    pila_temporal[palabras_cargadas] = p->dato;
-                    palabras_cargadas++;
-                }
+        while (p != NULL) {
+            if (indice_actual == buscado) {
+                out = p->dato;
+                return true;
             }
-            indice_global++;
+            indice_actual++;
             p = p->sig;
         }
     }
-    for (int i = 0; i < MAXPILA; i++) {
-        agregar_pila(pila_juego, pila_temporal[i]);
-    }
-}*/
-void cargar_pila_desde_indices(tdiccionario dic, indices in, tpila &pila_juego) {
-	int indice_global = 0;
-	int palabras_cargadas = 0;
-	int i, j;
-	pnodo_palabra p;
-	tpalabra pila_temporal[6];
-	for(i = 0; i < MAX_CLAVES && palabras_cargadas < 6; i++){
-		p = dic[i].listado.inicio;
-		while(p != NULL && palabras_cargadas < 6){
-			for(j = 0; j < 6; j++){
-				if(in[j] == -1){
-					// ya no quedan �ndices v�lidos
-				}else{
-					if(in[j] == indice_global){
-						pila_temporal[palabras_cargadas] = p->dato;
-						palabras_cargadas++;
-					}
-				}
-			}
-			indice_global++;
-			p = p->sig;
-		}
-	}
-	// cargar solo lo encontrado
-	for(i = 0; i < palabras_cargadas; i++){
-		agregar_pila(pila_juego, pila_temporal[i]);
-	}
+
+    return false; // No debería pasar si el índice es correcto
 }
 
+void cargar_pila_desde_indices(tdiccionario dic, indices in, tpila &pila_juego) {
+    tpalabra aux;
 
-
-// Función Principal Modularizada
+    for (int i = 0; i < 6; i++) {
+        if (obtener_palabra_por_indice(dic, in[i], aux)) {
+            agregar_pila(pila_juego, aux);
+        }
+    }
+}
 void seleccionarPalabrasAleatorias(tdiccionario dic, tpila &pila_juego) {
     indices in;
+
     int total = contar_palabras(dic);
-    
-    // 1. Generar los números
+    if (total == 0) return;
+
     generar_indices_azar(total, in);
-    
-    // 2. Llenar la pila usando esos números
+
     cargar_pila_desde_indices(dic, in, pila_juego);
 }
 
 
 
-
-/*void seleccionarPalabrasAleatorias(tdiccionario dic, tpila &pila_juego) {
-    indices in;
-    int indice_aleatorio;
-    int indices_encontrados = 0;
-	int total_palabras = contar_palabras(dic);
-
-    // Generar 6 indices aleatorios unicos
-    while (indices_encontrados < 6) {
-        indice_aleatorio = rand() % total_palabras;
-		
-        if (indice_repetido(in, indices_encontrados, indice_aleatorio) == false) {
-            in[indices_encontrados] = indice_aleatorio;
-            indices_encontrados++;
-        }
-    }
-
-    int indice_global = 0;
-    int palabras_cargadas = 0;
-    pnodo_palabra p;
-
-    tpalabra pila_palabras[6];
-
-	// Ahorro de iteraciones extra
-    for (int i = 0; i < MAX_CLAVES && palabras_cargadas < 6; i++) {
-        
-		p = dic[i].listado.inicio;
-		// Evita seguir buscando cuando ya se agregaron las 6 palabras
-        while (p != NULL && palabras_cargadas < 6) {
-			
-            for (int j = 0; j < 6; j++) {
-                if (in[j] == indice_global) {
-                    pila_palabras[palabras_cargadas] = p->dato;
-                    palabras_cargadas++;
-                }
-            }
-            indice_global++;
-            p = p->sig;
-        }
-    }
-
-    // Cargar palabras en la pila en orden LIFO
-    for (int i = 0; i < MAXPILA; i++) {
-        agregar_pila(pila_juego, pila_palabras[i]);
-    }
-}*/
 
 // Muestra interfaz de adivinanza con puntajes y pistas
 void mostrarMenuAdivinar(int puntaje, int intentos, int adivinadas, tpistas pistas_usadas, 
@@ -264,7 +176,6 @@ void mostrarMenuAdivinar(int puntaje, int intentos, int adivinadas, tpistas pist
 
 // Submenu de pistas
 void mostrarMenuPistas(char &op) {
-    tcad msg_menu = "\n> Opcion: ";
     limpiarPantalla();
 	cout << "\n";
 	cout << " +---------------------------------------+\n";
