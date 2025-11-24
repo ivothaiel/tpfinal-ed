@@ -55,16 +55,26 @@ void altaJugador(pjugador &jugadores) {
 }
 
 void bajaJugador(pjugador &arbol_jugadores) {
+    if (arbol_jugadores == NULL) {
+		cout << "\nNo hay jugadores registrados para eliminar" << endl;
+		pausarPantalla();
+	}
+	
     tcad alias_buscado;
     pjugador eliminado;
+	limpiar_buffer(); // Limpiar buffer antes de leer cadena
     leerCadenaValidada("Ingrese Alias del Jugador: ", alias_buscado, 4);
 
     if (buscar_jugador(arbol_jugadores, alias_buscado) == NULL) {
         cout << "\nEl alias '" << alias_buscado << "' no corresponde a ningun jugador" << endl;
     } else {
         eliminado = eliminar_jugador(arbol_jugadores, alias_buscado);
-        cout << "\nJugador '" << eliminado->dato.alias << "' eliminado con exito" << endl;
-        delete eliminado;
+        if (eliminado != NULL) {
+			cout << "\nJugador '" << eliminado->dato.alias << "' eliminado con exito" << endl;
+			delete eliminado;
+		} else {
+			cout << "\nERROR: No se pudo eliminar el jugador" << endl;
+		}
     }
 
     pausarPantalla();
@@ -97,8 +107,14 @@ void editar_jugador(pjugador &jugador, char op) {
 }
 
 void modificarJugador(pjugador arbol_jugadores) {
+    if (arbol_jugadores == NULL) {
+		cout << "\nNo hay jugadores registrados para modificar" << endl;
+		pausarPantalla();
+	}
+	
     tcad alias_buscado;
     char op;
+	limpiar_buffer(); // Limpiar buffer antes de leer cadena
     leerCadenaValidada("Ingrese Alias del Jugador: ", alias_buscado, 4);
     pjugador nodo_jugador = buscar_jugador(arbol_jugadores, alias_buscado);
 
@@ -117,7 +133,13 @@ void modificarJugador(pjugador arbol_jugadores) {
 }
 
 void consultarJugador(pjugador arbol_jugadores) {
+    if (arbol_jugadores == NULL) {
+		cout << "\nNo hay jugadores registrados para consultar" << endl;
+		pausarPantalla();
+	}
+	
     tcad alias_buscado;
+	limpiar_buffer(); // Limpiar buffer antes de leer cadena
     leerCadenaValidada("Ingrese Alias del Jugador: ", alias_buscado, 4);
     pjugador nodo_jugador = buscar_jugador(arbol_jugadores, alias_buscado);
 
@@ -141,7 +163,7 @@ void listarJugadores(pjugador arbol_jugadores) {
 }
 
 void gestionarJugadores(pjugador &arbol_jugadores) {
-    int opc;
+    char opc;
     bool salir = false;
 
     while (!salir) {
@@ -159,40 +181,42 @@ void gestionarJugadores(pjugador &arbol_jugadores) {
         cout << "\n> Opcion: ";
 		
         cin >> opc;
+		limpiar_buffer(); // Limpiar DESPUES de leer para eliminar el \n que queda
 		
         switch (opc) {
-            case 1:
+            case '1':
                 cout << "\n* * Registrar Jugador * *\n" << endl;
                 altaJugador(arbol_jugadores);
                 break;
 				
-            case 2:
+            case '2':
                 cout << "\n* * Consultar Jugador * *\n" << endl;
                 consultarJugador(arbol_jugadores);
                 break;
 				
-            case 3:
+            case '3':
                 cout << "\n* * Modificar Jugador * *\n" << endl;
                 modificarJugador(arbol_jugadores);
                 break;
 				
-            case 4:
+            case '4':
                 cout << "\n* * Eliminar Jugador * *\n" << endl;
                 bajaJugador(arbol_jugadores);
                 break;
 				
-            case 5:
+            case '5':
                 cout << "\n* * Listado de Jugadores * *" << endl;
                 listarJugadores(arbol_jugadores);
                 break;
 				
-            case 0:
+            case '0':
                 cout << "\nVolviendo al menu principal..." << endl;
                 salir = true;
                 break;
 				
             default:
                 cout << "\nOPCION INVALIDA" << endl;
+                pausarPantalla();
         }
     }
 }

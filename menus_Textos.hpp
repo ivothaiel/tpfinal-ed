@@ -25,6 +25,7 @@ void menu_principal(char &op){
     cout << "  0)  Salir del Juego\n\n";
     cout << "> Opcion: ";
     cin >> op;
+	limpiar_buffer(); // Limpiar DESPUES de leer para eliminar el \n que queda
 }
 
 void submenu_modificar_jugador(char &op){
@@ -38,6 +39,7 @@ void submenu_modificar_jugador(char &op){
     cout << "   0) Volver\n" << endl;
     cout << "> Opcion: ";
     cin >> op;
+	limpiar_buffer(); // Limpiar DESPUES de leer para eliminar el \n que queda
 }
 	
 void cartel_inicio_juego(){

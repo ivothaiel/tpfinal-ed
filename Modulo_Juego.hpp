@@ -140,7 +140,13 @@ void seleccionarPalabrasAleatorias(tdiccionario dic, tpila &pila_juego) {
     indices in;
 
     int total = contar_palabras(dic);
-    if (total == 0) return;
+    if (total == 0) {
+		cout << "\nERROR: No hay palabras en el diccionario" << endl;
+	}
+	
+	if (total < 6) {
+		cout << "\nERROR: No hay suficientes palabras (se requieren al menos 6)" << endl;
+	}
 
     generar_indices_azar(total, in);
 
@@ -172,6 +178,7 @@ void mostrarMenuAdivinar(int puntaje, int intentos, int adivinadas, tpistas pist
     cout << " 2) Pedir una Pista" << endl;
     cout << "\n > Opcion: ";
 	cin >> op;
+	limpiar_buffer(); // Limpiar DESPUES de leer para eliminar el \n que queda
 }
 
 // Submenu de pistas
@@ -185,8 +192,10 @@ void mostrarMenuPistas(char &op) {
     cout << "  2) Primer Letra - 3 puntos" << endl;
     cout << "  3) Definicion - 4 puntos" << endl;
     cout << "  4) Sinonimo - 5 puntos" << endl;
+    cout << "  0) Volver" << endl;
     cout << "\n> Opcion: ";
 	cin >> op;
+	limpiar_buffer(); // Limpiar DESPUES de leer para eliminar el \n que queda
 }
 
 // Verifica que las palabras sean iguales
@@ -270,6 +279,8 @@ void jugar_palabra(tpalabra &actual, int &puntaje, bool &adivinada, int adivinad
 			mostrarMenuPistas(opcion);
 			if(opcion == '1' || opcion == '2' || opcion == '3' || opcion == '4'){
 				elegir_pistas(pistas_usadas, puntaje, opcion);
+			}else if(opcion == '0'){
+				// Volver al menu anterior, no hacer nada
 			}else{
 				cout << "\nOPCION INVALIDA" << endl;
 				pausarPantalla();
@@ -301,6 +312,13 @@ void iniciarJuego(pjugador arbol_jugadores, tdiccionario dic, tlista_ranking &ra
 		tpila pila_juego;
 		iniciar_pila(pila_juego);
 		seleccionarPalabrasAleatorias(dic, pila_juego);
+		
+		// Validar que se cargaron las palabras correctamente
+		if (pila_vacia(pila_juego)) {
+			cout << "\nERROR: No se pudieron cargar las palabras para el juego." << endl;
+			pausarPantalla();
+		}
+		
 		int puntaje_partida = 7;
 		bool victoria = true;
 		int palabras_adivinadas = 0;
@@ -358,14 +376,27 @@ void mostrarVencedores(pjugador arbol_jugadores, tlista_ranking &ranking) {
     liberarlista(ranking);
     construir_ranking(arbol_jugadores, ranking);
 
+    if (ranking.inicio == NULL) {
+		cout << "\nNo hay vencedores registrados aun." << endl;
+		cout << "Los vencedores son jugadores que han ganado al menos una partida." << endl;
+		pausarPantalla();
+	}
+
     char orden_op;
     cout << "\nVer ranking en orden:" << endl;
     cout << " (D)ecreciente" << endl;
     cout << " (C)reciente" << endl;
     cout << "Opcion: ";
     cin >> orden_op;
+	limpiar_buffer(); // Limpiar DESPUES de leer para eliminar el \n que queda
 
     bool creciente = (orden_op == 'c' || orden_op == 'C');
+	
+	if (orden_op != 'c' && orden_op != 'C' && orden_op != 'd' && orden_op != 'D') {
+		cout << "\nOPCION INVALIDA. Se mostrara en orden decreciente por defecto." << endl;
+		creciente = false;
+		pausarPantalla();
+	}
 
     cout << "\n--- RANKING ---" << endl;
     mostrarlista(ranking, creciente);
