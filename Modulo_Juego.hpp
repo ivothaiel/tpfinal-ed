@@ -192,7 +192,7 @@ void elegir_pistas(tpistas &pistas_usadas, int &puntaje, char op){
     }
 }
 
-// LÓGICA SIMPLIFICADA SIN IF VACIOS NI CHEQUEOS LARGOS
+
 void jugar_palabra(tpalabra &actual, int &puntaje, bool &adivinada, int adivinadas) {
     tcad intento;
     int intentos = 3;

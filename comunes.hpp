@@ -26,7 +26,7 @@ void pausarPantalla() {
 }
 
 // Lee una cadena con longitud minima, eliminando salto de linea
-void leerCadenaValidada( const tcad mensaje, tcad &cadena, int minLen) {
+/*void leerCadenaValidada( const tcad mensaje, tcad &cadena, int minLen) {
     bool valido = false;
 
     while (!valido) {
@@ -53,9 +53,36 @@ void leerCadenaValidada( const tcad mensaje, tcad &cadena, int minLen) {
 			}
         }
     }
+}*/
+
+void leerCadenaValidada(const char* mensaje, char* cadena, int minLen) {
+    bool valido = false;
+    int len;
+
+    while (valido == false) {
+        cout << mensaje;
+        fgets(cadena, 60, stdin); 
+        len = strlen(cadena);
+        // elimina salto de linea si existe
+        if (len > 0 && cadena[len - 1] == '\n') {
+            cadena[len - 1] = '\0';
+            len--; 
+        }
+        // validacion
+        if (len >= minLen) {
+            valido = true;
+        } 
+        else {
+            if (len == 0) {
+                cout << "ERROR: El campo no puede estar vacio." << endl;
+            } else {
+                cout << "ERROR: Debe tener al menos " << minLen << " caracteres." << endl;
+            }
+        }
+    }
 }
 
-// Lee una cadena asegurando limpiar el buffer antes
+
 void leer_ingreso(tcad &cadena) {
     fgets(cadena, MAX, stdin);
     int len = (int)strlen(cadena);
