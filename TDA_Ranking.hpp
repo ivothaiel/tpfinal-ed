@@ -85,34 +85,85 @@ void agregar_ranking(tlista_ranking &lista, pnodo_ranking nuevo) {
     lista.cont++;
 }
 
+// Funcion auxiliar para formatear un numero con espacios
+void mostrar_numero(int num, int ancho) {
+	int digitos = 0;
+	int temp = num;
+	if (temp == 0) digitos = 1;
+	else {
+		while (temp > 0) {
+			digitos++;
+			temp = temp / 10;
+		}
+	}
+	cout << num;
+	for (int i = digitos; i < ancho; i++) {
+		cout << " ";
+	}
+}
+
+// Funcion auxiliar para formatear una cadena con espacios
+void mostrar_cadena_formato(tcad cad, int ancho) {
+	int len = strlen(cad);
+	cout << cad;
+	for (int i = len; i < ancho; i++) {
+		cout << " ";
+	}
+}
+
 // Recorre la lista circular en orden creciente o decreciente.
 void mostrarlista(tlista_ranking lista, bool creciente) {
     pnodo_ranking i;
+	int posicion = 1;
 
     if (lista.inicio == NULL) {
         cout << "No hay vencedores para mostrar." << endl;
     }
     else {
+		// Mostrar encabezado de la tabla
+		cout << "\n";
+		cout << "+-------+--------------------------------------+------------+" << endl;
+		cout << "| Pos.  | Alias                                | Puntaje    |" << endl;
+		cout << "+-------+--------------------------------------+------------+" << endl;
+		
         if (creciente) {
-            // Desde el final hacia atrás
+            // Desde el final hacia atrás (menor a mayor)
             i = lista.inicio->ant;
+			posicion = lista.cont; // Empezar desde la última posición
 
             do {
-                cout << " - Alias: " << i->dato.alias
-                     << " (Puntaje: " << i->dato.puntaje << ")" << endl;
+                cout << "| ";
+				mostrar_numero(posicion, 5);
+				cout << " | ";
+				mostrar_cadena_formato(i->dato.alias, 36);
+				cout << " | ";
+				mostrar_numero(i->dato.puntaje, 10);
+				cout << " |" << endl;
                 i = i->ant;
+				posicion--;
             } while (i != lista.inicio->ant);
         }
         else {
-            // Desde el inicio hacia adelante
+            // Desde el inicio hacia adelante (mayor a menor)
             i = lista.inicio;
+			posicion = 1;
 
             do {
-                cout << " - Alias: " << i->dato.alias
-                     << " (Puntaje: " << i->dato.puntaje << ")" << endl;
+                cout << "| ";
+				mostrar_numero(posicion, 5);
+				cout << " | ";
+				mostrar_cadena_formato(i->dato.alias, 36);
+				cout << " | ";
+				mostrar_numero(i->dato.puntaje, 10);
+				cout << " |" << endl;
                 i = i->sig;
+				posicion++;
             } while (i != lista.inicio);
         }
+		
+		// Cerrar la tabla
+		cout << "+-------+--------------------------------------+------------+" << endl;
+		cout << "\nTotal de vencedores: " << lista.cont << endl;
     }
 }
 
