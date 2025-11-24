@@ -5,36 +5,6 @@
 using namespace std;
 typedef char tcadena[60];
 
-// Valida si un caracter es letra
-bool es_letra(char c) {
-	return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
-}
-
-// Verifica que una palabra solo tenga caracteres alfabeticos
-bool verificar_letras(tcad palabra){
-	for(int i = 0; i < (int)strlen(palabra); i++){
-		if (!es_letra(palabra[i])) return false;
-	}
-	return true;
-}
-	
-// Convierte un caracter a mayuscula, solo si es minuscula
-void convertir_letra(char &c) {
-	if (c >= 'a' && c <= 'z') {
-		c = c - 32;
-	}
-}
-	
-// Imprime una cadena de caracteres, caracter por caracter
-void mostrar_cadena(tcad palabra) {
-	int i;
-	for (i = 0; i < (int)strlen(palabra); i++) {
-		char c = palabra[i];
-		cout << c;
-	}
-}
-
-
 bool existePalabra(tdiccionario &dic, tcad palabra){
 	return buscar_palabra_diccionario(dic, palabra) != NULL;
 }
@@ -43,52 +13,42 @@ bool existePalabra(tdiccionario &dic, tcad palabra){
 void altaPalabra(tdiccionario &dic) {
     tpalabra nueva_palabra;
     bool validar;
-	limpiar_buffer(); // limpia buffer antes de leer
 
     do {
         leerCadenaValidada("Ingrese Palabra: ", nueva_palabra.palabra, 5);
-        //mostrar_cadena(nueva_palabra.palabra);
 		
         validar = verificar_letras(nueva_palabra.palabra);
 		
         if (!validar)
             cout << "\nLa palabra solo debe contener letras" << endl;
-
+		
     } while (!validar);
-
-    convertir_letra(nueva_palabra.palabra[0]);
 
     if (buscar_palabra_diccionario(dic, nueva_palabra.palabra) != NULL)
         cout << "\nLa palabra '" << nueva_palabra.palabra << "' ya esta registrada" << endl;
     else {
-        leerCadenaValidada("Ingrese Definicion: ", nueva_palabra.definicion, 5);
+        leer_ingreso("Ingrese Definicion: ", nueva_palabra.definicion);
         leerCadenaValidada("Ingrese Sinonimo: ", nueva_palabra.sinonimo, 2);
         nueva_palabra.longitud = (int)strlen(nueva_palabra.palabra);
         agregar_palabra(dic, nueva_palabra);
         cout << "Palabra '" << nueva_palabra.palabra << "' registrada con exito." << endl;
     }
+	pausarPantalla();
 }
 
-// busca y elimina una palabra del diccionario
+// Busca y elimina una palabra del diccionario
 void bajaPalabra(tdiccionario &dic){
     if (contar_palabras(dic) > 0) {
         tcad palabra_buscada;
         pnodo_palabra eliminado;
-        limpiar_buffer(); 
         
         leerCadenaValidada("Ingrese Palabra a Eliminar: ", palabra_buscada, 5);
-        convertir_letra(palabra_buscada[0]);
         
-        pnodo_palabra palabra = buscar_palabra_diccionario(dic, palabra_buscada);
+		eliminado = eliminar_palabra(dic, palabra_buscada);
         
-        if (palabra != NULL) {
-            eliminado = eliminar_palabra(dic, palabra->dato.palabra);
-            if (eliminado != NULL) {
-                cout << "\n'" << eliminado->dato.palabra << "' se ha eliminado correctamente" << endl;
-                delete eliminado;
-            } else {
-                cout << "\nERROR: No se pudo eliminar la palabra" << endl;
-            }
+        if (eliminado != NULL) {
+            cout << "\n'" << eliminado->dato.palabra << "' se ha eliminado correctamente" << endl;
+            delete eliminado;
         }
         else {
             cout << "\n'" << palabra_buscada << "' no existe en el diccionario" << endl;
@@ -109,28 +69,21 @@ void editarPalabra(pnodo_palabra nodo) {
 	cout << "\nDatos actualizados\n";
 }
 
-
-
-
-
-// busca una palabra y modifica sus campos
+// Busca una palabra y modifica sus campos
 void modificarPalabra(tdiccionario &dic) {
     if (contar_palabras(dic) > 0) {
         tcad palabra_buscada;
-        limpiar_buffer(); 
         
         leerCadenaValidada("Ingrese Palabra a Modificar: ", palabra_buscada, 5);
-        convertir_letra(palabra_buscada[0]);
-
         pnodo_palabra nodo_palabra = buscar_palabra_diccionario(dic, palabra_buscada);
-
+		
         if (nodo_palabra == NULL) {
             cout << "\n'" << palabra_buscada << "' no existe en el diccionario" << endl;
         }
         else {
             limpiarPantalla();
             cout << "\nEdicion de la Palabra: " << nodo_palabra->dato.palabra << endl;
-            leerCadenaValidada("Ingrese Nueva Definicion: ", nodo_palabra->dato.definicion, 5);
+            leer_ingreso("Ingrese Nueva Definicion: ", nodo_palabra->dato.definicion);
             leerCadenaValidada("Ingrese Nuevo Sinonimo: ", nodo_palabra->dato.sinonimo, 2);
             cout << "\nDatos de la palabra '" << nodo_palabra->dato.palabra << "' actualizados" << endl;
         }
@@ -155,13 +108,11 @@ void consultarPalabra(tdiccionario &dic) {
     if (contar_palabras(dic) > 0) {
         pnodo_palabra palabra;
         tcad palabra_buscada;
-        limpiar_buffer(); 
         
         leerCadenaValidada("Ingrese Palabra a Consultar: ", palabra_buscada, 5);
-        convertir_letra(palabra_buscada[0]);
-
+		
         palabra = buscar_palabra_diccionario(dic, palabra_buscada);
-
+		
         if (palabra == NULL)
             cout << "\n'" << palabra_buscada << "' no existe en el diccionario" << endl;
         else
@@ -172,6 +123,8 @@ void consultarPalabra(tdiccionario &dic) {
     }
     pausarPantalla();
 }
+
+// Quitar si no se usa
 void listarPalabrasPorClave(tlista_palabras lista) {
 	pnodo_palabra p = lista.inicio;
 	while (p != NULL) {

@@ -107,7 +107,6 @@ void mostrar_jugadores(pjugador arbol){
 	if(arbol != NULL){
 		mostrar_jugadores(arbol->izq);
 		
-		//cout << "-----------------------------" << endl;
 		cout << "  Alias: " << arbol->dato.alias << endl;
 		cout << "  Juegos Ganados: " << arbol->dato.juegos_ganados << endl;
 		cout << "  Mejor Puntaje: " << arbol->dato.mejor_puntaje << endl;

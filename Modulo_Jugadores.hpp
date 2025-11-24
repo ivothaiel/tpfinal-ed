@@ -16,7 +16,7 @@ void mostrar_jugador(pjugador jugador) {
     cout << "Puntaje Acumulado: " << jugador->dato.puntaje_acumulado << endl;
 }
 
-/*void cargar_jugador(pjugador jugadores, tjugador &jugador) {
+void cargar_jugador(pjugador jugadores, tjugador &jugador) {
     bool existe;
     do {
         leerCadenaValidada("Ingrese Alias: ", jugador.alias, 4);
@@ -32,25 +32,6 @@ void mostrar_jugador(pjugador jugador) {
     leerCadenaValidada("Ingrese Nombre: ", jugador.nombre, 4);
     leerCadenaValidada("Ingrese Apellido: ", jugador.apellido, 4);
     leerCadenaValidada("Ingrese Signo Zodiacal: ", jugador.signo, 3);
-
-    jugador.juegos_ganados = 0;
-    jugador.mejor_puntaje = 0;
-    jugador.puntaje_acumulado = 0;
-}*/
-void cargar_jugador(pjugador jugadores, tjugador &jugador) {
-    bool existe = true; 
-    while (existe == true) {
-        leerCadenaValidada("Ingrese Alias: ", jugador.alias, 1);
-        if (buscar_jugador(jugadores, jugador.alias) != NULL) {
-            cout << "\nEl alias '" << jugador.alias << "' ya se encuentra en uso" << endl;
-            existe = true;
-        } else {
-            existe = false;
-        }
-    }
-    leerCadenaValidada("Ingrese Nombre: ", jugador.nombre, 1);
-    leerCadenaValidada("Ingrese Apellido: ", jugador.apellido, 1);
-    leerCadenaValidada("Ingrese Signo Zodiacal: ", jugador.signo, 1);
 
     jugador.juegos_ganados = 0;
     jugador.mejor_puntaje = 0;
@@ -80,8 +61,8 @@ void bajaJugador(pjugador &arbol_jugadores) {
 	}else{
 		tcad alias_buscado;
 		pjugador eliminado;
-		limpiar_buffer(); // Limpiar buffer antes de leer cadena
-		leerCadenaValidada("Ingrese Alias del Jugador: ", alias_buscado, 4);
+		//limpiar_buffer(); // Limpiar buffer antes de leer cadena
+		leerCadenaValidada("Ingrese Alias del Jugador: ", alias_buscado, 1);
 
 		if (buscar_jugador(arbol_jugadores, alias_buscado) == NULL) {
 			cout << "\nEl alias '" << alias_buscado << "' no corresponde a ningun jugador" << endl;
@@ -133,10 +114,9 @@ void modificarJugador(pjugador arbol_jugadores) {
 	else{
 		tcad alias_buscado;
 		char op;
-		limpiar_buffer(); // Limpiar buffer antes de leer cadena
 		leerCadenaValidada("Ingrese Alias del Jugador: ", alias_buscado, 4);
 		pjugador nodo_jugador = buscar_jugador(arbol_jugadores, alias_buscado);
-
+		
 		if (nodo_jugador == NULL) {
 			cout << "\nEl alias '" << alias_buscado << "' no corresponde a ningun jugador" << endl;
 			pausarPantalla();
@@ -159,16 +139,15 @@ void consultarJugador(pjugador arbol_jugadores) {
 	}
 	else{
 		tcad alias_buscado;
-		limpiar_buffer(); // Limpiar buffer antes de leer cadena
 		leerCadenaValidada("Ingrese Alias del Jugador: ", alias_buscado, 4);
 		pjugador nodo_jugador = buscar_jugador(arbol_jugadores, alias_buscado);
-
+		
 		if (nodo_jugador == NULL) {
 			cout << "\nEl alias '" << alias_buscado << "' no corresponde a ningun jugador" << endl;
 		} else {
 			mostrar_jugador(nodo_jugador);
 		}
-
+		
 		pausarPantalla();
 	}
 }

@@ -12,7 +12,7 @@ typedef int costos[4];
 typedef int indices[7];
 
 // ------------------------------------------------------------
-// SECCIÓN: SELECCIÓN DE JUGADOR
+// SECCION: SELECCION DE JUGADOR
 // ------------------------------------------------------------
 
 void jugadores_disponibles(pjugador jugadores){
@@ -27,9 +27,9 @@ void seleccion_jugador(pjugador jugadores, pjugador &seleccionado){
     while(seleccionado == NULL && salir == false){
         limpiarPantalla();
         jugadores_disponibles(jugadores);
-        cout << "\n> Ingrese Alias del Jugador - '0' para Cancelar: ";
-        leer_ingreso(alias);
-        
+        //cout << "\n> Ingrese Alias del Jugador - '0' para Cancelar: ";
+		leer_ingreso("\n> Ingrese Alias del Jugador - '0' para Cancelar: ", alias);
+		
         if(strcmp(alias, "0") == 0){
             salir = true;
             juego_cancelado();
@@ -39,8 +39,8 @@ void seleccion_jugador(pjugador jugadores, pjugador &seleccionado){
             
             if(seleccionado == NULL){
                 cout << "\nEl alias '" << alias 
-                     << "' no corresponde a ningun jugador." << endl;
-                cout << "Intente nuevamente." << endl;
+                     << "' no corresponde a ningun jugador. ";
+                cout << "Intente nuevamente" << endl;
                 pausarPantalla();
             }
         }
@@ -69,12 +69,12 @@ void generar_indices_azar(int total, indices &in) {
 
     while (usados < 6) {
         aleatorio = rand() % total;
-
+		
         bool repetido = false;
         for (int j = 0; j < usados; j++)
             if (in[j] == aleatorio)
                 repetido = true;
-
+		
         if (!repetido) {
             in[usados] = aleatorio;
             usados++;
@@ -91,7 +91,7 @@ bool obtener_palabra_por_indice(tdiccionario dic, int buscado, tpalabra &out) {
 
     while (i < MAX_CLAVES && encontrado == false) {
         p = dic[i].listado.inicio;
-
+		
         while (p != NULL && encontrado == false) {
             if (indice_actual == buscado) {
                 out = p->dato;
@@ -124,8 +124,6 @@ void seleccionarPalabrasAleatorias(tdiccionario dic, tpila &pila_juego) {
     cargar_pila_desde_indices(dic, in, pila_juego);
 }
 
-
-
 void mostrarMenuAdivinar(int puntaje, int intentos, int adivinadas, tpistas pistas_usadas, 
     tpalabra actual, char &op) {
     limpiarPantalla();
@@ -155,7 +153,7 @@ void mostrarMenuPistas(char &op) {
     limpiarPantalla();
     cout << "\n";
     cout << " +---------------------------------------+\n";
-    cout << " |        * Pistas Disponibles * |\n";
+    cout << " |        * Pistas Disponibles *         |\n";
     cout << " +---------------------------------------+\n\n";
     cout << "  1) Cantidad de Letras - 2 puntos" << endl;
     cout << "  2) Primer Letra - 3 puntos" << endl;
@@ -184,7 +182,7 @@ void elegir_pistas(tpistas &pistas_usadas, int &puntaje, char op){
             if(puntaje < costo)
                 cout << "\nNo tienes puntos suficientes para usar la pista" << endl;
         }
-        pausarPantalla(); // Pausa solo si entró a procesar algo válido
+        pausarPantalla(); // Pausa solo si entra a procesar algo valido
     }
     else {
         cout << "\nOPCION INVALIDA" << endl;
@@ -201,16 +199,14 @@ void jugar_palabra(tpalabra &actual, int &puntaje, bool &adivinada, int adivinad
 
     while(intentos > 0 && adivinada == false){
         mostrarMenuAdivinar(puntaje, intentos, adivinadas, pistas_usadas, actual, opcion);
-
-        if(opcion == '1'){
-            limpiar_buffer(); 
+		
+        if(opcion == '1'){ 
             leerCadenaValidada("\nIngresa tu Respuesta: ", intento, 1);
-            convertir_letra(intento[0]); // Capitalizar primera letra
-
+			
             if(strcmp(intento, actual.palabra) == 0){
                 adivinada = true;
             }else{
-                cout << "\nNo ha adivinado la palabra." << endl;
+                cout << "\nNo ha adivinado la palabra" << endl;
                 intentos--;
                 pausarPantalla();
             }
@@ -237,7 +233,7 @@ void actualizar_puntaje(pjugador &seleccionado, int puntaje){
 }
 
 // Coordina toda la partida
-void iniciarJuego(pjugador arbol_jugadores, tdiccionario dic, tlista_ranking &ranking) {
+void iniciarJuego(pjugador arbol_jugadores, tdiccionario dic) {
     pjugador seleccionado = NULL;
     cartel_inicio_juego();
     seleccion_jugador(arbol_jugadores, seleccionado);
@@ -288,58 +284,56 @@ void iniciarJuego(pjugador arbol_jugadores, tdiccionario dic, tlista_ranking &ra
 void construir_ranking(pjugador arbol, tlista_ranking &lista) {
     if (arbol != NULL) { // Reemplaza al return si es NULL
         construir_ranking(arbol->izq, lista);
-
+		
         if (arbol->dato.juegos_ganados > 0) {
             tinfo_ranking info;
             info.puntaje = arbol->dato.mejor_puntaje;
             strcpy(info.alias, arbol->dato.alias);
-
+			
             pnodo_ranking nuevo;
             crearnodo_ranking(nuevo, info);
-
+			
             if (nuevo != NULL) {
                 agregar_ranking(lista, nuevo);
             }
         }
-
+		
         construir_ranking(arbol->der, lista);
     }
 }
 
 void mostrarVencedores(pjugador arbol_jugadores, tlista_ranking &ranking) {
     limpiarPantalla();
-    cout << "--- VENCEDORES (Ranking) ---" << endl;
+    cout << "* * * R A N K I N G  D E  V E N C E D O R E S * * *\n" << endl;
 
     liberarlista(ranking);
     construir_ranking(arbol_jugadores, ranking);
 
     if (ranking.inicio == NULL) {
-        cout << "\nNo hay vencedores registrados aun." << endl;
-        cout << "Los vencedores son jugadores que han ganado al menos una partida." << endl;
+        cout << "\nNo hay vencedores registrados. ";
+        cout << "Los vencedores son jugadores que han ganado al menos una partida" << endl;
         pausarPantalla();
     }
     else{
         char orden_op;
-        cout << "\nVer ranking en orden:" << endl;
-        cout << " 1) Decreciente (Mayor a Menor)" << endl;
+        cout << "Ver ranking en orden:" << endl;
+        cout << "\n 1) Decreciente (Mayor a Menor)" << endl;
         cout << " 2) Creciente (Menor a Mayor)" << endl;
-        cout << "Opcion: ";
+        cout << "\n> Opcion: ";
         cin >> orden_op;
         limpiar_buffer(); 
-
-
+		
         bool creciente = (orden_op == '2');
         
         if (orden_op != '1' && orden_op != '2') {
             cout << "\nOPCION INVALIDA. Se mostrara en orden decreciente por defecto." << endl;
             creciente = false; // Por defecto decreciente
-            pausarPantalla();
         }
-
-        cout << "\n--- RANKING ---" << endl;
+		
+        cout << "\n* * * R A N K I N G * * *" << endl;
         mostrarlista(ranking, creciente);
+		pausarPantalla();
     }
 
     liberarlista(ranking);
-    cout << "\n(Ranking liberado.)" << endl;
 }

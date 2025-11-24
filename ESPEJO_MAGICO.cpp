@@ -54,7 +54,7 @@ int main(){
 				else if(contar_palabras(diccionario_palabras) < 6)
 					cout << "\nDebe registrar al menos 6 palabras para iniciar el juego" << endl;
 				else
-					iniciarJuego(arbol_jugadores, diccionario_palabras, ranking_vencedores); 
+					iniciarJuego(arbol_jugadores, diccionario_palabras); 
                 break;
             case '4':
                 mostrarVencedores(arbol_jugadores, ranking_vencedores); 
@@ -69,15 +69,11 @@ int main(){
                 liberar_diccionario(diccionario_palabras);
                 liberarlista(ranking_vencedores);
                 
-                cout << "\nQue los espiritus guardianes guien tu camino. ï¿½Hasta pronto viajero!" << endl;
+                cout << "\nQue los espiritus guardianes guien tu camino. ¡Hasta pronto viajero!" << endl;
                 break;
             default:
                 cout << "\nOPCION INVALIDA" << endl;
         }
-        if (op != '0' && op != '1' && op != '2' && op != '3' && op != '4') {
-			pausarPantalla();
-		}
-        
     } while(op != '0');
     
     return 0;

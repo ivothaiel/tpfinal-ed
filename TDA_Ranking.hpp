@@ -75,7 +75,7 @@ void agregar_ranking(tlista_ranking &lista, pnodo_ranking nuevo) {
     else {
         // Insertar ordenadamente
         insertarordenado_ranking(lista.inicio, nuevo, lista.inicio);
-
+		
         // Si es el mayor puntaje, actualizar inicio
         if (nuevo->dato.puntaje >= lista.inicio->dato.puntaje) {
             lista.inicio = nuevo;
@@ -127,10 +127,10 @@ void mostrarlista(tlista_ranking lista, bool creciente) {
 		cout << "+-------+--------------------------------------+------------+" << endl;
 		
         if (creciente) {
-            // Desde el final hacia atrás (menor a mayor)
+            // Desde el final hacia atras (menor a mayor)
             i = lista.inicio->ant;
-			posicion = lista.cont; // Empezar desde la última posición
-
+			posicion = lista.cont; // Empezar desde la ultima posicion
+			
             do {
                 cout << "| ";
 				mostrar_numero(posicion, 5);
@@ -147,7 +147,7 @@ void mostrarlista(tlista_ranking lista, bool creciente) {
             // Desde el inicio hacia adelante (mayor a menor)
             i = lista.inicio;
 			posicion = 1;
-
+			
             do {
                 cout << "| ";
 				mostrar_numero(posicion, 5);
@@ -173,16 +173,16 @@ void liberarlista(tlista_ranking &lista) {
 
     if (lista.inicio != NULL) {
         p = lista.inicio;
-
+		
         // Rompe la circularidad para liberar con while normal
         lista.inicio->ant->sig = NULL;
-
+		
         while (p != NULL) {
             aux = p;
             p = p->sig;
             delete aux;
         }
-
+		
         iniciarlista(lista);
     }
 }
