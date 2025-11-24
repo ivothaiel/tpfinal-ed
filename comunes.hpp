@@ -47,9 +47,9 @@ void leerCadenaValidada( const tcad mensaje, tcad &cadena, int minLen) {
         } else {
             if (len == 0) {
 				cout << "Invalido: No se permiten cadenas vacias" << endl;
-			} else {
-				cout << "Invalido: La cadena debe tener al menos " 
-					<< minLen << " caracteres" << endl;
+        } else {
+            cout << "Invalido: La cadena debe tener al menos " 
+				<< minLen << " caracteres" << endl;
 			}
         }
     }
