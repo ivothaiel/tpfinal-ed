@@ -1,15 +1,15 @@
 // --- DEFINICION TDA PILA ---
-struct tpalabra_simple { // Estructura minima necesaria para la pila si no incluimos diccionario aun
+/*struct tpalabra_simple { // Estructura minima necesaria para la pila si no incluimos diccionario aun
     tcad palabra; 
     int longitud; 
     tcad definicion;
     tcad sinonimo;
-};
+};*/
 // Nota: Usaremos tpalabra_simple aqui para mantener orden, 
 // pero compatible con la del diccionario mas adelante.
 
 const int MAXPILA = 6;  
-typedef tpalabra_simple tcontenedor[MAXPILA]; 
+typedef tpalabra tcontenedor[MAXPILA]; 
 
 struct tpila {
     tcontenedor datos; 
@@ -29,7 +29,7 @@ bool pila_llena(tpila p) {
     return p.cima == MAXPILA - 1;
 }
 
-void agregar_pila(tpila &p, tpalabra_simple nuevo) {
+void agregar_pila(tpila &p, tpalabra nuevo) {
     if (pila_llena(p) == true)
 		cout << "ERROR: Pila Llena" << endl; 
     else { 
@@ -38,8 +38,8 @@ void agregar_pila(tpila &p, tpalabra_simple nuevo) {
 	}
 }
 
-tpalabra_simple quitar_pila(tpila &p) {
-    tpalabra_simple extraido;
+tpalabra quitar_pila(tpila &p) {
+    tpalabra extraido;
     if (pila_vacia(p) == true)
 		strcpy(extraido.palabra, "ERROR_VACIA"); 
     else { 

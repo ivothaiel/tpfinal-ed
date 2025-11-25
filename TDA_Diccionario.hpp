@@ -1,9 +1,14 @@
 // --- DEFINICION ---
 // Reutilizamos tpalabra_simple definiendo tpalabra como alias para mantener compatibilidad
-typedef tpalabra_simple tpalabra;
+//typedef tpalabra_simple tpalabra;
 
 typedef struct tnodo_palabra *pnodo_palabra;
-
+typedef struct tpalabra{
+    tcad palabra; 
+    int longitud; 
+    tcad definicion;
+    tcad sinonimo;
+};
 struct tnodo_palabra {
     tpalabra dato;          
     pnodo_palabra ant;     

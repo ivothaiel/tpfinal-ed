@@ -2,12 +2,12 @@
 
 using namespace std;
 
-#include "comunes.hpp"
-#include "menus_Textos.hpp"
-#include "TDA_Pila.hpp"
+#include "comunes.hpp"         // 1. 
+#include "menus_Textos.hpp"    
+#include "TDA_Diccionario.hpp" // 2. 
+#include "TDA_Pila.hpp"        // 3. 
 #include "TDA_Ranking.hpp"
 #include "TDA_Jugador.hpp"
-#include "TDA_Diccionario.hpp"
 #include "archivos.hpp"
 #include "Modulo_Jugadores.hpp"
 #include "Modulo_Palabras.hpp"
@@ -69,7 +69,7 @@ int main(){
                 liberar_diccionario(diccionario_palabras);
                 liberarlista(ranking_vencedores);
                 
-                cout << "\nQue los espiritus guardianes guien tu camino. ¡Hasta pronto viajero!" << endl;
+                cout << "\nQue los espiritus guardianes guien tu camino. ï¿½Hasta pronto viajero!" << endl;
                 break;
             default:
                 cout << "\nOPCION INVALIDA" << endl;
